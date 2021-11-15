@@ -33,12 +33,13 @@ def apk_dir():
 @pytest.fixture()
 def capabilities(apk_dir):
     caps = {
-        'app': apk_dir + '/org.wikipedia.apk',
-        'automationName': 'Appium',
         'platformName': 'Android',
-        'platformVersion': '8.0',
         'deviceName': 'andro80',
+        'platformVersion': '8.0',
+        'automationName': 'Appium',
+        'appPackage': 'org.wikipedia',
         'appActivity': '.main.MainActivity',
+        'app': apk_dir + '/org.wikipedia.apk',
         'adbExecTimeout': 40000
     }
     return caps
@@ -52,13 +53,8 @@ def executor():
 
 @pytest.fixture()
 def driver(request, capabilities, executor, selenium_is_4_or_newer):
-    """With selenium v4.0.0, released on 2021-10-13, the code below
-    emits the following warning:
-    "DeprecationWarning: desired_capabilities has been deprecated,
-    please pass in an Options object with options kwarg".
-    This can be traced to the following change log entry at
-    https://github.com/SeleniumHQ/selenium/blob/trunk/py/CHANGES
-
+    """Since v4.0.0, selenium deprecates passing capabilities as dictionaries.
+    See: https://github.com/SeleniumHQ/selenium/blob/trunk/py/CHANGES
 
     "...
     Selenium 4.0 Beta 1
@@ -67,7 +63,8 @@ def driver(request, capabilities, executor, selenium_is_4_or_newer):
     ..."
 
     Appium-Python-Client doesn't seem to provide a way to pass Options argument as of v2.0.0.
-    Hence this hack, though it's probably not the best way to handle such situations.
+    Thus, for selenium 4 and newer, DeprecationWarning is suppressed by pytest.deprecated_call()
+    (which is probably bad practice for production code O=)
 
     Possible alternatives include:
         - manually downgrading selenium to v3.14.1 (works OK);
@@ -75,6 +72,7 @@ def driver(request, capabilities, executor, selenium_is_4_or_newer):
     """
 
     if selenium_is_4_or_newer:
+        # see docstring right above
         with pytest.deprecated_call():
             driver = webdriver.Remote(
                 command_executor=executor,
