@@ -3,14 +3,26 @@ import io.appium.java_client.android.AndroidDriver;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.net.URL;
 
 public class TestTextInElements {
 
     private AppiumDriver driver;
+
+    public WebElement waitForWebElementVisibleByXpath(String xpath, String error_message, long timeoutInSeconds)
+    {
+        WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
+        wait.withMessage(error_message + '\n');
+        By by = By.xpath(xpath);
+        return wait.until(
+                ExpectedConditions.presenceOfElementLocated(by)
+        );
+    }
 
     @Before
     public void setUp() throws Exception
@@ -23,7 +35,7 @@ public class TestTextInElements {
         capabilities.setCapability("automationName","Appium");
         capabilities.setCapability("appPackage","org.wikipedia");
         capabilities.setCapability("appActivity",".main.MainActivity");
-        capabilities.setCapability("app","***REMOVED***/codebase/github/appium-automation-mixed/appium-automation-mixed/apks/org.wikipedia.apk");
+        capabilities.setCapability("app","***REMOVED***/appium-automation-mixed/appium-automation-mixed/apks/org.wikipedia.apk");
 
         driver = new AndroidDriver(new URL("http://127.0.0.1:4723/wd/hub"), capabilities);
     }
@@ -62,7 +74,11 @@ public class TestTextInElements {
         element_to_init_search.click();
 
         // THEN: Search field accepts text
-        WebElement element_to_type_search_query = driver.findElementByXPath("//*[contains(@text, 'Search…')]");
+        WebElement element_to_type_search_query = waitForWebElementVisibleByXpath(
+                "//*[contains(@text, 'Search…')]",
+                "Cannot locate requested element",
+                5);
+        // WebElement element_to_type_search_query = driver.findElementByXPath("//*[contains(@text, 'Search…')]");
         element_to_type_search_query.sendKeys("Yo La Tengo Discography");
     }
 }
