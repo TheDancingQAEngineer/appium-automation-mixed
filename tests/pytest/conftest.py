@@ -39,8 +39,7 @@ def capabilities(apk_dir):
         'automationName': 'Appium',
         'appPackage': 'org.wikipedia',
         'appActivity': '.main.MainActivity',
-        'app': apk_dir + '/org.wikipedia.apk',
-        'adbExecTimeout': 40000
+        'app': apk_dir + '/org.wikipedia.apk'
     }
     return caps
 
