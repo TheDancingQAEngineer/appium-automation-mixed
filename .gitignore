@@ -10,6 +10,12 @@
 
 logs/
 
+#######################
+# training files
+#######################
+
+tests/junit/TestTextInElements.java
+
 ########################
 # Java
 #######################
