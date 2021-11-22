@@ -9,7 +9,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.net.URL;
 import java.util.List;
 
-public class TestDisappearingSearchResults {
+public class TestTextInMultipleSearchResults {
 
     private AppiumDriver driver;
 
@@ -36,11 +36,11 @@ public class TestDisappearingSearchResults {
     }
 
     @Test
-    public void testSearchResultsAppearAndDisappear()   // This test passes.
+    public void testAllSearchResultsHaveRequestedText() // This test passes.
     {
         waitForElementAndClick(
                 By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
-                "Cannot locate 'Search Wikipedia'");
+                "Cannot locate 'Search Wikipedia'.");
 
         waitForElementAndSendKeys(
                 By.xpath("//*[contains(@text, 'Search…')]"),
@@ -52,48 +52,49 @@ public class TestDisappearingSearchResults {
                 "//*[@resource-id='org.wikipedia:id/page_list_item_container']"
                         + "//*[contains(@text, 'Hungary')]";
 
-        // This only passes if more than 1 item is on the screen.
-        // Compare with testOverlySpecificQueryThatFails()
-        waitForElementsVisible(
+        List<WebElement> results = waitForAllElementsVisible(
                 By.xpath(xpath_to_search),
-                "Cannot locate requested item",
-                1,
+                "Cannot locate requested item.",
                 15);
 
-        waitForElementAndClick(
-                By.id("org.wikipedia:id/search_close_btn"),
-                "Cannot locate 'X' button to cancel search.",
-                5);
-
-        waitForElementNotPresent(
-                By.xpath(xpath_to_search),
-                "Search elements still visible.",
-                10
-        );
+        for (WebElement element : results)
+        {
+            assertElementHasText(
+                    element,
+                    "Hungary",
+                    "At least one element doesn't have 'Hungary'.");
+        }
     }
 
     @Test
-    public void testOverlySpecificQueryThatFails()   // This test fails by design.
+    public void testSomeSearchResultsDoNotHaveRequestedText()   // This test fails by design.
     {
         waitForElementAndClick(
                 By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
-                "Cannot locate 'Search Wikipedia'");
+                "Cannot locate 'Search Wikipedia'.");
 
         waitForElementAndSendKeys(
                 By.xpath("//*[contains(@text, 'Search…')]"),
-                "Yo La Tengo discography",
+                "Hungary",
                 "Cannot locate search input.",
                 15);
 
         String xpath_to_search =
                 "//*[@resource-id='org.wikipedia:id/page_list_item_container']"
-                + "//*[contains(@text, 'Yo La Tengo discography')]";
+                        + "//*[contains(@text, 'Hungary')]";
 
-        waitForElementsVisible(
+        List<WebElement> results = waitForAllElementsVisible(
                 By.xpath(xpath_to_search),
-                "Cannot locate requested item",
-                1,
+                "Cannot locate requested item.",
                 15);
+
+        for (WebElement element : results)
+        {
+            assertElementHasText(
+                    element,
+                    "Football",
+                    "At least one element doesn't have 'Football'.");
+        }
     }
 
     private WebElement waitForElementVisible(By by, String error_message, long timeoutInSeconds)
@@ -105,14 +106,13 @@ public class TestDisappearingSearchResults {
         );
     }
 
-    private List<WebElement> waitForElementsVisible(By by, String error_message,
-                                                    int count_more_than,
+    private List<WebElement> waitForAllElementsVisible(By by, String error_message,
                                                     long timeoutInSeconds)
     {
         WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
         wait.withMessage(error_message + '\n');
         return wait.until(
-                ExpectedConditions.numberOfElementsToBeMoreThan(by, count_more_than)
+                ExpectedConditions.visibilityOfAllElementsLocatedBy(by)
         );
     }
 
@@ -136,10 +136,14 @@ public class TestDisappearingSearchResults {
         return element;
     }
 
-    private boolean waitForElementNotPresent(By by, String error_message, long timeoutInSeconds)
+    private void assertElementHasText(WebElement element, String text, String error_message)
     {
-        WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
-        wait.withMessage(error_message + '\n');
-        return wait.until(ExpectedConditions.invisibilityOfElementLocated(by));
+        /* It appears that all WebElements have attribute 'text', even if it's empty.
+         * Thus, we're not doing the try-catch here.
+         */
+        String element_text = element.getAttribute("text");
+
+        Assert.assertTrue(error_message,
+                element_text.contains(text));
     }
 }
