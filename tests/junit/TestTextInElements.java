@@ -60,6 +60,21 @@ public class TestTextInElements {
         return waitForWebElementVisibleById(id, error_message, 5);
     }
 
+    private WebElement waitForElementAndClick(By by, String error_message, long timeoutInSeconds)
+    {
+        WebElement element = waitForWebElementVisible(by, error_message, timeoutInSeconds);
+        element.click();
+        return element;
+    }
+
+    private WebElement waitForElementAndSendKeys(By by, String keys,
+                                                        String error_message, long timeoutInSeconds)
+    {
+        WebElement element = waitForWebElementVisible(by, error_message, timeoutInSeconds);
+        element.sendKeys(keys);
+        return element;
+    }
+
     /* Part 6: More refactoring. */
     private WebElement waitForElementByXpathAndClick(String xpath, String error_message, long timeoutInSeconds)
     {
@@ -242,11 +257,97 @@ public class TestTextInElements {
 
     }
 
+    /* Part 9: Basic Assertions */
+    @Test
+    public void testCompareArticleTitle()
+    {
+        // GIVEN:
+        // - running emulator
+        // - running Appium Server
+        // - app is on search screen
+        // - cursor in search field
+        waitForElementAndClick(
+                By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
+                "Cannot locate requested element",
+                5);
+
+        // WHEN:
+        // - we type "Java" into search field,
+        // - click the result and wait for page to load
+        waitForElementAndSendKeys(
+                By.xpath("//*[contains(@text, 'Search…')]"),
+                "Java",
+                "Cannot locate requested element",
+                5);
+
+        String xpath_to_search =
+                "//*[@resource_id='org.wikipedia:id/page_list_item_container']"
+                        + "//*[@text='Object-Oriented Programming Language']";
+
+        waitForElementAndClick(
+                By.xpath(xpath_to_search),
+                "Cannot locate requested element",
+                5);
+
+        // THEN: Page title matches our search
+        // org.wikipedia:id/view_page_title_text
+        WebElement title_element =  waitForWebElementVisible(By.id("org.wikipedia:id/view_page_title_text"),
+                "Cannot find article title.",
+                15);
+
+        String article_title = title_element.getAttribute("text");
+
+        Assert.assertEquals(
+                "We see unexpected title.",
+                "Java (programming language)",
+                article_title
+        );
+    }
+
+    /* Part 10: Search cancel. */
+    @Test
+    public void testSearchCancelAdvanced()
+    {
+        // GIVEN:
+        // - running emulator
+        // - running Appium Server
+        // - app is on search screen
+        // - cursor in search field
+        // - search query typed in
+
+        waitForElementByIdAndClick("org.wikipedia:id/search-container",
+                "Cannot locate search container.",
+                5);
+
+        // WHEN: we click X to cancel search...
+        waitForElementAndClear(By.id("org.wikipedia:id/search_src_text"),
+                "Cannot locate search text element.",
+                5);
+
+        waitForElementByIdAndClick("org.wikipedia:id/search_close_btn",
+                "Cannot locate 'X' button to cancel search.",
+                5);
+
+        // THEN: the X is no longer visible (though it says nothing of functionality)
+        waitForElementNotPresentById("org.wikipedia:id/search_close_btn",
+                "'X' button did not disappear.",
+                5);
+
+    }
+
     private boolean waitForElementNotPresentById(String id, String error_message, long timeoutInSeconds)
     {
         WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
         wait.withMessage(error_message + '\n');
         By by = By.id(id);
         return wait.until(ExpectedConditions.invisibilityOfElementLocated(by));
+    }
+
+    /* Part 10: New WebElement method */
+    private WebElement waitForElementAndClear(By by, String error_message, long timeoutInSeconds)
+    {
+        WebElement element = waitForWebElementVisible(by, error_message, timeoutInSeconds);
+        element.clear();
+        return element;
     }
 }
