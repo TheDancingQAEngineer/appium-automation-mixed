@@ -40,9 +40,7 @@ public class TestFindingTextInElements {
     {
         WebElement element =  waitForElementVisible(
                 By.xpath("//*[contains(@text, 'In the news')]"),
-                "Cannot locate 'In the news'",
-                5
-        );
+                "Cannot locate 'In the news'");
 
         assertElementHasText(
                 element,
