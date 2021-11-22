@@ -36,16 +36,16 @@ public class TestFindingTextInElements {
     }
 
     @Test
-    public void testTextInTheNews()         // This test passes.
+    public void testTextSearchWikipedia()         // This test passes.
     {
         WebElement element =  waitForElementVisible(
-                By.xpath("//*[contains(@text, 'In the news')]"),
-                "Cannot locate 'In the news'");
+                By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
+                "Cannot locate 'Search Wikipedia'");
 
         assertElementHasText(
                 element,
-                "news",
-                "No 'news' in located element");
+                "Search",
+                "No 'Search' in located element");
     }
 
     @Test
@@ -53,12 +53,12 @@ public class TestFindingTextInElements {
     {
         WebElement element =  waitForElementVisible(
                 By.xpath("//*[contains(@text, 'Featured')]"),
-                "Cannot locate 'In the news'");
+                "Cannot locate 'Featured'");
 
         assertElementHasText(
                 element,
-                "news",
-                "No 'news' in located element");
+                "Search",
+                "No 'Search' in located element");
     }
 
     @Test
@@ -70,8 +70,8 @@ public class TestFindingTextInElements {
 
         assertElementHasText(
                 element,
-                "news",
-                "No 'news' in located element");
+                "Search",
+                "No 'Search' in located element");
     }
 
     private void assertElementHasText(WebElement element, String text, String error_message)
