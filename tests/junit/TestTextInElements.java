@@ -12,122 +12,16 @@ public class TestTextInElements {
 
     private AppiumDriver driver;
 
-    /* Part 8: Still more refactoring. */
-    private WebElement waitForWebElementVisible(By by, String error_message, long timeoutInSeconds)
-    {
-        WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
-        wait.withMessage(error_message + '\n');
-        return wait.until(
-                ExpectedConditions.presenceOfElementLocated(by)
-        );
-    }
-
-    /* Part 8: Still more refactoring. */
-    private WebElement waitForWebElementVisibleByXpathRefactored(String xpath, String error_message, long timeoutInSeconds)
-    {
-        By by = By.xpath(xpath);
-        return waitForWebElementVisible(by, error_message, timeoutInSeconds);
-    }
-
-    private WebElement waitForWebElementVisibleByXpath(String xpath, String error_message, long timeoutInSeconds)
-    {
-        WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
-        wait.withMessage(error_message + '\n');
-        By by = By.xpath(xpath);
-        return wait.until(
-                ExpectedConditions.presenceOfElementLocated(by)
-        );
-    }
-
-    /* Part 4: An example of method overloading. */
-    private WebElement waitForWebElementVisibleByXpath(String xpath, String error_message)
-    {
-        return waitForWebElementVisibleByXpath(xpath, error_message, 5);
-    }
-
-    private WebElement waitForWebElementVisibleById(String id, String error_message, long timeoutInSeconds)
-    {
-        WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
-        wait.withMessage(error_message + '\n');
-        By by = By.id(id);
-        return wait.until(
-                ExpectedConditions.presenceOfElementLocated(by)
-        );
-    }
-
-    private WebElement waitForWebElementVisibleById(String id, String error_message)
-    {
-        return waitForWebElementVisibleById(id, error_message, 5);
-    }
-
-    private WebElement waitForElementAndClick(By by, String error_message, long timeoutInSeconds)
-    {
-        WebElement element = waitForWebElementVisible(by, error_message, timeoutInSeconds);
-        element.click();
-        return element;
-    }
-
-    private WebElement waitForElementAndSendKeys(By by, String keys,
-                                                        String error_message, long timeoutInSeconds)
-    {
-        WebElement element = waitForWebElementVisible(by, error_message, timeoutInSeconds);
-        element.sendKeys(keys);
-        return element;
-    }
-
-    /* Part 6: More refactoring. */
-    private WebElement waitForElementByXpathAndClick(String xpath, String error_message, long timeoutInSeconds)
-    {
-        WebElement element = waitForWebElementVisibleByXpath(xpath, error_message, timeoutInSeconds);
-        element.click();
-        return element;
-    }
-
-    /* Part 6: More refactoring. */
-    private WebElement waitForElementByXpathAndSendKeys(String xpath, String keys,
-                                                        String error_message, long timeoutInSeconds)
-    {
-        WebElement element = waitForWebElementVisibleByXpath(xpath, error_message, timeoutInSeconds);
-        element.sendKeys(keys);
-        return element;
-    }
-
-    private WebElement waitForElementByIdAndClick(String id, String error_message, long timeoutInSeconds)
-    {
-        WebElement element = waitForWebElementVisibleById(id, error_message, timeoutInSeconds);
-        element.click();
-        return element;
-    }
-
-    /* Part 6: More refactoring. */
-    private WebElement waitForElementByIdAndSendKeys(String id, String keys,
-                                                        String error_message, long timeoutInSeconds)
-    {
-        WebElement element = waitForWebElementVisibleById(id, error_message, timeoutInSeconds);
-        element.sendKeys(keys);
-        return element;
-    }
-
     @Before
     public void setUp() throws Exception
     {
-        DesiredCapabilities capabilities = new DesiredCapabilities();
-
-        capabilities.setCapability("platformName","Android");
-        capabilities.setCapability("deviceName","andro80");
-        capabilities.setCapability("platformVersion","8.0");
-        capabilities.setCapability("automationName","Appium");
-        capabilities.setCapability("appPackage","org.wikipedia");
-        capabilities.setCapability("appActivity",".main.MainActivity");
-        capabilities.setCapability("app","***REMOVED***/appium-automation-mixed/appium-automation-mixed/apks/org.wikipedia.apk");
-
-        driver = new AndroidDriver(new URL("http://127.0.0.1:4723/wd/hub"), capabilities);
+        driver = AppiumSetup.setUp();
     }
 
     @After
     public void tearDown()
     {
-        driver.quit();
+        AppiumSetup.tearDown(driver);
     }
 
     @Test
@@ -348,6 +242,102 @@ public class TestTextInElements {
     {
         WebElement element = waitForWebElementVisible(by, error_message, timeoutInSeconds);
         element.clear();
+        return element;
+    }
+
+    /* Part 8: Still more refactoring. */
+    private WebElement waitForWebElementVisible(By by, String error_message, long timeoutInSeconds)
+    {
+        WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
+        wait.withMessage(error_message + '\n');
+        return wait.until(
+                ExpectedConditions.presenceOfElementLocated(by)
+        );
+    }
+
+    /* Part 8: Still more refactoring. */
+    private WebElement waitForWebElementVisibleByXpathRefactored(String xpath, String error_message, long timeoutInSeconds)
+    {
+        By by = By.xpath(xpath);
+        return waitForWebElementVisible(by, error_message, timeoutInSeconds);
+    }
+
+    private WebElement waitForWebElementVisibleByXpath(String xpath, String error_message, long timeoutInSeconds)
+    {
+        WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
+        wait.withMessage(error_message + '\n');
+        By by = By.xpath(xpath);
+        return wait.until(
+                ExpectedConditions.presenceOfElementLocated(by)
+        );
+    }
+
+    /* Part 4: An example of method overloading. */
+    private WebElement waitForWebElementVisibleByXpath(String xpath, String error_message)
+    {
+        return waitForWebElementVisibleByXpath(xpath, error_message, 5);
+    }
+
+    private WebElement waitForWebElementVisibleById(String id, String error_message, long timeoutInSeconds)
+    {
+        WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
+        wait.withMessage(error_message + '\n');
+        By by = By.id(id);
+        return wait.until(
+                ExpectedConditions.presenceOfElementLocated(by)
+        );
+    }
+
+    private WebElement waitForWebElementVisibleById(String id, String error_message)
+    {
+        return waitForWebElementVisibleById(id, error_message, 5);
+    }
+
+    private WebElement waitForElementAndClick(By by, String error_message, long timeoutInSeconds)
+    {
+        WebElement element = waitForWebElementVisible(by, error_message, timeoutInSeconds);
+        element.click();
+        return element;
+    }
+
+    private WebElement waitForElementAndSendKeys(By by, String keys,
+                                                 String error_message, long timeoutInSeconds)
+    {
+        WebElement element = waitForWebElementVisible(by, error_message, timeoutInSeconds);
+        element.sendKeys(keys);
+        return element;
+    }
+
+    /* Part 6: More refactoring. */
+    private WebElement waitForElementByXpathAndClick(String xpath, String error_message, long timeoutInSeconds)
+    {
+        WebElement element = waitForWebElementVisibleByXpath(xpath, error_message, timeoutInSeconds);
+        element.click();
+        return element;
+    }
+
+    /* Part 6: More refactoring. */
+    private WebElement waitForElementByXpathAndSendKeys(String xpath, String keys,
+                                                        String error_message, long timeoutInSeconds)
+    {
+        WebElement element = waitForWebElementVisibleByXpath(xpath, error_message, timeoutInSeconds);
+        element.sendKeys(keys);
+        return element;
+    }
+
+    private WebElement waitForElementByIdAndClick(String id, String error_message, long timeoutInSeconds)
+    {
+        WebElement element = waitForWebElementVisibleById(id, error_message, timeoutInSeconds);
+        element.click();
+        return element;
+    }
+
+    /* Part 6: More refactoring. */
+    private WebElement waitForElementByIdAndSendKeys(String id, String keys,
+                                                     String error_message, long timeoutInSeconds)
+    {
+        WebElement element = waitForWebElementVisibleById(id, error_message, timeoutInSeconds);
+        element.sendKeys(keys);
         return element;
     }
 }
