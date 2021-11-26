@@ -83,7 +83,7 @@ public class TestTextInElements {
 
         // THEN: at least one search result contains text "Programming Language"
         String xpath_to_search =
-                "//*[@resource_id='org.wikipedia:id/page_list_item_container']"
+                "//*[@resource-id='org.wikipedia:id/page_list_item_container']"
                         + "//*[@text='Object-Oriented Programming Language']";
 
         WebElement element_expected = waitForWebElementVisibleByXpath(
@@ -113,7 +113,7 @@ public class TestTextInElements {
 
         // THEN: at least one search result contains text "Programming Language"
         String xpath_to_search =
-                "//*[@resource_id='org.wikipedia:id/page_list_item_container']"
+                "//*[@resource-id='org.wikipedia:id/page_list_item_container']"
                         + "//*[@text='Object-Oriented Programming Language']";
 
         waitForWebElementVisibleByXpath(
@@ -175,7 +175,7 @@ public class TestTextInElements {
                 5);
 
         String xpath_to_search =
-                "//*[@resource_id='org.wikipedia:id/page_list_item_container']"
+                "//*[@resource-id='org.wikipedia:id/page_list_item_container']"
                         + "//*[@text='Object-Oriented Programming Language']";
 
         waitForElementAndClick(
