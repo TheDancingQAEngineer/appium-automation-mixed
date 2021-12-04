@@ -1,22 +1,9 @@
 import io.appium.java_client.AppiumDriver;
+import lib.CoreTestCase;
 import org.junit.*;
 import org.openqa.selenium.*;
 
-public class Test4 {
-
-    private AppiumDriver driver;
-
-    @Before
-    public void setUp() throws Exception
-    {
-        driver = AppiumSetup.setUp();
-    }
-
-    @After
-    public void tearDown()
-    {
-        AppiumSetup.tearDown(driver);
-    }
+public class TestSearchSwipeAndScreenFlip extends CoreTestCase {
 
     @Test
     public void testSwipeArticle()
@@ -249,7 +236,7 @@ public class Test4 {
     @Test
     public void testAmountOfEmptySearch()
     {
-        String search_line = "Java";
+        String search_line = "VCXZasdfrewq";
         // String search_line = "zxcvfdsaqwer";
 
         // String no_results_label_locator = "//*[@resource-id='org.wikipedia:id/search_empty_view']";

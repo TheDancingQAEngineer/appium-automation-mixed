@@ -1,5 +1,6 @@
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.android.AndroidDriver;
+import lib.CoreTestCase;
 import org.junit.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.remote.DesiredCapabilities;
@@ -8,21 +9,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.net.URL;
 
-public class TestTextInElements {
-
-    private AppiumDriver driver;
-
-    @Before
-    public void setUp() throws Exception
-    {
-        driver = AppiumSetup.setUp();
-    }
-
-    @After
-    public void tearDown()
-    {
-        AppiumSetup.tearDown(driver);
-    }
+public class TestTextInElements extends CoreTestCase {
 
     @Test
     public void testFindSearchFieldAndClick()
