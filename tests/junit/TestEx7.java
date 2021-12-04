@@ -1,61 +1,31 @@
 import io.appium.java_client.AppiumDriver;
-import org.apache.commons.io.filefilter.FalseFileFilter;
 import org.junit.*;
 import org.openqa.selenium.By;
 import org.openqa.selenium.ScreenOrientation;
+import org.openqa.selenium.WebElement;
 
 public class TestEx7 {
+
     private static AppiumDriver driver;
 
-    /**
-     * A simple hack to reset screen rotation.
-     * If necessary for all tests, this can be called in @Before method,
-     * but NOT in @BeforeClass (;
-     *
-     * Run the whole class (NOT individual tests) to see in action.
-     */
-    private void setScreenOrientationPortrait() {
-        if (driver.getOrientation() != ScreenOrientation.PORTRAIT) {
-            driver.rotate(ScreenOrientation.PORTRAIT);
-        }
-    }
-
-    @BeforeClass
-    public static void setUpClass() throws Exception {
-        System.out.println("Initializing Appium Driver...");
+    @Before
+    public void setUp() throws Exception {
         driver = AppiumSetup.setUp();
+        System.out.println("ScreenOrientation after setUp(): "
+                + driver.getOrientation().toString());
     }
 
-    @AfterClass
-    public static void tearDownClass()
+    @After
+    public void tearDown()
     {
-        System.out.println("Tearing down Appium Driver...");
+        System.out.println("ScreenOrientation before tearDown(): "
+                + driver.getOrientation().toString());
         AppiumSetup.tearDown(driver);
-        System.out.println("Done.");
     }
 
     @Test
-    public void test01ThatGoesLandscapeAndDeliberatelyFails()
+    public void testThatFlipsScreenAndDoesntCleanUpAfterItself()
     {
-        System.out.println("Running test 1...");
-        // check that we're on start screen
-        UiHelpers.waitForElementVisible(driver,
-                By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
-                "Cannot locate 'Search Wikipedia'. Maybe we're not on start screen",
-                5);
-
-        // flip screen
-        driver.rotate(ScreenOrientation.LANDSCAPE);
-
-        // fail by design
-        Assert.assertTrue(false);
-    }
-
-    @Test
-    public void test02ThatDependsOnPortraitModeAndFailsWithoutIt()
-    {
-        System.out.println("Running test 2...");
-
         // check that we're on start screen
         UiHelpers.waitForElementVisible(driver,
                 By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
@@ -63,31 +33,22 @@ public class TestEx7 {
                 5);
 
         // try to find something that's only visible in portrait mode
-        searchForSomethingThatIsOnlyVisibleInPortraitMode();
+        WebElement featured_article_card = searchForSomethingThatIsOnlyVisibleInPortraitMode();
+
+        // flip screen
+        driver.rotate(ScreenOrientation.LANDSCAPE);
+
+        // Check that featured article card disappears, so that we know
+        // that the test would fail if we started it with device in LANDSCAPE mode.
+        Assert.assertTrue(
+                UiHelpers.waitForElementInvisible(driver, featured_article_card,
+                        "Featured article card visible after screen flip.", 15)
+        );
     }
 
-    @Test
-    public void test03ThatChecksScreenOrientationAndFlipsIfNecessary()
+    private WebElement searchForSomethingThatIsOnlyVisibleInPortraitMode()
     {
-        System.out.println("Running test 3...");
-
-        // check if screen is in portrait and flip if necessary
-        setScreenOrientationPortrait();
-
-        // check that we're on start screen
-        UiHelpers.waitForElementVisible(driver,
-                By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
-                "Cannot locate 'Search Wikipedia'. Maybe we're not on start screen",
-                5);
-
-        // search for the same thing as in test 2
-        searchForSomethingThatIsOnlyVisibleInPortraitMode();
-
-    }
-
-    private void searchForSomethingThatIsOnlyVisibleInPortraitMode()
-    {
-        UiHelpers.waitForElementVisible(driver,
+        return UiHelpers.waitForElementVisible(driver,
                 By.id("org.wikipedia:id/view_featured_article_card_header"),
                 "Featured article card not visible.",
                 10);

@@ -50,6 +50,20 @@ public class UiHelpers {
         );
     }
 
+    public static Boolean waitForElementInvisible(
+            AppiumDriver driver,
+            WebElement element,
+            String error_message,
+            long timeoutInSeconds)
+    {
+        WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
+        wait.withMessage(error_message + '\n');
+        return wait.until(
+                ExpectedConditions.invisibilityOf(element)
+        );
+    }
+
+
     public static WebElement waitForElementClickable(
             AppiumDriver driver,
             By by,
