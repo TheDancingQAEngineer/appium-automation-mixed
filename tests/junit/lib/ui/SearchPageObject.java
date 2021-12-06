@@ -60,14 +60,14 @@ public class SearchPageObject extends MainPageObject{
 
     public void waitForCancelButtonToAppear()
     {
-        waitForElementVisible(By.id(SEARCH_CANCEL_BUTTON),
+        this.waitForElementVisible(By.id(SEARCH_CANCEL_BUTTON),
                 "Cannot find cancel button.",
                 5);
     }
 
     public void waitForCancelButtonToDisappear()
     {
-        waitForElementNotVisible(By.id(SEARCH_CANCEL_BUTTON),
+        this.waitForElementNotVisible(By.id(SEARCH_CANCEL_BUTTON),
                 "Search cancel button visible after timeout.",
                 5);
     }

@@ -56,23 +56,23 @@ public class MainPageObject {
     protected WebElement waitForElementVisibleByXpath(String xpath, String error_message, long timeoutInSeconds)
     {
         By by = By.xpath(xpath);
-        return waitForElementVisible(by, error_message, timeoutInSeconds);
+        return this.waitForElementVisible(by, error_message, timeoutInSeconds);
     }
 
     protected WebElement waitForElementVisibleByXpath(String xpath, String error_message)
     {
-        return waitForElementVisibleByXpath(xpath, error_message, 5);
+        return this.waitForElementVisibleByXpath(xpath, error_message, 5);
     }
 
     protected void waitForElementVisibleAndClear(By by, String error_message, long timeoutInSeconds)
     {
-        WebElement element = waitForElementVisible(by, error_message, timeoutInSeconds);
+        WebElement element = this.waitForElementVisible(by, error_message, timeoutInSeconds);
         element.clear();
     }
 
     protected WebElement waitForElementVisibleAndClick(By by, String error_message, long timeoutInSeconds)
     {
-        WebElement element = waitForElementVisible(by, error_message, timeoutInSeconds);
+        WebElement element = this.waitForElementVisible(by, error_message, timeoutInSeconds);
         element.click();
         return element;
     }
@@ -80,14 +80,14 @@ public class MainPageObject {
     public String waitForElementVisibleAndGetAttribute(By by, String attribute_name,
                                                        String error_message, long timeoutInSeconds)
     {
-        WebElement element = waitForElementVisible(by, error_message, timeoutInSeconds);
+        WebElement element = this.waitForElementVisible(by, error_message, timeoutInSeconds);
         return element.getAttribute(attribute_name);
     }
 
     /* Part 6: More refactoring. */
     protected WebElement waitForElementVisibleByXpathAndClick(String xpath, String error_message, long timeoutInSeconds)
     {
-        WebElement element = waitForElementVisibleByXpath(xpath, error_message, timeoutInSeconds);
+        WebElement element = this.waitForElementVisibleByXpath(xpath, error_message, timeoutInSeconds);
         element.click();
         return element;
     }
@@ -95,7 +95,7 @@ public class MainPageObject {
     protected WebElement waitForElementVisibleAndSendKeys(By by, String keys,
             String error_message, long timeoutInSeconds)
     {
-        WebElement element = waitForElementVisible(by, error_message, timeoutInSeconds);
+        WebElement element = this.waitForElementVisible(by, error_message, timeoutInSeconds);
         element.sendKeys(keys);
         return element;
     }
@@ -104,7 +104,7 @@ public class MainPageObject {
     protected WebElement waitForElementVisibleByXpathAndSendKeys(String xpath, String keys,
                                                                String error_message, long timeoutInSeconds)
     {
-        WebElement element = waitForElementVisibleByXpath(xpath, error_message, timeoutInSeconds);
+        WebElement element = this.waitForElementVisibleByXpath(xpath, error_message, timeoutInSeconds);
         element.sendKeys(keys);
         return element;
     }
@@ -131,7 +131,7 @@ public class MainPageObject {
     protected void waitForElementClickableAndClick(By by, String error_message,
                                                    long timeoutInSeconds)
     {
-        WebElement element = waitForElementClickable(by,
+        WebElement element = this.waitForElementClickable(by,
                 error_message, timeoutInSeconds);
         element.click();
     }
