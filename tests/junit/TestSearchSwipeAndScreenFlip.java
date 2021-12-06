@@ -1,197 +1,146 @@
-import io.appium.java_client.AppiumDriver;
 import lib.CoreTestCase;
+import lib.ui.ArticlePageObject;
+import lib.ui.MainPageObject;
+import lib.ui.SearchPageObject;
 import org.junit.*;
 import org.openqa.selenium.*;
 
 public class TestSearchSwipeAndScreenFlip extends CoreTestCase {
 
+    protected lib.ui.MainPageObject MainPageObject;
+    protected SearchPageObject SearchPageObject;
+    protected ArticlePageObject ArticlePageObject;
+
+    @Override
+    protected void setUp() throws Exception {
+        super.setUp();
+        this.MainPageObject = new MainPageObject(driver);
+        this.SearchPageObject = new SearchPageObject(driver);
+        this.ArticlePageObject = new ArticlePageObject(driver);
+    }
+
     @Test
     public void testSwipeArticle()
     {
-        // GIVEN:
-        // - running emulator
-        // - running Appium Server
-        // - app is on search screen
-        // - cursor in search field
-        UiHelpers.waitForElementAndClick(driver,
-                By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
-                "Cannot locate requested element",
-                5);
+        // DONE: TODO: Refactor during section 5
 
-        // WHEN:
-        // - we type "Java" into search field,
-        // - click the result and wait for page to load
-        UiHelpers.waitForElementAndSendKeys(driver,
-                By.xpath("//*[contains(@text, 'Search…')]"),
-                "Java",
-                "Cannot locate requested element",
-                5);
+        String search_query = "Appium";
+        String expected_substring = "Appium";
 
-        String xpath_to_search =
-                "//*[@resource-id='org.wikipedia:id/page_list_item_container']"
-                        + "//*[@text='Object-oriented programming language']";
+        SearchPageObject.initSearchInput();
+        SearchPageObject.typeSearchLine(search_query);
 
-        UiHelpers.waitForElementAndClick(driver,
-                By.xpath(xpath_to_search),
-                "Cannot locate requested element",
-                15);
+        SearchPageObject.clickOnArticleWithSubstring(expected_substring);
+        ArticlePageObject.waitForTitleElement();
 
-        // THEN: Page title matches our search
-        // org.wikipedia:id/view_page_title_text
-        WebElement title_element = UiHelpers.waitForElementVisible(driver,
-                By.id("org.wikipedia:id/view_page_title_text"),
-                "Cannot find article title.",
-                15);
-
-        UiHelpers.swipeUp(driver, 2000);
-        UiHelpers.swipeUp(driver, 2000);
-        UiHelpers.swipeUp(driver, 2000);
-        UiHelpers.swipeUp(driver, 2000);
-        UiHelpers.swipeUp(driver, 2000);
+        ArticlePageObject.swipeUp(2000);
+        ArticlePageObject.swipeUp(2000);
+        ArticlePageObject.swipeUp(2000);
+        ArticlePageObject.swipeUp(2000);
+        ArticlePageObject.swipeUp(2000);
     }
 
     /* Lesson 4, Parts 1-2. Swipes */
     @Test
     public void testSwipeTillElementFound()
     {
-        // GIVEN:
-        // - running emulator
-        // - running Appium Server
-        // - app is on search screen
-        // - cursor in search field
-        UiHelpers.waitForElementAndClick(driver,
-                By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
-                "Cannot locate requested element",
-                5);
+        // DONE: TODO: Refactor during section 5
 
-        // WHEN:
-        // - we type "Java" into search field,
-        // - click the result and wait for page to load
-        UiHelpers.waitForElementAndSendKeys(driver,
-                By.xpath("//*[contains(@text, 'Search…')]"),
-                "Appium",
-                "Cannot locate requested element",
-                10);
+        String search_query = "Appium";
+        String expected_substring = "Appium";
 
-        String xpath_to_search =
-                "//*[@resource-id='org.wikipedia:id/page_list_item_title']"
-                        + "[@text='Appium']";
+        SearchPageObject.initSearchInput();
+        SearchPageObject.typeSearchLine(search_query);
+        SearchPageObject.clickOnArticleWithSubstring(expected_substring);
 
-        UiHelpers.waitForElementAndClick(driver,
-                By.xpath(xpath_to_search),
-                "Cannot locate requested element",
-                10);
-
-        // THEN: Page title matches our search
-        // org.wikipedia:id/view_page_title_text
-        WebElement title_element = UiHelpers.waitForElementVisible(driver,
-                By.id("org.wikipedia:id/view_page_title_text"),
-                "Cannot find article title.",
-                15);
-
-        UiHelpers.swipeUpTillElement(driver,
-                By.xpath("//*[@text='View page in browser']"),
-                "Can't find text 'View page in browser'",
-                20);
+        ArticlePageObject.waitForTitleElement();
+        ArticlePageObject.swipeToFooter();
     }
 
     /* Lesson 4, Parts 3-4. Long test */
     @Test
     public void testAddToReadingListAndDelete()
     {
-        String readingListTitle = "Learning programming";
-        String articleTitle = "Java (programming language)";
+        String reading_list_title = "Learning programming";
+        String search_query = "Java";
+        String article_title = "Java (programming language)";
 
         // Launch app, enter search mode
-        UiHelpers.waitForElementAndClick(driver,
-                By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
-                "Cannot locate search field.",
-                5);
+        SearchPageObject.initSearchInput();
 
         // Search "Java"
-        UiHelpers.waitForElementAndSendKeys(driver,
-                By.xpath("//*[contains(@text, 'Search…')]"),
-                "Java",
-                "Cannot type 'Java' to search.",
-                10);
+        SearchPageObject.typeSearchLine(search_query);
 
         // Go to article
-        String xpath_to_search =
-                "//*[@resource-id='org.wikipedia:id/page_list_item_title']"
-                        + String.format("[@text='%s']", articleTitle);
-
-        UiHelpers.waitForElementAndClick(driver,
-                By.xpath(xpath_to_search),
-                String.format("Cannot find '%s' in search results.", articleTitle),
-                10);
+        SearchPageObject.clickOnArticleWithSubstring(article_title);
 
         // Hit "three dots"
-        UiHelpers.waitForElementAndClick(driver,
+        UiHelpers.waitForElementVisibleAndClick(driver,
                 By.xpath("//android.widget.ImageView[@content-desc='More options']"),
                 "Cannot locate three dots.",
                 20);
 
         // Add to reading list
-        UiHelpers.waitForElementAndClick(driver,
+        UiHelpers.waitForElementClickableAndClick(driver,
                 By.xpath("//*[@text='Add to reading list']"),
                 "Cannot find 'Add to reading list' menu item.",
                 10);
 
         // + Create new
-        UiHelpers.waitForElementAndClick(driver,
+        UiHelpers.waitForElementVisibleAndClick(driver,
                 By.id("org.wikipedia:id/onboarding_button"),
                 "Cannot find onboarding button.",
                 10);
 
-        UiHelpers.waitForElementAndClear(driver,
+        UiHelpers.waitForElementVisibleAndClear(driver,
                 By.id("org.wikipedia:id/text_input"),
                 "Cannot clear input in reading list name.",
                 5);
 
         // Enter list name
-        UiHelpers.waitForElementAndSendKeys(driver,
+        UiHelpers.waitForElementVisibleAndSendKeys(driver,
                 By.id("org.wikipedia:id/text_input"),
-                readingListTitle,
+                reading_list_title,
                 "Cannot send keys to text input.",
                 10);
 
         // Tap 'OK'
-        UiHelpers.waitForElementAndClick(driver,
+        UiHelpers.waitForElementVisibleAndClick(driver,
                 By.xpath("//*[@text='OK']"),
                 "Cannot find OK button.",
                 10);
 
         // Close article
-        UiHelpers.waitForElementAndClick(driver,
+        UiHelpers.waitForElementVisibleAndClick(driver,
                 By.xpath("//android.widget.ImageButton[@content-desc='Navigate up']"),
                 "Cannot locate 'X' to close article.",
                 15);
 
         // Tap 'My lists'
-        UiHelpers.waitForElementAndClick(driver,
+        UiHelpers.waitForElementVisibleAndClick(driver,
                 By.xpath("//android.widget.FrameLayout[@content-desc='My lists']"),
                 "Cannot locate 'My Lists' button.",
                 15);
 
         // Tap the list previously created
-        UiHelpers.waitForElementAndClick(driver,
+        UiHelpers.waitForElementVisibleAndClick(driver,
                 By.xpath(
-                        String.format("//*[@text='%s']", readingListTitle)),
-                String.format("Cannot find '%s' in My lists.", readingListTitle),
+                        String.format("//*[@text='%s']", reading_list_title)),
+                String.format("Cannot find '%s' in My lists.", reading_list_title),
                 15);
 
         // Assert the article is there
         // Remove by swiping
         UiHelpers.swipeElementToLeft(driver,
                 By.xpath(
-                        String.format("//*[@text='%s']", articleTitle)),
+                        String.format("//*[@text='%s']", article_title)),
                 String.format(
                         "Swipe to left failed. Cannot find '%s' in reading list.",
-                        articleTitle));
+                        article_title));
 
         // Assert article is removed
         UiHelpers.waitForElementNotPresent(driver,
-                By.xpath(String.format("//*[@text='%s']", articleTitle)),
+                By.xpath(String.format("//*[@text='%s']", article_title)),
                 "Swiped, but article still present",
                 5);
     }
@@ -203,14 +152,10 @@ public class TestSearchSwipeAndScreenFlip extends CoreTestCase {
         String search_line = "Yo La Tengo discography";
         // Open app
         // Tap 'Search'
-        UiHelpers.waitForElementAndClick(driver,
-                By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
-                "Cannot locate search field.",
-                5);
-
+        SearchPageObject.initSearchInput();
 
         // Send query with at least one likely match
-        UiHelpers.waitForElementAndSendKeys(driver,
+        UiHelpers.waitForElementVisibleAndSendKeys(driver,
                 By.xpath("//*[contains(@text, 'Search…')]"),
                 search_line,
                 String.format("Cannot type '%s' to search.", search_line),
@@ -246,13 +191,10 @@ public class TestSearchSwipeAndScreenFlip extends CoreTestCase {
 
         // Open app
         // Tap 'Search'
-        UiHelpers.waitForElementAndClick(driver,
-                By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
-                "Cannot locate search field.",
-                5);
+        SearchPageObject.initSearchInput();
 
         // Send random query with unlikely matches
-        UiHelpers.waitForElementAndSendKeys(driver,
+        UiHelpers.waitForElementVisibleAndSendKeys(driver,
                 By.xpath("//*[contains(@text, 'Search…')]"),
                 search_line,
                 String.format("Cannot type '%s' to search.", search_line),
@@ -280,14 +222,11 @@ public class TestSearchSwipeAndScreenFlip extends CoreTestCase {
         }
 
         // Tap search
-        UiHelpers.waitForElementAndClick(driver,
-                By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
-                "Cannot locate requested element",
-                5);
+        SearchPageObject.initSearchInput();
 
         // Send search query
         String search_query = "Java";
-        UiHelpers.waitForElementAndSendKeys(driver,
+        UiHelpers.waitForElementVisibleAndSendKeys(driver,
                 By.xpath("//*[contains(@text, 'Search…')]"),
                 search_query,
                 "Cannot locate search input field.",
@@ -299,13 +238,13 @@ public class TestSearchSwipeAndScreenFlip extends CoreTestCase {
                         + "//*[@text='Object-oriented programming language']";
 
         // Open article
-        UiHelpers.waitForElementAndClick(driver,
+        UiHelpers.waitForElementVisibleAndClick(driver,
                 By.xpath(xpath_to_search),
                 String.format("Cannot locate element by xpath: \n%s", xpath_to_search),
                 15);
 
         // Get title
-        String title_before_rotation = UiHelpers.waitForElementAndGetAttribute(driver,
+        String title_before_rotation = MainPageObject.waitForElementVisibleAndGetAttribute(
                 By.id("org.wikipedia:id/view_page_title_text"),
                 "text",
                 "Cannot find article title.",
@@ -315,7 +254,7 @@ public class TestSearchSwipeAndScreenFlip extends CoreTestCase {
         driver.rotate(ScreenOrientation.LANDSCAPE);
 
         // Assert article title is still there
-        String title_after_rotation = UiHelpers.waitForElementAndGetAttribute(driver,
+        String title_after_rotation = MainPageObject.waitForElementVisibleAndGetAttribute(
                 By.id("org.wikipedia:id/view_page_title_text"),
                 "text",
                 "Cannot find article title.",
@@ -331,7 +270,7 @@ public class TestSearchSwipeAndScreenFlip extends CoreTestCase {
         driver.rotate(ScreenOrientation.LANDSCAPE);
 
         // Assert article title is still the same
-        String title_after_second_rotation = UiHelpers.waitForElementAndGetAttribute(driver,
+        String title_after_second_rotation = MainPageObject.waitForElementVisibleAndGetAttribute(
                 By.id("org.wikipedia:id/view_page_title_text"),
                 "text",
                 "Cannot find article title.",
@@ -355,16 +294,13 @@ public class TestSearchSwipeAndScreenFlip extends CoreTestCase {
 
         // Launch app
         // Go to search screen
-        UiHelpers.waitForElementAndClick(driver,
-                By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
-                "Cannot locate requested element",
-                5);
+        SearchPageObject.initSearchInput();
 
         // Send 'Java'
         String search_query = "Java";
         String article_title = "Java (programming language)";
 
-        UiHelpers.waitForElementAndSendKeys(driver,
+        UiHelpers.waitForElementVisibleAndSendKeys(driver,
                 By.xpath("//*[contains(@text, 'Search…')]"),
                 search_query,
                 "Cannot locate search input field.",
