@@ -1,15 +1,22 @@
-import io.appium.java_client.AppiumDriver;
-import io.appium.java_client.android.AndroidDriver;
 import lib.CoreTestCase;
+import lib.ui.ArticlePageObject;
+import lib.ui.MainPageObject;
+import lib.ui.SearchPageObject;
 import org.junit.*;
 import org.openqa.selenium.*;
-import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.net.URL;
-
 public class TestTextInElements extends CoreTestCase {
+
+    private MainPageObject MainPageObject;
+
+    protected void setUp() throws Exception
+    {
+        super.setUp();
+        
+        MainPageObject = new MainPageObject(driver);
+    }
 
     @Test
     public void testFindSearchFieldAndClick()
@@ -23,164 +30,116 @@ public class TestTextInElements extends CoreTestCase {
         // THEN:
         // - there's an element with text 'Search Wikipedia';
         // - the element is clickable
-        WebElement element_to_init_search = driver.findElementByXPath("//*[contains(@text, 'Search Wikipedia')]");
-        element_to_init_search.click();
+        SearchPageObject SearchPageObject = new SearchPageObject(driver);
+        SearchPageObject.initSearchInput();
     }
 
     @Test
     public void testSendTextToSearchField()
     {
+        String search_query = "Yo La Tengo Discography";
         // GIVEN:
         // - running emulator
         // - running Appium Server
 
         // WHEN: On search screen
 
-        // This is explicit reference to findElement*().
-        WebElement element_to_init_search = driver.findElementByXPath("//*[contains(@text, 'Search Wikipedia')]");
-        element_to_init_search.click();
+        SearchPageObject SearchPageObject = new SearchPageObject(driver);
+        SearchPageObject.initSearchInput();
 
         // THEN: Search field accepts text
 
         // This is a custom method with wait().
         // Note that we're using an overloaded method.
-        WebElement element_to_type_search_query = waitForWebElementVisibleByXpath(
-                "//*[contains(@text, 'Search…')]",
-                "Cannot locate requested element");
-
-        element_to_type_search_query.sendKeys("Yo La Tengo Discography");
+        SearchPageObject.typeSearchLine(search_query);
     }
 
     @Test
     /* Part 5. Compound xPath */
     public void testSearchForJavaTheProgrammingLanguage() {
-        // GIVEN:
-        // - running emulator
-        // - running Appium Server
-        // - app is on search screen
-        // - cursor in search field
-        WebElement element_to_init_search = driver.findElementByXPath("//*[contains(@text, 'Search Wikipedia')]");
-        element_to_init_search.click();
-        WebElement element_to_type_search_query = waitForWebElementVisibleByXpath(
-                "//*[contains(@text, 'Search…')]",
-                "Cannot locate requested element");
 
-        // WHEN: we type "Java" into search field
-        element_to_type_search_query.sendKeys("Java");
+        SearchPageObject SearchPageObject = new SearchPageObject(driver);
 
-        // THEN: at least one search result contains text "Programming Language"
-        String xpath_to_search =
-                "//*[@resource-id='org.wikipedia:id/page_list_item_container']"
-                        + "//*[@text='Object-Oriented Programming Language']";
-
-        WebElement element_expected = waitForWebElementVisibleByXpath(
-                xpath_to_search,
-                "Cannot locate requested element.",
-                15
-        );
+        SearchPageObject.initSearchInput();
+        SearchPageObject.typeSearchLine("Java");
+        SearchPageObject.waitForSearchResult("Object-oriented programming language");
     }
 
     @Test
     public void testSearchForJavaRefactored() {
+        String
+                search_query = "Java",
+                expected_substring = "Object-oriented programming language";
+
         // GIVEN:
         // - running emulator
         // - running Appium Server
         // - app is on search screen
         // - cursor in search field
-        waitForElementByXpathAndClick("//*[contains(@text, 'Search Wikipedia')]",
-                "Cannot locate requested element",
-                5);
+        SearchPageObject SearchPageObject = new SearchPageObject(driver);
+        SearchPageObject.initSearchInput();
 
         // WHEN: we type "Java" into search field
-        waitForElementByXpathAndSendKeys(
-                "//*[contains(@text, 'Search…')]",
-                "Java",
-                "Cannot locate requested element",
-                5);
+        SearchPageObject.typeSearchLine(search_query);
 
         // THEN: at least one search result contains text "Programming Language"
-        String xpath_to_search =
-                "//*[@resource-id='org.wikipedia:id/page_list_item_container']"
-                        + "//*[@text='Object-Oriented Programming Language']";
-
-        waitForWebElementVisibleByXpath(
-                xpath_to_search,
-                "Cannot locate requested element.",
-                15
-        );
-
+        SearchPageObject.waitForSearchResult(expected_substring);
     }
 
     /* Part 7: Search cancel. */
     @Test
     public void testSearchCancel()
     {
+        // DONE: TODO: Refactor this test by the end of section 4
         // GIVEN:
         // - running emulator
         // - running Appium Server
         // - app is on search screen
-        // - cursor in search field
-        // - search query typed in
+        SearchPageObject SearchPageObject = new SearchPageObject(driver);
 
-        waitForElementByIdAndClick("org.wikipedia:id/search-container",
-                "Cannot locate search container.",
-                5);
+        SearchPageObject.initSearchInput();
 
         // WHEN: we click X to cancel search...
-        waitForElementByIdAndClick("org.wikipedia:id/search_close_btn",
-                "Cannot locate 'X' button to cancel search.",
-                5);
+        SearchPageObject.waitForCancelButtonToAppear();
+        SearchPageObject.clickCancelSearch();
 
         // THEN: the X is no longer visible (though it says nothing of functionality)
-        waitForElementNotPresentById("org.wikipedia:id/search_close_btn",
-                "'X' button did not disappear.",
-                5);
-
+        SearchPageObject.waitForCancelButtonToDisappear();
     }
 
     /* Part 9: Basic Assertions */
     @Test
     public void testCompareArticleTitle()
+    // DONE: TODO: Refactor during section 5
     {
+        String search_query = "Java";
+        String expected_substring = "Object-oriented programming language";
+        String expected_title = "Java (programming language)";
+
         // GIVEN:
         // - running emulator
         // - running Appium Server
         // - app is on search screen
         // - cursor in search field
-        waitForElementAndClick(
-                By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
-                "Cannot locate requested element",
-                5);
+        SearchPageObject SearchPageObject = new SearchPageObject(driver);
+        SearchPageObject.initSearchInput();
 
         // WHEN:
         // - we type "Java" into search field,
         // - click the result and wait for page to load
-        waitForElementAndSendKeys(
-                By.xpath("//*[contains(@text, 'Search…')]"),
-                "Java",
-                "Cannot locate requested element",
-                5);
-
-        String xpath_to_search =
-                "//*[@resource-id='org.wikipedia:id/page_list_item_container']"
-                        + "//*[@text='Object-Oriented Programming Language']";
-
-        waitForElementAndClick(
-                By.xpath(xpath_to_search),
-                "Cannot locate requested element",
-                5);
+        SearchPageObject.typeSearchLine(search_query);
+        SearchPageObject.clickOnArticleWithSubstring(expected_substring);
 
         // THEN: Page title matches our search
         // org.wikipedia:id/view_page_title_text
-        WebElement title_element =  waitForWebElementVisible(By.id("org.wikipedia:id/view_page_title_text"),
-                "Cannot find article title.",
-                15);
 
-        String article_title = title_element.getAttribute("text");
+        ArticlePageObject ArticlePageObject = new ArticlePageObject(driver);
+        String article_title = ArticlePageObject.getArticleTitle();
 
         Assert.assertEquals(
-                "We see unexpected title.",
-                "Java (programming language)",
+                String.format("Expected title '%s', got '%s'\n",
+                        expected_title, article_title),
+                expected_title,
                 article_title
         );
     }
@@ -189,80 +148,21 @@ public class TestTextInElements extends CoreTestCase {
     @Test
     public void testSearchCancelAdvanced()
     {
-        // GIVEN:
-        // - running emulator
-        // - running Appium Server
-        // - app is on search screen
-        // - cursor in search field
-        // - search query typed in
+        String search_query = "Java";
+        SearchPageObject SearchPageObject = new SearchPageObject(driver);
 
-        waitForElementByIdAndClick("org.wikipedia:id/search-container",
-                "Cannot locate search container.",
-                5);
+        // GIVEN: search query typed in
+        SearchPageObject.initSearchInput();
+        SearchPageObject.typeSearchLine(search_query);
 
-        // WHEN: we click X to cancel search...
-        waitForElementAndClear(By.id("org.wikipedia:id/search_src_text"),
-                "Cannot locate search text element.",
-                5);
-
-        waitForElementByIdAndClick("org.wikipedia:id/search_close_btn",
-                "Cannot locate 'X' button to cancel search.",
-                5);
+        // WHEN: we have cleared text from search input
+        //      AND we click X to cancel search...
+        SearchPageObject.clearSearchInput();
+        SearchPageObject.waitForCancelButtonToAppear();
+        SearchPageObject.clickCancelSearch();
 
         // THEN: the X is no longer visible (though it says nothing of functionality)
-        waitForElementNotPresentById("org.wikipedia:id/search_close_btn",
-                "'X' button did not disappear.",
-                5);
-
-    }
-
-    private boolean waitForElementNotPresentById(String id, String error_message, long timeoutInSeconds)
-    {
-        WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
-        wait.withMessage(error_message + '\n');
-        By by = By.id(id);
-        return wait.until(ExpectedConditions.invisibilityOfElementLocated(by));
-    }
-
-    /* Part 10: New WebElement method */
-    private WebElement waitForElementAndClear(By by, String error_message, long timeoutInSeconds)
-    {
-        WebElement element = waitForWebElementVisible(by, error_message, timeoutInSeconds);
-        element.clear();
-        return element;
-    }
-
-    /* Part 8: Still more refactoring. */
-    private WebElement waitForWebElementVisible(By by, String error_message, long timeoutInSeconds)
-    {
-        WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
-        wait.withMessage(error_message + '\n');
-        return wait.until(
-                ExpectedConditions.presenceOfElementLocated(by)
-        );
-    }
-
-    /* Part 8: Still more refactoring. */
-    private WebElement waitForWebElementVisibleByXpathRefactored(String xpath, String error_message, long timeoutInSeconds)
-    {
-        By by = By.xpath(xpath);
-        return waitForWebElementVisible(by, error_message, timeoutInSeconds);
-    }
-
-    private WebElement waitForWebElementVisibleByXpath(String xpath, String error_message, long timeoutInSeconds)
-    {
-        WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
-        wait.withMessage(error_message + '\n');
-        By by = By.xpath(xpath);
-        return wait.until(
-                ExpectedConditions.presenceOfElementLocated(by)
-        );
-    }
-
-    /* Part 4: An example of method overloading. */
-    private WebElement waitForWebElementVisibleByXpath(String xpath, String error_message)
-    {
-        return waitForWebElementVisibleByXpath(xpath, error_message, 5);
+        SearchPageObject.waitForCancelButtonToDisappear();
     }
 
     private WebElement waitForWebElementVisibleById(String id, String error_message, long timeoutInSeconds)
@@ -271,60 +171,14 @@ public class TestTextInElements extends CoreTestCase {
         wait.withMessage(error_message + '\n');
         By by = By.id(id);
         return wait.until(
-                ExpectedConditions.presenceOfElementLocated(by)
+                ExpectedConditions.visibilityOfElementLocated(by)
         );
-    }
-
-    private WebElement waitForWebElementVisibleById(String id, String error_message)
-    {
-        return waitForWebElementVisibleById(id, error_message, 5);
-    }
-
-    private WebElement waitForElementAndClick(By by, String error_message, long timeoutInSeconds)
-    {
-        WebElement element = waitForWebElementVisible(by, error_message, timeoutInSeconds);
-        element.click();
-        return element;
-    }
-
-    private WebElement waitForElementAndSendKeys(By by, String keys,
-                                                 String error_message, long timeoutInSeconds)
-    {
-        WebElement element = waitForWebElementVisible(by, error_message, timeoutInSeconds);
-        element.sendKeys(keys);
-        return element;
-    }
-
-    /* Part 6: More refactoring. */
-    private WebElement waitForElementByXpathAndClick(String xpath, String error_message, long timeoutInSeconds)
-    {
-        WebElement element = waitForWebElementVisibleByXpath(xpath, error_message, timeoutInSeconds);
-        element.click();
-        return element;
-    }
-
-    /* Part 6: More refactoring. */
-    private WebElement waitForElementByXpathAndSendKeys(String xpath, String keys,
-                                                        String error_message, long timeoutInSeconds)
-    {
-        WebElement element = waitForWebElementVisibleByXpath(xpath, error_message, timeoutInSeconds);
-        element.sendKeys(keys);
-        return element;
     }
 
     private WebElement waitForElementByIdAndClick(String id, String error_message, long timeoutInSeconds)
     {
         WebElement element = waitForWebElementVisibleById(id, error_message, timeoutInSeconds);
         element.click();
-        return element;
-    }
-
-    /* Part 6: More refactoring. */
-    private WebElement waitForElementByIdAndSendKeys(String id, String keys,
-                                                     String error_message, long timeoutInSeconds)
-    {
-        WebElement element = waitForWebElementVisibleById(id, error_message, timeoutInSeconds);
-        element.sendKeys(keys);
         return element;
     }
 }
