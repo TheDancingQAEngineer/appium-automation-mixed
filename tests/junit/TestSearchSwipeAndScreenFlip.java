@@ -1,5 +1,7 @@
 import lib.CoreTestCase;
-import lib.ui.*;
+import lib.ui.ArticlePageObject;
+import lib.ui.MainPageObject;
+import lib.ui.SearchPageObject;
 import org.junit.*;
 import org.openqa.selenium.*;
 
@@ -8,8 +10,6 @@ public class TestSearchSwipeAndScreenFlip extends CoreTestCase {
     protected lib.ui.MainPageObject MainPageObject;
     protected SearchPageObject SearchPageObject;
     protected ArticlePageObject ArticlePageObject;
-    protected NavigationUI NavigationUI;
-    protected MyListsPageObject MyListsPageObject;
 
     @Override
     protected void setUp() throws Exception {
@@ -65,9 +65,6 @@ public class TestSearchSwipeAndScreenFlip extends CoreTestCase {
         String search_query = "Java";
         String article_title = "Java (programming language)";
 
-        this.NavigationUI = new NavigationUI(driver);
-        this.MyListsPageObject = new MyListsPageObject(driver);
-
         // Launch app, enter search mode
         SearchPageObject.initSearchInput();
 
@@ -77,27 +74,75 @@ public class TestSearchSwipeAndScreenFlip extends CoreTestCase {
         // Go to article
         SearchPageObject.clickOnArticleWithSubstring(article_title);
 
-        ArticlePageObject.waitForTitleElement();
+        // Hit "three dots"
+        UiHelpers.waitForElementVisibleAndClick(driver,
+                By.xpath("//android.widget.ImageView[@content-desc='More options']"),
+                "Cannot locate three dots.",
+                20);
 
-        ArticlePageObject.addArticleToReadingList(reading_list_title);
+        // Add to reading list
+        UiHelpers.waitForElementClickableAndClick(driver,
+                By.xpath("//*[@text='Add to reading list']"),
+                "Cannot find 'Add to reading list' menu item.",
+                10);
+
+        // + Create new
+        UiHelpers.waitForElementVisibleAndClick(driver,
+                By.id("org.wikipedia:id/onboarding_button"),
+                "Cannot find onboarding button.",
+                10);
+
+        UiHelpers.waitForElementVisibleAndClear(driver,
+                By.id("org.wikipedia:id/text_input"),
+                "Cannot clear input in reading list name.",
+                5);
+
+        // Enter list name
+        UiHelpers.waitForElementVisibleAndSendKeys(driver,
+                By.id("org.wikipedia:id/text_input"),
+                reading_list_title,
+                "Cannot send keys to text input.",
+                10);
+
+        // Tap 'OK'
+        UiHelpers.waitForElementVisibleAndClick(driver,
+                By.xpath("//*[@text='OK']"),
+                "Cannot find OK button.",
+                10);
 
         // Close article
-        ArticlePageObject.closeArticle();
+        UiHelpers.waitForElementVisibleAndClick(driver,
+                By.xpath("//android.widget.ImageButton[@content-desc='Navigate up']"),
+                "Cannot locate 'X' to close article.",
+                15);
 
         // Tap 'My lists'
-        NavigationUI.clickMyLists();
+        UiHelpers.waitForElementVisibleAndClick(driver,
+                By.xpath("//android.widget.FrameLayout[@content-desc='My lists']"),
+                "Cannot locate 'My Lists' button.",
+                15);
 
         // Tap the list previously created
-        MyListsPageObject.openReadingListByName(reading_list_title);
+        UiHelpers.waitForElementVisibleAndClick(driver,
+                By.xpath(
+                        String.format("//*[@text='%s']", reading_list_title)),
+                String.format("Cannot find '%s' in My lists.", reading_list_title),
+                15);
 
         // Assert the article is there
-        MyListsPageObject.waitForArticleToAppearByTitle(article_title);
-
         // Remove by swiping
-        MyListsPageObject.swipeArticleToDelete(article_title);
+        UiHelpers.swipeElementToLeft(driver,
+                By.xpath(
+                        String.format("//*[@text='%s']", article_title)),
+                String.format(
+                        "Swipe to left failed. Cannot find '%s' in reading list.",
+                        article_title));
 
         // Assert article is removed
-        MyListsPageObject.waitForArticleToDisappearByTitle(article_title);
+        UiHelpers.waitForElementNotPresent(driver,
+                By.xpath(String.format("//*[@text='%s']", article_title)),
+                "Swiped, but article still present",
+                5);
     }
 
     /* Lesson 4, Part 5. Asserts. */
@@ -110,9 +155,23 @@ public class TestSearchSwipeAndScreenFlip extends CoreTestCase {
         SearchPageObject.initSearchInput();
 
         // Send query with at least one likely match
-        SearchPageObject.typeSearchLine(search_line);
+        UiHelpers.waitForElementVisibleAndSendKeys(driver,
+                By.xpath("//*[contains(@text, 'Search…')]"),
+                search_line,
+                String.format("Cannot type '%s' to search.", search_line),
+                10);
 
-        int number_of_search_elements = SearchPageObject.getNumberOfSearchResults();
+
+        String search_result_locator = "//*[@resource-id='org.wikipedia:id/search_results_container']" +
+                "//*[@resource-id='org.wikipedia:id/page_list_item_container']";
+
+        UiHelpers.waitForElementVisible(driver,
+                By.xpath(search_result_locator),
+                String.format("Failed to locate element by xpath: \n%s.", search_result_locator),
+                10);
+
+        int number_of_search_elements = UiHelpers.getNumberOfElements(driver,
+                By.xpath(search_result_locator));
 
         // Check that search results has more than 0 items, if true, pass
         Assert.assertTrue("Too few results", number_of_search_elements > 0);
@@ -123,19 +182,34 @@ public class TestSearchSwipeAndScreenFlip extends CoreTestCase {
     public void testAmountOfEmptySearch()
     {
         String search_line = "VCXZasdfrewq";
+        // String search_line = "zxcvfdsaqwer";
+
+        // String no_results_label_locator = "//*[@resource-id='org.wikipedia:id/search_empty_view']";
+        String no_results_label_locator = "//*[@text='No results found']";
+        String search_result_locator = "//*[@resource-id='org.wikipedia:id/search_results_container']" +
+                "//*[@resource-id='org.wikipedia:id/page_list_item_container']";
 
         // Open app
         // Tap 'Search'
         SearchPageObject.initSearchInput();
 
         // Send random query with unlikely matches
-        SearchPageObject.typeSearchLine(search_line);
+        UiHelpers.waitForElementVisibleAndSendKeys(driver,
+                By.xpath("//*[contains(@text, 'Search…')]"),
+                search_line,
+                String.format("Cannot type '%s' to search.", search_line),
+                10);
 
         // Check that search results has 0 items, if false, throw exception
-        SearchPageObject.assertZeroSearchResults(search_line);
+        UiHelpers.assertZeroElementsVisible(driver,
+                By.xpath(search_result_locator),
+                String.format("Found results by query: '%s'", search_line));
 
         // Check that "No results found" label is visible
-        SearchPageObject.waitForNoResultsLabel();
+        UiHelpers.waitForElementVisible(driver,
+                By.xpath(no_results_label_locator),
+                String.format("Cannot locate item by xpath: \n%s", no_results_label_locator),
+                10);
     }
 
     /* Part 7. Rotation */
@@ -152,20 +226,39 @@ public class TestSearchSwipeAndScreenFlip extends CoreTestCase {
 
         // Send search query
         String search_query = "Java";
-        String expected_substring = "Object-oriented programming language";
-        SearchPageObject.typeSearchLine(search_query);
+        UiHelpers.waitForElementVisibleAndSendKeys(driver,
+                By.xpath("//*[contains(@text, 'Search…')]"),
+                search_query,
+                "Cannot locate search input field.",
+                5);
 
         // Wait for results
-        SearchPageObject.clickOnArticleWithSubstring(expected_substring);
+        String xpath_to_search =
+                "//*[@resource-id='org.wikipedia:id/page_list_item_container']"
+                        + "//*[@text='Object-oriented programming language']";
+
+        // Open article
+        UiHelpers.waitForElementVisibleAndClick(driver,
+                By.xpath(xpath_to_search),
+                String.format("Cannot locate element by xpath: \n%s", xpath_to_search),
+                15);
 
         // Get title
-        String title_before_rotation = ArticlePageObject.getArticleTitle();
+        String title_before_rotation = MainPageObject.waitForElementVisibleAndGetAttribute(
+                By.id("org.wikipedia:id/view_page_title_text"),
+                "text",
+                "Cannot find article title.",
+                15);
 
         // Rotate device
         driver.rotate(ScreenOrientation.LANDSCAPE);
 
         // Assert article title is still there
-        String title_after_rotation = ArticlePageObject.getArticleTitle();
+        String title_after_rotation = MainPageObject.waitForElementVisibleAndGetAttribute(
+                By.id("org.wikipedia:id/view_page_title_text"),
+                "text",
+                "Cannot find article title.",
+                15);
 
         Assert.assertEquals(
                 "Titles before and after rotation don't match.",
@@ -177,7 +270,11 @@ public class TestSearchSwipeAndScreenFlip extends CoreTestCase {
         driver.rotate(ScreenOrientation.LANDSCAPE);
 
         // Assert article title is still the same
-        String title_after_second_rotation = ArticlePageObject.getArticleTitle();
+        String title_after_second_rotation = MainPageObject.waitForElementVisibleAndGetAttribute(
+                By.id("org.wikipedia:id/view_page_title_text"),
+                "text",
+                "Cannot find article title.",
+                15);
 
         Assert.assertEquals(
                 "Titles before and after two rotations don't match.",
@@ -203,16 +300,30 @@ public class TestSearchSwipeAndScreenFlip extends CoreTestCase {
         String search_query = "Java";
         String article_title = "Java (programming language)";
 
-        SearchPageObject.typeSearchLine(search_query);
+        UiHelpers.waitForElementVisibleAndSendKeys(driver,
+                By.xpath("//*[contains(@text, 'Search…')]"),
+                search_query,
+                "Cannot locate search input field.",
+                5);
 
         // Check that 'Java (programming language)' is found
-        SearchPageObject.waitForSearchResult(article_title);
+        String xpath_to_search =
+                "//*[@resource-id='org.wikipedia:id/page_list_item_title']"
+                        + String.format("[@text='%s']", article_title);
+
+        UiHelpers.waitForElementVisible(driver,
+                By.xpath(xpath_to_search),
+                String.format("Cannot find '%s' in search results.", article_title),
+                10);
 
         // Send app to background by clicking 'O'
         // Launch again
-        driver.runAppInBackground(java.time.Duration.ofSeconds(2));
+        driver.runAppInBackground(2);
 
         // Check that our search result is still on the screen
-        SearchPageObject.waitForSearchResult(article_title);
+        UiHelpers.waitForElementVisible(driver,
+                By.xpath(xpath_to_search),
+                String.format("Cannot find '%s' in search results.", article_title),
+                10);
     }
 }

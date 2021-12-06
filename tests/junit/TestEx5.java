@@ -30,7 +30,7 @@ public class TestEx5 extends CoreTestCase {
         3. Убеждается, что вторая осталась
         4. Переходит в неё и убеждается, что title совпадает */
 
-        // DONE: TODO: Refactor after section 6.
+        // TODO: Refactor after section 6.
 
         String
                 search_query_1 = "Java",

@@ -6,47 +6,37 @@ import org.openqa.selenium.By;
 public class SearchPageObject extends MainPageObject{
 
     private static final String
-        NO_RESULTS_LABEL_XPATH = "xpath://*[@text='No results found']",
-        SEARCH_INIT_ELEMENT_XPATH = "xpath://*[contains(@text, 'Search Wikipedia')]",
-        SEARCH_INPUT_XPATH = "xpath://*[contains(@text, 'Search…')]",
-        SEARCH_CANCEL_BUTTON_ID = "id:org.wikipedia:id/search_close_btn",
-        SEARCH_RESULT_XPATH = "xpath://*[@resource-id='org.wikipedia:id/search_results_container']" +
-                "//*[@resource-id='org.wikipedia:id/page_list_item_container']",
-        SEARCH_TEXT_FIELD_ID = "id:org.wikipedia:id/search_src_text";
-
-    /** STRING TEMPLATES BEGIN **/
-
-    private static final String
-            SEARCH_RESULT_BY_SUBSTRING_XPATH_TPL = "xpath://*[@resource-id='org.wikipedia:id/page_list_item_container']"
-                + "//*[contains(@text, '{SUBSTRING}')]";
-
-    /** STRING TEMPLATES END **/
-
-
-    /** TEMPLATE METHODS BEGIN **/
-
-    private static String getSearchResultElement(String substring)
-    {
-        return SEARCH_RESULT_BY_SUBSTRING_XPATH_TPL.replace("{SUBSTRING}", substring);
-    }
-
-    /** TEMPLATE METHODS END **/
+        SEARCH_INIT_ELEMENT = "//*[contains(@text, 'Search Wikipedia')]",
+        SEARCH_INPUT = "//*[contains(@text, 'Search…')]",
+        SEARCH_CANCEL_BUTTON = "org.wikipedia:id/search_close_btn",
+        SEARCH_RESULT_BY_SUBSTRING_TPL = "//*[@resource-id='org.wikipedia:id/page_list_item_container']"
+                + "//*[contains(@text, '{SUBSTRING}')]",
+        SEARCH_TEXT_FIELD = "org.wikipedia:id/search_src_text";
 
     public SearchPageObject(AppiumDriver driver) {
         super(driver);
     }
 
+    /** TEMPLATE METHODS BEGIN **/
+    private static String getSearchResultElement(String substring)
+    {
+        return SEARCH_RESULT_BY_SUBSTRING_TPL.replace("{SUBSTRING}", substring);
+    }
+
+    /** TEMPLATE METHODS END **/
+
+
     public void initSearchInput()
     {
-        this.waitForElementVisibleByXpath(SEARCH_INIT_ELEMENT_XPATH,
+        this.waitForElementVisibleByXpath(SEARCH_INIT_ELEMENT,
                 "Cannot find search field on start screen.",
                 5);
 
-        this.waitForElementVisibleByXpathAndClick(SEARCH_INIT_ELEMENT_XPATH,
+        this.waitForElementVisibleByXpathAndClick(SEARCH_INIT_ELEMENT,
                 "Cannot click in search field at home screen.",
                 5);
 
-        this.waitForElementVisibleByXpath(SEARCH_INPUT_XPATH,
+        this.waitForElementVisibleByXpath(SEARCH_INPUT,
                 "Cannot find search input after tap.",
                 5);
     }
@@ -54,7 +44,7 @@ public class SearchPageObject extends MainPageObject{
     public void typeSearchLine(String search_line)
     {
         this.waitForElementVisibleAndSendKeys(
-                SEARCH_INPUT_XPATH,
+                By.xpath(SEARCH_INPUT),
                 search_line,
                 "Cannot type search line to search input",
                 5
@@ -70,27 +60,27 @@ public class SearchPageObject extends MainPageObject{
 
     public void waitForCancelButtonToAppear()
     {
-        waitForElementVisible(SEARCH_CANCEL_BUTTON_ID,
+        waitForElementVisible(By.id(SEARCH_CANCEL_BUTTON),
                 "Cannot find cancel button.",
                 5);
     }
 
     public void waitForCancelButtonToDisappear()
     {
-        waitForElementNotVisible(SEARCH_CANCEL_BUTTON_ID,
+        waitForElementNotVisible(By.id(SEARCH_CANCEL_BUTTON),
                 "Search cancel button visible after timeout.",
                 5);
     }
 
     public void clickCancelSearch()
     {
-        this.waitForElementVisibleAndClick(SEARCH_CANCEL_BUTTON_ID,
+        this.waitForElementVisibleAndClick(By.id(SEARCH_CANCEL_BUTTON),
                 "Cannot find and click search cancel button",
                 5);
     }
 
     public void clearSearchInput() {
-        this.waitForElementVisibleAndClear(SEARCH_TEXT_FIELD_ID,
+        this.waitForElementVisibleAndClear(By.id(SEARCH_TEXT_FIELD),
                 "Cannot locate search text element to clear.",
                 5);
     }
@@ -108,7 +98,7 @@ public class SearchPageObject extends MainPageObject{
             int minimum_expected_number_of_results) {
 
         this.waitForElementsVisible(
-                getSearchResultElement(expected_substring),
+                By.xpath(getSearchResultElement(expected_substring)),
                 minimum_expected_number_of_results - 1,
                 String.format("Less than %d elements found by substring '%s'",
                         minimum_expected_number_of_results, expected_substring),
@@ -117,24 +107,8 @@ public class SearchPageObject extends MainPageObject{
 
     public void waitForSearchResultsToDisappear(String substring) {
         this.waitForElementNotVisible(
-                getSearchResultElement(substring),
+                By.xpath(getSearchResultElement(substring)),
                 "Search result still visible after click on cancel button",
                 5);
-    }
-
-    public int getNumberOfSearchResults() {
-        return this.getNumberOfElements(SEARCH_RESULT_XPATH);
-    }
-
-    public void waitForNoResultsLabel() {
-        this.waitForElementVisible(
-                NO_RESULTS_LABEL_XPATH,
-                String.format("Cannot locate item by xpath: \n%s", NO_RESULTS_LABEL_XPATH),
-                10);
-    }
-
-    public void assertZeroSearchResults(String search_line) {
-        this.assertZeroElementsVisible(SEARCH_RESULT_XPATH,
-                String.format("Found results by query: '%s'", search_line));
     }
 }
