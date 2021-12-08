@@ -29,7 +29,7 @@ public class MainPageObject {
         );
     }
 
-    protected WebElement waitForElementVisible(
+    public WebElement waitForElementVisible(
             By by,
             String error_message,
             long timeoutInSeconds)
