@@ -2,8 +2,12 @@ package lib.ui;
 
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.TouchAction;
+import io.appium.java_client.touch.WaitOptions;
+import io.appium.java_client.touch.offset.PointOption;
 import org.junit.Assert;
 import org.openqa.selenium.*;
+
+import java.time.Duration;
 
 public class ArticlePageObject extends MainPageObject{
 
@@ -72,7 +76,7 @@ public class ArticlePageObject extends MainPageObject{
         int start_y = (int) (size.height * 0.8);
         int end_y = (int) (size.height * 0.2);
 
-        action.press(x, start_y).waitAction(timeOfSwipe).moveTo(x, end_y).release().perform();
+        this.swipeByCoordinates(x, start_y, x, end_y, timeOfSwipe);
     }
 
     public void addArticleToReadingList(String list_name)

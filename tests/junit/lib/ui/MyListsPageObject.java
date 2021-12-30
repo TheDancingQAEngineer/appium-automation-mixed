@@ -39,14 +39,8 @@ public class MyListsPageObject extends MainPageObject{
         int lower_y = upper_y + element.getSize().getHeight();
         int mid_y = (upper_y + lower_y) / 2;
 
-        TouchAction action = new TouchAction(driver);
-
-        action
-                .press(right_x, mid_y)
-                .waitAction(500)
-                .moveTo(left_x, mid_y)
-                .release()
-                .perform();
+        this.swipeByCoordinates(right_x, mid_y,
+                left_x, mid_y, 500);
     }
 
     public void openReadingListByName(String list_name)
