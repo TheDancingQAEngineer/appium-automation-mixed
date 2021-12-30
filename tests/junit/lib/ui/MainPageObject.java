@@ -1,11 +1,15 @@
 package lib.ui;
 
 import io.appium.java_client.AppiumDriver;
+import io.appium.java_client.TouchAction;
+import io.appium.java_client.touch.WaitOptions;
+import io.appium.java_client.touch.offset.PointOption;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.time.Duration;
 import java.util.List;
 
 public class MainPageObject {
@@ -134,5 +138,25 @@ public class MainPageObject {
         WebElement element = waitForElementClickable(by,
                 error_message, timeoutInSeconds);
         element.click();
+    }
+
+    protected void swipeByCoordinates(
+            int x_start, int y_start,
+            int x_end, int y_end, int timeOfSwipe)
+    {
+        TouchAction action = new TouchAction(driver);
+
+        PointOption startingPoint = PointOption.point(x_start, y_start);
+        PointOption endPoint = PointOption.point(x_end, y_end);
+
+        Duration swipeDuration = Duration.ofMillis(timeOfSwipe);
+        WaitOptions swipeWait = WaitOptions.waitOptions(swipeDuration);
+
+        action
+                .press(startingPoint)
+                .waitAction(swipeWait)
+                .moveTo(endPoint)
+                .release()
+                .perform();
     }
 }
