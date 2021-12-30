@@ -318,7 +318,7 @@ public class TestSearchSwipeAndScreenFlip extends CoreTestCase {
 
         // Send app to background by clicking 'O'
         // Launch again
-        driver.runAppInBackground(2);
+        driver.runAppInBackground(java.time.Duration.ofSeconds(2));
 
         // Check that our search result is still on the screen
         UiHelpers.waitForElementVisible(driver,

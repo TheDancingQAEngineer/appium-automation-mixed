@@ -1,14 +1,7 @@
-import io.appium.java_client.AppiumDriver;
 import lib.CoreTestCase;
 import lib.ui.ArticlePageObject;
 import lib.ui.SearchPageObject;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
-import org.openqa.selenium.By;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.ScreenOrientation;
-import org.openqa.selenium.WebElement;
 
 public class TestEx6 extends CoreTestCase {
 
