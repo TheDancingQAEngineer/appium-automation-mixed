@@ -1,6 +1,6 @@
-import lib.CoreTestCaseIOS;
+import lib.CoreTestCase;
 
-public class TestIOSSmoke extends CoreTestCaseIOS {
+public class TestIOSSmoke extends CoreTestCase {
 
     public void testSmoke() {
         
