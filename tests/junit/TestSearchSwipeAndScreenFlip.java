@@ -1,7 +1,5 @@
 import lib.CoreTestCase;
-import lib.ui.ArticlePageObject;
-import lib.ui.MainPageObject;
-import lib.ui.SearchPageObject;
+import lib.ui.*;
 import org.junit.*;
 import org.openqa.selenium.*;
 
@@ -10,6 +8,8 @@ public class TestSearchSwipeAndScreenFlip extends CoreTestCase {
     protected lib.ui.MainPageObject MainPageObject;
     protected SearchPageObject SearchPageObject;
     protected ArticlePageObject ArticlePageObject;
+    protected NavigationUI NavigationUI;
+    protected MyListsPageObject MyListsPageObject;
 
     @Override
     protected void setUp() throws Exception {
@@ -65,6 +65,9 @@ public class TestSearchSwipeAndScreenFlip extends CoreTestCase {
         String search_query = "Java";
         String article_title = "Java (programming language)";
 
+        this.NavigationUI = new NavigationUI(driver);
+        this.MyListsPageObject = new MyListsPageObject(driver);
+
         // Launch app, enter search mode
         SearchPageObject.initSearchInput();
 
@@ -74,75 +77,27 @@ public class TestSearchSwipeAndScreenFlip extends CoreTestCase {
         // Go to article
         SearchPageObject.clickOnArticleWithSubstring(article_title);
 
-        // Hit "three dots"
-        UiHelpers.waitForElementVisibleAndClick(driver,
-                By.xpath("//android.widget.ImageView[@content-desc='More options']"),
-                "Cannot locate three dots.",
-                20);
+        ArticlePageObject.waitForTitleElement();
 
-        // Add to reading list
-        UiHelpers.waitForElementClickableAndClick(driver,
-                By.xpath("//*[@text='Add to reading list']"),
-                "Cannot find 'Add to reading list' menu item.",
-                10);
-
-        // + Create new
-        UiHelpers.waitForElementVisibleAndClick(driver,
-                By.id("org.wikipedia:id/onboarding_button"),
-                "Cannot find onboarding button.",
-                10);
-
-        UiHelpers.waitForElementVisibleAndClear(driver,
-                By.id("org.wikipedia:id/text_input"),
-                "Cannot clear input in reading list name.",
-                5);
-
-        // Enter list name
-        UiHelpers.waitForElementVisibleAndSendKeys(driver,
-                By.id("org.wikipedia:id/text_input"),
-                reading_list_title,
-                "Cannot send keys to text input.",
-                10);
-
-        // Tap 'OK'
-        UiHelpers.waitForElementVisibleAndClick(driver,
-                By.xpath("//*[@text='OK']"),
-                "Cannot find OK button.",
-                10);
+        ArticlePageObject.addArticleToReadingList(reading_list_title);
 
         // Close article
-        UiHelpers.waitForElementVisibleAndClick(driver,
-                By.xpath("//android.widget.ImageButton[@content-desc='Navigate up']"),
-                "Cannot locate 'X' to close article.",
-                15);
+        ArticlePageObject.closeArticle();
 
         // Tap 'My lists'
-        UiHelpers.waitForElementVisibleAndClick(driver,
-                By.xpath("//android.widget.FrameLayout[@content-desc='My lists']"),
-                "Cannot locate 'My Lists' button.",
-                15);
+        NavigationUI.clickMyLists();
 
         // Tap the list previously created
-        UiHelpers.waitForElementVisibleAndClick(driver,
-                By.xpath(
-                        String.format("//*[@text='%s']", reading_list_title)),
-                String.format("Cannot find '%s' in My lists.", reading_list_title),
-                15);
+        MyListsPageObject.openReadingListByName(reading_list_title);
 
         // Assert the article is there
+        MyListsPageObject.waitForArticleToAppearByTitle(article_title);
+
         // Remove by swiping
-        UiHelpers.swipeElementToLeft(driver,
-                By.xpath(
-                        String.format("//*[@text='%s']", article_title)),
-                String.format(
-                        "Swipe to left failed. Cannot find '%s' in reading list.",
-                        article_title));
+        MyListsPageObject.swipeArticleToDelete(article_title);
 
         // Assert article is removed
-        UiHelpers.waitForElementNotPresent(driver,
-                By.xpath(String.format("//*[@text='%s']", article_title)),
-                "Swiped, but article still present",
-                5);
+        MyListsPageObject.waitForArticleToDisappearByTitle(article_title);
     }
 
     /* Lesson 4, Part 5. Asserts. */
@@ -245,7 +200,7 @@ public class TestSearchSwipeAndScreenFlip extends CoreTestCase {
 
         // Get title
         String title_before_rotation = MainPageObject.waitForElementVisibleAndGetAttribute(
-                By.id("org.wikipedia:id/view_page_title_text"),
+                "org.wikipedia:id/view_page_title_text",
                 "text",
                 "Cannot find article title.",
                 15);
@@ -255,7 +210,7 @@ public class TestSearchSwipeAndScreenFlip extends CoreTestCase {
 
         // Assert article title is still there
         String title_after_rotation = MainPageObject.waitForElementVisibleAndGetAttribute(
-                By.id("org.wikipedia:id/view_page_title_text"),
+                "org.wikipedia:id/view_page_title_text",
                 "text",
                 "Cannot find article title.",
                 15);
@@ -271,7 +226,7 @@ public class TestSearchSwipeAndScreenFlip extends CoreTestCase {
 
         // Assert article title is still the same
         String title_after_second_rotation = MainPageObject.waitForElementVisibleAndGetAttribute(
-                By.id("org.wikipedia:id/view_page_title_text"),
+                "org.wikipedia:id/view_page_title_text",
                 "text",
                 "Cannot find article title.",
                 15);

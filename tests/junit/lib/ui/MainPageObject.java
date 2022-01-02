@@ -35,10 +35,11 @@ public class MainPageObject {
     }
 
     protected WebElement waitForElementVisible(
-            By by,
+            String locator_with_type,
             String error_message,
             long timeoutInSeconds)
     {
+        By by = this.getLocatorByString(locator_with_type);
         WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
         wait.withMessage(error_message + '\n');
         return wait.until(
@@ -46,11 +47,11 @@ public class MainPageObject {
         );
     }
 
-    protected WebElement waitForElementClickable(
-            By by,
+    protected WebElement waitForElementClickable(String locator_with_type,
             String error_message,
             long timeoutInSeconds)
     {
+        By by = getLocatorByString(locator_with_type);
         WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
         wait.withMessage(error_message + '\n');
         return wait.until(
@@ -60,8 +61,7 @@ public class MainPageObject {
 
     protected WebElement waitForElementVisibleByXpath(String xpath, String error_message, long timeoutInSeconds)
     {
-        By by = By.xpath(xpath);
-        return waitForElementVisible(by, error_message, timeoutInSeconds);
+        return waitForElementVisible(xpath, error_message, timeoutInSeconds);
     }
 
     protected WebElement waitForElementVisibleByXpath(String xpath, String error_message)
@@ -69,23 +69,23 @@ public class MainPageObject {
         return waitForElementVisibleByXpath(xpath, error_message, 5);
     }
 
-    protected void waitForElementVisibleAndClear(By by, String error_message, long timeoutInSeconds)
+    protected void waitForElementVisibleAndClear(String locator_with_type, String error_message, long timeoutInSeconds)
     {
-        WebElement element = waitForElementVisible(by, error_message, timeoutInSeconds);
+        WebElement element = waitForElementVisible(locator_with_type, error_message, timeoutInSeconds);
         element.clear();
     }
 
-    protected WebElement waitForElementVisibleAndClick(By by, String error_message, long timeoutInSeconds)
+    protected WebElement waitForElementVisibleAndClick(String locator_with_type, String error_message, long timeoutInSeconds)
     {
-        WebElement element = waitForElementVisible(by, error_message, timeoutInSeconds);
+        WebElement element = waitForElementVisible(locator_with_type, error_message, timeoutInSeconds);
         element.click();
         return element;
     }
 
-    public String waitForElementVisibleAndGetAttribute(By by, String attribute_name,
+    public String waitForElementVisibleAndGetAttribute(String locator_with_type, String attribute_name,
                                                        String error_message, long timeoutInSeconds)
     {
-        WebElement element = waitForElementVisible(by, error_message, timeoutInSeconds);
+        WebElement element = waitForElementVisible(locator_with_type, error_message, timeoutInSeconds);
         return element.getAttribute(attribute_name);
     }
 
@@ -97,10 +97,10 @@ public class MainPageObject {
         return element;
     }
 
-    protected WebElement waitForElementVisibleAndSendKeys(By by, String keys,
+    protected WebElement waitForElementVisibleAndSendKeys(String locator_with_type, String keys,
             String error_message, long timeoutInSeconds)
     {
-        WebElement element = waitForElementVisible(by, error_message, timeoutInSeconds);
+        WebElement element = waitForElementVisible(locator_with_type, error_message, timeoutInSeconds);
         element.sendKeys(keys);
         return element;
     }
@@ -114,9 +114,10 @@ public class MainPageObject {
         return element;
     }
 
-    protected boolean waitForElementNotVisible(By by,
+    protected boolean waitForElementNotVisible(String locator_with_type,
             String error_message, long timeoutInSeconds)
     {
+        By by = getLocatorByString(locator_with_type);
         WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
         wait.withMessage(error_message + '\n');
         return wait.until(ExpectedConditions.invisibilityOfElementLocated(by));
@@ -133,10 +134,10 @@ public class MainPageObject {
         );
     }
 
-    protected void waitForElementClickableAndClick(By by, String error_message,
+    protected void waitForElementClickableAndClick(String locator_with_type, String error_message,
                                                    long timeoutInSeconds)
     {
-        WebElement element = waitForElementClickable(by,
+        WebElement element = waitForElementClickable(locator_with_type,
                 error_message, timeoutInSeconds);
         element.click();
     }
@@ -161,7 +162,7 @@ public class MainPageObject {
                 .perform();
     }
 
-    private By getLocatorByString(String locator_with_type) throws IllegalArgumentException
+    protected By getLocatorByString(String locator_with_type) throws IllegalArgumentException
     {
         String[] exploded_locator = locator_with_type.split(Pattern.quote(":"),2);
         String by_type = exploded_locator[0];

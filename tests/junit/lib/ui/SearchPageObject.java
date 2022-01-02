@@ -6,37 +6,44 @@ import org.openqa.selenium.By;
 public class SearchPageObject extends MainPageObject{
 
     private static final String
-        SEARCH_INIT_ELEMENT = "//*[contains(@text, 'Search Wikipedia')]",
-        SEARCH_INPUT = "//*[contains(@text, 'Search…')]",
-        SEARCH_CANCEL_BUTTON = "org.wikipedia:id/search_close_btn",
-        SEARCH_RESULT_BY_SUBSTRING_TPL = "//*[@resource-id='org.wikipedia:id/page_list_item_container']"
-                + "//*[contains(@text, '{SUBSTRING}')]",
-        SEARCH_TEXT_FIELD = "org.wikipedia:id/search_src_text";
+        SEARCH_INIT_ELEMENT_XPATH = "xpath://*[contains(@text, 'Search Wikipedia')]",
+        SEARCH_INPUT_XPATH = "xpath://*[contains(@text, 'Search…')]",
+        SEARCH_CANCEL_BUTTON_ID = "id:org.wikipedia:id/search_close_btn",
+        SEARCH_TEXT_FIELD_ID = "id:org.wikipedia:id/search_src_text";
+
+    /** STRING TEMPLATES BEGIN **/
+
+    private static final String
+            SEARCH_RESULT_BY_SUBSTRING_XPATH_TPL = "xpath://*[@resource-id='org.wikipedia:id/page_list_item_container']"
+                + "//*[contains(@text, '{SUBSTRING}')]";
+
+    /** STRING TEMPLATES END **/
+
+
+    /** TEMPLATE METHODS BEGIN **/
+
+    private static String getSearchResultElement(String substring)
+    {
+        return SEARCH_RESULT_BY_SUBSTRING_XPATH_TPL.replace("{SUBSTRING}", substring);
+    }
+
+    /** TEMPLATE METHODS END **/
 
     public SearchPageObject(AppiumDriver driver) {
         super(driver);
     }
 
-    /** TEMPLATE METHODS BEGIN **/
-    private static String getSearchResultElement(String substring)
-    {
-        return SEARCH_RESULT_BY_SUBSTRING_TPL.replace("{SUBSTRING}", substring);
-    }
-
-    /** TEMPLATE METHODS END **/
-
-
     public void initSearchInput()
     {
-        this.waitForElementVisibleByXpath(SEARCH_INIT_ELEMENT,
+        this.waitForElementVisibleByXpath(SEARCH_INIT_ELEMENT_XPATH,
                 "Cannot find search field on start screen.",
                 5);
 
-        this.waitForElementVisibleByXpathAndClick(SEARCH_INIT_ELEMENT,
+        this.waitForElementVisibleByXpathAndClick(SEARCH_INIT_ELEMENT_XPATH,
                 "Cannot click in search field at home screen.",
                 5);
 
-        this.waitForElementVisibleByXpath(SEARCH_INPUT,
+        this.waitForElementVisibleByXpath(SEARCH_INPUT_XPATH,
                 "Cannot find search input after tap.",
                 5);
     }
@@ -44,7 +51,7 @@ public class SearchPageObject extends MainPageObject{
     public void typeSearchLine(String search_line)
     {
         this.waitForElementVisibleAndSendKeys(
-                By.xpath(SEARCH_INPUT),
+                SEARCH_INPUT_XPATH,
                 search_line,
                 "Cannot type search line to search input",
                 5
@@ -60,27 +67,27 @@ public class SearchPageObject extends MainPageObject{
 
     public void waitForCancelButtonToAppear()
     {
-        waitForElementVisible(By.id(SEARCH_CANCEL_BUTTON),
+        waitForElementVisible(SEARCH_CANCEL_BUTTON_ID,
                 "Cannot find cancel button.",
                 5);
     }
 
     public void waitForCancelButtonToDisappear()
     {
-        waitForElementNotVisible(By.id(SEARCH_CANCEL_BUTTON),
+        waitForElementNotVisible(SEARCH_CANCEL_BUTTON_ID,
                 "Search cancel button visible after timeout.",
                 5);
     }
 
     public void clickCancelSearch()
     {
-        this.waitForElementVisibleAndClick(By.id(SEARCH_CANCEL_BUTTON),
+        this.waitForElementVisibleAndClick(SEARCH_CANCEL_BUTTON_ID,
                 "Cannot find and click search cancel button",
                 5);
     }
 
     public void clearSearchInput() {
-        this.waitForElementVisibleAndClear(By.id(SEARCH_TEXT_FIELD),
+        this.waitForElementVisibleAndClear(SEARCH_TEXT_FIELD_ID,
                 "Cannot locate search text element to clear.",
                 5);
     }
@@ -107,7 +114,7 @@ public class SearchPageObject extends MainPageObject{
 
     public void waitForSearchResultsToDisappear(String substring) {
         this.waitForElementNotVisible(
-                By.xpath(getSearchResultElement(substring)),
+                getSearchResultElement(substring),
                 "Search result still visible after click on cancel button",
                 5);
     }
