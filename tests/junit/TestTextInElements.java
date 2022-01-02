@@ -2,9 +2,6 @@ import lib.CoreTestCase;
 import lib.ui.ArticlePageObject;
 import lib.ui.SearchPageObject;
 import org.junit.*;
-import org.openqa.selenium.*;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class TestTextInElements extends CoreTestCase {
 
@@ -156,15 +153,5 @@ public class TestTextInElements extends CoreTestCase {
 
         // THEN: the X is no longer visible (though it says nothing of functionality)
         SearchPageObject.waitForCancelButtonToDisappear();
-    }
-
-    private WebElement waitForWebElementVisibleById(String id, String error_message, long timeoutInSeconds)
-    {
-        WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
-        wait.withMessage(error_message + '\n');
-        By by = By.id(id);
-        return wait.until(
-                ExpectedConditions.visibilityOfElementLocated(by)
-        );
     }
 }
