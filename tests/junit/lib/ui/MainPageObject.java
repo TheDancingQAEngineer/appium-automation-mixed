@@ -123,10 +123,11 @@ public class MainPageObject {
         return wait.until(ExpectedConditions.invisibilityOfElementLocated(by));
     }
 
-    protected List<WebElement> waitForElementsVisible(By by, int count_more_than,
+    protected List<WebElement> waitForElementsVisible(String locator_with_type, int count_more_than,
                                                       String error_message,
                                                       long timeoutInSeconds)
     {
+        By by = getLocatorByString(locator_with_type);
         WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
         wait.withMessage(error_message + '\n');
         return wait.until(
@@ -176,6 +177,24 @@ public class MainPageObject {
         } else {
             throw new IllegalArgumentException(
                     String.format(error_message_format, locator_with_type));
+        }
+    }
+
+    protected int getNumberOfElements(String locator_with_type) {
+        By by = getLocatorByString(locator_with_type);
+        List elements = driver.findElements(by);
+        return elements.size();
+    }
+
+    protected void assertZeroElementsVisible(String locator_with_type,
+                                             String error_message)
+    {
+        int number_of_elements = this.getNumberOfElements(locator_with_type);
+        if (number_of_elements > 0) {
+            String default_message = String.format(
+                    "An element %s is expected to be absent", locator_with_type
+            );
+            throw new AssertionError(default_message + " " + error_message);
         }
     }
 }
