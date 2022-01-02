@@ -1,21 +1,17 @@
 import lib.CoreTestCase;
 import lib.ui.ArticlePageObject;
-import lib.ui.MainPageObject;
 import lib.ui.SearchPageObject;
 import org.junit.*;
-import org.openqa.selenium.*;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class TestTextInElements extends CoreTestCase {
 
-    private MainPageObject MainPageObject;
+    private SearchPageObject SearchPageObject;
 
     protected void setUp() throws Exception
     {
         super.setUp();
         
-        MainPageObject = new MainPageObject(driver);
+        SearchPageObject = new SearchPageObject(driver);
     }
 
     @Test
@@ -30,7 +26,6 @@ public class TestTextInElements extends CoreTestCase {
         // THEN:
         // - there's an element with text 'Search Wikipedia';
         // - the element is clickable
-        SearchPageObject SearchPageObject = new SearchPageObject(driver);
         SearchPageObject.initSearchInput();
     }
 
@@ -44,7 +39,6 @@ public class TestTextInElements extends CoreTestCase {
 
         // WHEN: On search screen
 
-        SearchPageObject SearchPageObject = new SearchPageObject(driver);
         SearchPageObject.initSearchInput();
 
         // THEN: Search field accepts text
@@ -57,9 +51,6 @@ public class TestTextInElements extends CoreTestCase {
     @Test
     /* Part 5. Compound xPath */
     public void testSearchForJavaTheProgrammingLanguage() {
-
-        SearchPageObject SearchPageObject = new SearchPageObject(driver);
-
         SearchPageObject.initSearchInput();
         SearchPageObject.typeSearchLine("Java");
         SearchPageObject.waitForSearchResult("Object-oriented programming language");
@@ -76,7 +67,7 @@ public class TestTextInElements extends CoreTestCase {
         // - running Appium Server
         // - app is on search screen
         // - cursor in search field
-        SearchPageObject SearchPageObject = new SearchPageObject(driver);
+
         SearchPageObject.initSearchInput();
 
         // WHEN: we type "Java" into search field
@@ -95,7 +86,7 @@ public class TestTextInElements extends CoreTestCase {
         // - running emulator
         // - running Appium Server
         // - app is on search screen
-        SearchPageObject SearchPageObject = new SearchPageObject(driver);
+
 
         SearchPageObject.initSearchInput();
 
@@ -121,7 +112,7 @@ public class TestTextInElements extends CoreTestCase {
         // - running Appium Server
         // - app is on search screen
         // - cursor in search field
-        SearchPageObject SearchPageObject = new SearchPageObject(driver);
+
         SearchPageObject.initSearchInput();
 
         // WHEN:
@@ -149,7 +140,6 @@ public class TestTextInElements extends CoreTestCase {
     public void testSearchCancelAdvanced()
     {
         String search_query = "Java";
-        SearchPageObject SearchPageObject = new SearchPageObject(driver);
 
         // GIVEN: search query typed in
         SearchPageObject.initSearchInput();
@@ -163,22 +153,5 @@ public class TestTextInElements extends CoreTestCase {
 
         // THEN: the X is no longer visible (though it says nothing of functionality)
         SearchPageObject.waitForCancelButtonToDisappear();
-    }
-
-    private WebElement waitForWebElementVisibleById(String id, String error_message, long timeoutInSeconds)
-    {
-        WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
-        wait.withMessage(error_message + '\n');
-        By by = By.id(id);
-        return wait.until(
-                ExpectedConditions.visibilityOfElementLocated(by)
-        );
-    }
-
-    private WebElement waitForElementByIdAndClick(String id, String error_message, long timeoutInSeconds)
-    {
-        WebElement element = waitForWebElementVisibleById(id, error_message, timeoutInSeconds);
-        element.click();
-        return element;
     }
 }
