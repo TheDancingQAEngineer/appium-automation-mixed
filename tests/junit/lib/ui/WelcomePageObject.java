@@ -5,6 +5,13 @@ import org.openqa.selenium.By;
 
 public class WelcomePageObject extends MainPageObject {
 
+    private static final String
+            LEARN_MORE_ABOUT_WIKIPEDIA_ID = "Learn more about Wikipedia",
+            NEXT_BUTTON_ID = "Next",
+            NEW_WAYS_TO_EXPLORE_TEXT = "New ways to explore",
+            PREFERRED_LANGUAGES_TEXT = "Add or edit preferred languages",
+            GET_STARTED_BUTTON_ID = "Get started";
+
     public WelcomePageObject(AppiumDriver driver) {
         super(driver);
     }
@@ -12,7 +19,7 @@ public class WelcomePageObject extends MainPageObject {
     public void waitForLearnMoreLink()
     {
         this.waitForElementVisible(
-                By.name("Learn more about Wikipedia"),
+                By.name(LEARN_MORE_ABOUT_WIKIPEDIA_ID),
                 "Cannot find \"Learn more about Wikipedia\" link.",
                 10);
     }
@@ -20,14 +27,14 @@ public class WelcomePageObject extends MainPageObject {
     public void clickNext()
     {
         this.waitForElementClickableAndClick(
-                By.id("Next"),
+                By.id(NEXT_BUTTON_ID),
                 "Cannot find \"Next\" button.",
                 10);
     }
 
     public void waitForNewWaysToExplore() {
         this.waitForElementVisible(
-                By.id("New ways to explore"),
+                By.id(NEW_WAYS_TO_EXPLORE_TEXT),
                 "Cannot see \"New ways to explore\" text.",
                 10
         );
@@ -35,7 +42,7 @@ public class WelcomePageObject extends MainPageObject {
 
     public void waitForAddOrEditLanguages() {
         this.waitForElementVisible(
-                By.id("Add or edit preferred languages"),
+                By.id(PREFERRED_LANGUAGES_TEXT),
                 "Cannot see \"Add or edit preferred languages\" text.",
                 10
         );
@@ -43,31 +50,8 @@ public class WelcomePageObject extends MainPageObject {
 
     public void clickGetStarted() {
         this.waitForElementClickableAndClick(
-                By.id("Get started"),
+                By.id(GET_STARTED_BUTTON_ID),
                 "Cannot find \"Get started\" button.",
                 10);
-    }
-
-    public void clickDismiss() {
-        this.waitForElementClickableAndClick(
-                By.id("Dismiss"),
-                "Cannot find \"Dismiss\" button.",
-                10);
-    }
-
-    public void waitForLoginToSync() {
-        this.waitForElementVisible(
-                By.id("Log in to sync your saved articles"),
-                "Cannot see \"Log in to sync your saved articles\" button.",
-                10
-        );
-    }
-
-    public void waitForManagePreferences() {
-        this.waitForElementVisible(
-                By.id("Manage preferences"),
-                "Cannot see \"Manage preferences\" button.",
-                10
-        );
     }
 }
