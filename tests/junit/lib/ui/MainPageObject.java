@@ -11,6 +11,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
 import java.util.List;
+import java.util.regex.Pattern;
 
 public class MainPageObject {
 
@@ -158,5 +159,22 @@ public class MainPageObject {
                 .moveTo(endPoint)
                 .release()
                 .perform();
+    }
+
+    private By getLocatorByString(String locator_with_type) throws IllegalArgumentException
+    {
+        String[] exploded_locator = locator_with_type.split(Pattern.quote(":"),2);
+        String by_type = exploded_locator[0];
+        String locator = exploded_locator[1];
+        String error_message_format = "Cannot get type of locator: \"%s\"";
+
+        if (by_type.equals("xpath")) {
+            return By.xpath(locator);
+        } else if (by_type.equals("id")) {
+            return By.id(locator);
+        } else {
+            throw new IllegalArgumentException(
+                    String.format(error_message_format, locator_with_type));
+        }
     }
 }
