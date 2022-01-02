@@ -6,9 +6,12 @@ import org.openqa.selenium.By;
 public class SearchPageObject extends MainPageObject{
 
     private static final String
+        NO_RESULTS_LABEL_XPATH = "xpath://*[@text='No results found']",
         SEARCH_INIT_ELEMENT_XPATH = "xpath://*[contains(@text, 'Search Wikipedia')]",
         SEARCH_INPUT_XPATH = "xpath://*[contains(@text, 'Search…')]",
         SEARCH_CANCEL_BUTTON_ID = "id:org.wikipedia:id/search_close_btn",
+        SEARCH_RESULT_XPATH = "xpath://*[@resource-id='org.wikipedia:id/search_results_container']" +
+                "//*[@resource-id='org.wikipedia:id/page_list_item_container']",
         SEARCH_TEXT_FIELD_ID = "id:org.wikipedia:id/search_src_text";
 
     /** STRING TEMPLATES BEGIN **/
@@ -105,7 +108,7 @@ public class SearchPageObject extends MainPageObject{
             int minimum_expected_number_of_results) {
 
         this.waitForElementsVisible(
-                By.xpath(getSearchResultElement(expected_substring)),
+                getSearchResultElement(expected_substring),
                 minimum_expected_number_of_results - 1,
                 String.format("Less than %d elements found by substring '%s'",
                         minimum_expected_number_of_results, expected_substring),
@@ -117,5 +120,21 @@ public class SearchPageObject extends MainPageObject{
                 getSearchResultElement(substring),
                 "Search result still visible after click on cancel button",
                 5);
+    }
+
+    public int getNumberOfSearchResults() {
+        return this.getNumberOfElements(SEARCH_RESULT_XPATH);
+    }
+
+    public void waitForNoResultsLabel() {
+        this.waitForElementVisible(
+                NO_RESULTS_LABEL_XPATH,
+                String.format("Cannot locate item by xpath: \n%s", NO_RESULTS_LABEL_XPATH),
+                10);
+    }
+
+    public void assertZeroSearchResults(String search_line) {
+        this.assertZeroElementsVisible(SEARCH_RESULT_XPATH,
+                String.format("Found results by query: '%s'", search_line));
     }
 }

@@ -91,7 +91,7 @@ public class ArticlePageObject extends MainPageObject{
 
     public void addArticleToReadingList(String list_name)
     {
-        // TODO: Adjust for different flow on first and subsequent additions
+        // DONE: TODO: Adjust for different flow on first and subsequent additions
         // Tap "Three dots"
         this.waitForElementVisibleAndClick(
                 THREE_DOTS_XPATH,
@@ -148,7 +148,8 @@ public class ArticlePageObject extends MainPageObject{
     {
         try {
             // TODO: Refactor
-            WebElement element = driver.findElement(By.id(ARTICLE_TITLE_ID));
+            By by = this.getLocatorByString(ARTICLE_TITLE_ID);
+            WebElement element = driver.findElement(by);
         } catch (NoSuchElementException e) {
             String default_message = String.format("Article title not found by id: %s.", ARTICLE_TITLE_ID);
             throw new AssertionError(default_message);
