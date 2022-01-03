@@ -1,6 +1,7 @@
 import lib.CoreTestCase;
 import lib.ui.ArticlePageObject;
 import lib.ui.SearchPageObject;
+import lib.ui.factories.SearchPageObjectFactory;
 import org.junit.*;
 
 public class TestTextInElements extends CoreTestCase {
@@ -11,7 +12,7 @@ public class TestTextInElements extends CoreTestCase {
     {
         super.setUp();
         
-        SearchPageObject = new SearchPageObject(driver);
+        SearchPageObject = SearchPageObjectFactory.get(driver);
     }
 
     @Test
