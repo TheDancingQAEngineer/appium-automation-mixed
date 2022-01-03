@@ -1,6 +1,7 @@
 package lib.ui;
 
 import io.appium.java_client.AppiumDriver;
+import lib.util.WikiArticle;
 import org.openqa.selenium.By;
 
 public class SearchPageObject extends MainPageObject{
@@ -18,7 +19,10 @@ public class SearchPageObject extends MainPageObject{
 
     private static final String
             SEARCH_RESULT_BY_SUBSTRING_XPATH_TPL = "xpath://*[@resource-id='org.wikipedia:id/page_list_item_container']"
-                + "//*[contains(@text, '{SUBSTRING}')]";
+                + "//*[contains(@text, '{SUBSTRING}')]",
+            SEARCH_ITEM_TITLE_AND_DESCRIPTION_TPL =
+                "xpath://*[@resource-id='org.wikipedia:id/page_list_item_container']"
+                + "[.//@text=\"{TITLE}\" and .//@text=\"{DESCRIPTION}\"]";
 
     /** STRING TEMPLATES END **/
 
@@ -28,6 +32,21 @@ public class SearchPageObject extends MainPageObject{
     private static String getSearchResultElement(String substring)
     {
         return SEARCH_RESULT_BY_SUBSTRING_XPATH_TPL.replace("{SUBSTRING}", substring);
+    }
+
+    private static String getSearchResultElementByWikiArticleObject(WikiArticle article)
+    {
+        return SEARCH_ITEM_TITLE_AND_DESCRIPTION_TPL
+                .replace("{TITLE}", article.getTitle())
+                .replace("{DESCRIPTION}", article.getDescription());
+    }
+
+    private static String getSearchResultElementByTitleAndDescription(
+            String title, String description)
+    {
+        return SEARCH_ITEM_TITLE_AND_DESCRIPTION_TPL
+                .replace("{TITLE}", title)
+                .replace("{DESCRIPTION}", description);
     }
 
     /** TEMPLATE METHODS END **/
@@ -136,5 +155,33 @@ public class SearchPageObject extends MainPageObject{
     public void assertZeroSearchResults(String search_line) {
         this.assertZeroElementsVisible(SEARCH_RESULT_XPATH,
                 String.format("Found results by query: '%s'", search_line));
+    }
+
+    public void waitForSearchResultByTitleAndDescription(String title, String description) {
+        String article_xpath = this.getSearchResultElementByTitleAndDescription(title, description);
+        String error_message = String.format("Cannot locate article with title \"%s\' and description \"%s\".",
+                title, description);
+        this.waitForElementVisible(article_xpath,
+                error_message,
+                5);
+    }
+
+    public void waitForSearchResultByWikiArticleObject(WikiArticle article) {
+        String article_xpath = getSearchResultElementByWikiArticleObject(article);
+        String error_message = String.format("Cannot locate article with title \"%s\' and description \"%s\".",
+                article.getTitle(), article.getDescription());
+        this.waitForElementVisible(article_xpath,
+                error_message,
+                5);
+    }
+
+    public void assertNoSearchResultByTitleAndDescription(String title, String description) {
+        String article_xpath = getSearchResultElementByTitleAndDescription(title, description);
+        String error_message = String.format("Unexpectedly found element with title \"%s\" and description \"%s\".",
+                title, description);
+
+        this.waitForElementNotVisible(article_xpath,
+                error_message,
+                5);
     }
 }
