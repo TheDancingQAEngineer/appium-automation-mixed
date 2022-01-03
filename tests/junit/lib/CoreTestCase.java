@@ -2,10 +2,10 @@ package lib;
 
 import io.appium.java_client.AppiumDriver;
 import junit.framework.TestCase;
+import lib.ui.WelcomePageObject;
 
 public class CoreTestCase extends TestCase {
 
-    protected Platform Platform;
     protected AppiumDriver driver;
 
 
@@ -13,8 +13,8 @@ public class CoreTestCase extends TestCase {
     protected void setUp() throws Exception
     {
         super.setUp();
-        this.Platform = new Platform();
-        driver = this.Platform.getDriver();
+        driver = Platform.getInstance().getDriver();
+        this.skipIOSWelcomePage();
     }
 
     @Override
@@ -22,5 +22,13 @@ public class CoreTestCase extends TestCase {
         driver.quit();
 
         super.tearDown();
+    }
+
+    private void skipIOSWelcomePage()
+    {
+        if(Platform.getInstance().isIOS()) {
+            WelcomePageObject WelcomePageObject = new WelcomePageObject(driver);
+            WelcomePageObject.clickSkip();
+        }
     }
 }
