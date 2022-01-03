@@ -1,6 +1,7 @@
 import lib.ui.SearchPageObject;
 import lib.CoreTestCase;
 import lib.ui.*;
+import lib.ui.factories.SearchPageObjectFactory;
 import org.junit.*;
 import org.openqa.selenium.*;
 
@@ -16,7 +17,7 @@ public class TestSearchSwipeAndScreenFlip extends CoreTestCase {
     protected void setUp() throws Exception {
         super.setUp();
         this.MainPageObject = new MainPageObject(driver);
-        this.SearchPageObject = new SearchPageObject(driver);
+        this.SearchPageObject = SearchPageObjectFactory.get(driver);
         this.ArticlePageObject = new ArticlePageObject(driver);
     }
 

@@ -1,16 +1,16 @@
-package lib.ui.ios;
+package lib.ui;
 
 import io.appium.java_client.AppiumDriver;
 import lib.ui.MainPageObject;
 
-public class IOSHomePageObject extends MainPageObject {
+public class HomePageObject extends MainPageObject {
 
     private static final String
             DISMISS_BUTTON_ID = "id:Dismiss",
             LOGIN_BUTTON_ID = "id:Log in to sync your saved articles",
             MANAGE_PREFERENCES_BUTTON_ID = "id:Manage preferences";
 
-    public IOSHomePageObject(AppiumDriver driver) {
+    public HomePageObject(AppiumDriver driver) {
         super(driver);
     }
 
