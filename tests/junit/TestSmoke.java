@@ -8,4 +8,16 @@ public class TestSmoke extends CoreTestCase {
     {
         System.out.println("I am testSmoke(). I ran!");
     }
+
+    @Test
+    public void testExpectedFailure()
+    {
+        try {
+            System.out.println("I am testExpectedFailure(). If I passed, something is off.");
+            fail("shouldn't pass.");
+        } catch (Exception e) {
+            // expected
+        }
+
+    }
 }
