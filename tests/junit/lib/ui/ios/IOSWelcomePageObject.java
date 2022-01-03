@@ -1,8 +1,9 @@
-package lib.ui;
+package lib.ui.ios;
 
 import io.appium.java_client.AppiumDriver;
+import lib.ui.MainPageObject;
 
-public class WelcomePageObject extends MainPageObject {
+public class IOSWelcomePageObject extends MainPageObject {
 
     private static final String
             LEARN_MORE_ABOUT_WIKIPEDIA_ID = "id:Learn more about Wikipedia",
@@ -11,7 +12,7 @@ public class WelcomePageObject extends MainPageObject {
             PREFERRED_LANGUAGES_TEXT = "id:Add or edit preferred languages",
             GET_STARTED_BUTTON_ID = "id:Get started";
 
-    public WelcomePageObject(AppiumDriver driver) {
+    public IOSWelcomePageObject(AppiumDriver driver) {
         super(driver);
     }
 
