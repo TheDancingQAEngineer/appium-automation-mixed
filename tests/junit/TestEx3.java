@@ -1,5 +1,6 @@
 import lib.CoreTestCase;
 import lib.ui.SearchPageObject;
+import lib.ui.factories.SearchPageObjectFactory;
 import org.junit.*;
 
 public class TestEx3 extends CoreTestCase {
@@ -9,7 +10,7 @@ public class TestEx3 extends CoreTestCase {
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        SearchPageObject = new SearchPageObject(driver);
+        SearchPageObject = SearchPageObjectFactory.get(driver);
     }
 
     @Test

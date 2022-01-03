@@ -1,5 +1,6 @@
 import lib.CoreTestCase;
 import lib.ui.SearchPageObject;
+import lib.ui.factories.SearchPageObjectFactory;
 import lib.util.WikiArticle;
 import org.junit.Test;
 
@@ -10,7 +11,7 @@ public class TestEx9 extends CoreTestCase {
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        SearchPageObject = new SearchPageObject(driver);
+        SearchPageObject = SearchPageObjectFactory.get(driver);
     }
 
     /** Задача:
