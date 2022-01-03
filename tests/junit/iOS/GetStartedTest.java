@@ -1,42 +1,43 @@
 package iOS;
 
-import lib.ui.ios.IOSHomePageObject;
-import lib.ui.ios.IOSWelcomePageObject;
+import lib.Platform;
+import lib.ui.HomePageObject;
+import lib.ui.WelcomePageObject;
 import org.junit.*;
 
 public class GetStartedTest extends lib.CoreTestCase {
 
-    private IOSWelcomePageObject IOSWelcomePageObject;
-    private IOSHomePageObject IOSHomePageObject;
+    private WelcomePageObject WelcomePageObject;
+    private HomePageObject HomePageObject;
 
     protected void setUp() throws Exception {
         super.setUp();
-        this.IOSWelcomePageObject = new IOSWelcomePageObject(driver);
-        this.IOSHomePageObject = new IOSHomePageObject(driver);
+        this.WelcomePageObject = new WelcomePageObject(driver);
+        this.HomePageObject = new HomePageObject(driver);
     }
 
     @Test
     public void testPassThroughWelcome()
     {
-        if (this.Platform.isAndroid()) {
+        if (Platform.getInstance().isAndroid()) {
             return;
         }
 
-        IOSWelcomePageObject.waitForLearnMoreLink();
-        IOSWelcomePageObject.clickNext();
+        WelcomePageObject.waitForLearnMoreLink();
+        WelcomePageObject.clickNext();
 
-        IOSWelcomePageObject.waitForNewWaysToExplore();
-        IOSWelcomePageObject.clickNext();
+        WelcomePageObject.waitForNewWaysToExplore();
+        WelcomePageObject.clickNext();
 
-        IOSWelcomePageObject.waitForAddOrEditLanguages();
-        IOSWelcomePageObject.clickNext();
+        WelcomePageObject.waitForAddOrEditLanguages();
+        WelcomePageObject.clickNext();
 
-        IOSWelcomePageObject.clickGetStarted();
+        WelcomePageObject.clickGetStarted();
 
-        IOSHomePageObject.waitForLoginToSync();
-        IOSHomePageObject.clickDismiss();
+        HomePageObject.waitForLoginToSync();
+        HomePageObject.clickDismiss();
 
-        IOSHomePageObject.waitForManagePreferences();
-        IOSHomePageObject.clickDismiss();
+        HomePageObject.waitForManagePreferences();
+        HomePageObject.clickDismiss();
     }
 }
