@@ -1,18 +1,19 @@
-package lib.ui.ios;
+package lib.ui;
 
 import io.appium.java_client.AppiumDriver;
 import lib.ui.MainPageObject;
 
-public class IOSWelcomePageObject extends MainPageObject {
+public class WelcomePageObject extends MainPageObject {
 
     private static final String
             LEARN_MORE_ABOUT_WIKIPEDIA_ID = "id:Learn more about Wikipedia",
             NEXT_BUTTON_ID = "id:Next",
             NEW_WAYS_TO_EXPLORE_TEXT = "id:New ways to explore",
             PREFERRED_LANGUAGES_TEXT = "id:Add or edit preferred languages",
-            GET_STARTED_BUTTON_ID = "id:Get started";
+            GET_STARTED_BUTTON_ID = "id:Get started",
+            SKIP_BUTTON_ID = "id:Skip";
 
-    public IOSWelcomePageObject(AppiumDriver driver) {
+    public WelcomePageObject(AppiumDriver driver) {
         super(driver);
     }
 
@@ -53,5 +54,13 @@ public class IOSWelcomePageObject extends MainPageObject {
                 GET_STARTED_BUTTON_ID,
                 "Cannot find \"Get started\" button.",
                 10);
+    }
+
+    public void clickSkip() {
+        this.waitForElementClickableAndClick(
+                SKIP_BUTTON_ID,
+                "Cannot find \"Skip\" button.",
+                10
+        );
     }
 }

@@ -3,6 +3,7 @@ import lib.ui.ArticlePageObject;
 import lib.ui.MyListsPageObject;
 import lib.ui.NavigationUI;
 import lib.ui.SearchPageObject;
+import lib.ui.factories.SearchPageObjectFactory;
 import org.junit.*;
 
 public class TestEx5 extends CoreTestCase {
@@ -15,7 +16,7 @@ public class TestEx5 extends CoreTestCase {
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        SearchPageObject = new SearchPageObject(driver);
+        SearchPageObject = SearchPageObjectFactory.get(driver);
         ArticlePageObject = new ArticlePageObject(driver);
         NavigationUI = new NavigationUI(driver);
         MyListsPageObject = new MyListsPageObject(driver);
