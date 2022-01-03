@@ -108,6 +108,7 @@ public class TestEx9 extends CoreTestCase {
 
         SearchPageObject.initSearchInput();
         SearchPageObject.typeSearchLine(search_line);
+        SearchPageObject.waitForAnySearchResult();
 
         SearchPageObject.assertNoSearchResultByTitleAndDescription(article_1.getTitle(), article_1.getDescription());
     }
