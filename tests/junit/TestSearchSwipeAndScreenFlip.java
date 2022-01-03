@@ -1,3 +1,4 @@
+import lib.ui.SearchPageObject;
 import lib.CoreTestCase;
 import lib.ui.*;
 import org.junit.*;
