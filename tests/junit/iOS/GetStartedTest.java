@@ -1,38 +1,42 @@
 package iOS;
 
-import lib.ui.HomePageObject;
-import lib.ui.WelcomePageObject;
-import org.junit.Test;
+import lib.ui.ios.IOSHomePageObject;
+import lib.ui.ios.IOSWelcomePageObject;
+import org.junit.*;
 
 public class GetStartedTest extends lib.CoreTestCase {
 
-    private lib.ui.WelcomePageObject WelcomePageObject;
-    private lib.ui.HomePageObject HomePageObject;
+    private IOSWelcomePageObject IOSWelcomePageObject;
+    private IOSHomePageObject IOSHomePageObject;
 
     protected void setUp() throws Exception {
         super.setUp();
-        this.WelcomePageObject = new WelcomePageObject(driver);
-        this.HomePageObject = new HomePageObject(driver);
+        this.IOSWelcomePageObject = new IOSWelcomePageObject(driver);
+        this.IOSHomePageObject = new IOSHomePageObject(driver);
     }
 
     @Test
     public void testPassThroughWelcome()
     {
-        WelcomePageObject.waitForLearnMoreLink();
-        WelcomePageObject.clickNext();
+        if (this.Platform.isAndroid()) {
+            return;
+        }
 
-        WelcomePageObject.waitForNewWaysToExplore();
-        WelcomePageObject.clickNext();
+        IOSWelcomePageObject.waitForLearnMoreLink();
+        IOSWelcomePageObject.clickNext();
 
-        WelcomePageObject.waitForAddOrEditLanguages();
-        WelcomePageObject.clickNext();
+        IOSWelcomePageObject.waitForNewWaysToExplore();
+        IOSWelcomePageObject.clickNext();
 
-        WelcomePageObject.clickGetStarted();
+        IOSWelcomePageObject.waitForAddOrEditLanguages();
+        IOSWelcomePageObject.clickNext();
 
-        HomePageObject.waitForLoginToSync();
-        HomePageObject.clickDismiss();
+        IOSWelcomePageObject.clickGetStarted();
 
-        HomePageObject.waitForManagePreferences();
-        HomePageObject.clickDismiss();
+        IOSHomePageObject.waitForLoginToSync();
+        IOSHomePageObject.clickDismiss();
+
+        IOSHomePageObject.waitForManagePreferences();
+        IOSHomePageObject.clickDismiss();
     }
 }

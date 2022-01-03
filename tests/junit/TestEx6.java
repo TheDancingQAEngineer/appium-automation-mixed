@@ -13,7 +13,7 @@ public class TestEx6 extends CoreTestCase {
      *
      * Метод можно назвать assertElementPresent.
      */
-    private lib.ui.SearchPageObject SearchPageObject;
+    private SearchPageObject SearchPageObject;
     private ArticlePageObject ArticlePageObject;
 
     @Override
