@@ -1,7 +1,9 @@
 import lib.CoreTestCase;
 import lib.ui.ArticlePageObject;
 import lib.ui.SearchPageObject;
+import lib.ui.factories.ArticlePageObjectFactory;
 import lib.ui.factories.SearchPageObjectFactory;
+import org.junit.Assert;
 import org.junit.Test;
 
 public class TestEx6 extends CoreTestCase {
@@ -21,7 +23,7 @@ public class TestEx6 extends CoreTestCase {
     protected void setUp() throws Exception {
         super.setUp();
         SearchPageObject = SearchPageObjectFactory.get(driver);
-        ArticlePageObject = new ArticlePageObject(driver);
+        ArticlePageObject = ArticlePageObjectFactory.get(driver);
     }
 
     @Test
@@ -32,10 +34,14 @@ public class TestEx6 extends CoreTestCase {
         String expected_title = "Java (programming language)";
 
         goFromStartScreenThroughSearchToArticle(search_query, expected_title);
-        ArticlePageObject.assertTitleElementPresent();
+        try {
+            ArticlePageObject.assertTitleElementPresent(expected_title);
+        } catch (AssertionError e) {
+            Assert.assertTrue(e.getMessage().contains("Article title not found"));
+        }
     }
 
-    @Test
+    @Test(expected = AssertionError.class)
     public void testArticleHasTitleWithWait()
     // This test is supposed to be more robust than the previous.
     {
@@ -44,8 +50,8 @@ public class TestEx6 extends CoreTestCase {
 
         goFromStartScreenThroughSearchToArticle(search_query, expected_title);
 
-        ArticlePageObject.waitForTitleElement();
-        ArticlePageObject.assertTitleElementPresent();
+        ArticlePageObject.waitForTitleElement(expected_title);
+        ArticlePageObject.assertTitleElementPresent(expected_title);
     }
 
     private void goFromStartScreenThroughSearchToArticle(String search_query, String expected_header)

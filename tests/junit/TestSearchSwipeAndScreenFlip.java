@@ -1,6 +1,7 @@
 import lib.ui.SearchPageObject;
 import lib.CoreTestCase;
 import lib.ui.*;
+import lib.ui.factories.ArticlePageObjectFactory;
 import lib.ui.factories.SearchPageObjectFactory;
 import org.junit.*;
 import org.openqa.selenium.*;
@@ -10,21 +11,18 @@ public class TestSearchSwipeAndScreenFlip extends CoreTestCase {
     protected lib.ui.MainPageObject MainPageObject;
     protected SearchPageObject SearchPageObject;
     protected ArticlePageObject ArticlePageObject;
-    protected NavigationUI NavigationUI;
-    protected MyListsPageObject MyListsPageObject;
 
     @Override
     protected void setUp() throws Exception {
         super.setUp();
         this.MainPageObject = new MainPageObject(driver);
         this.SearchPageObject = SearchPageObjectFactory.get(driver);
-        this.ArticlePageObject = new ArticlePageObject(driver);
+        this.ArticlePageObject = ArticlePageObjectFactory.get(driver);
     }
 
     @Test
     public void testSwipeArticle()
     {
-        // DONE: TODO: Refactor during section 5
 
         String search_query = "Appium";
         String expected_substring = "Appium";
@@ -33,7 +31,7 @@ public class TestSearchSwipeAndScreenFlip extends CoreTestCase {
         SearchPageObject.typeSearchLine(search_query);
 
         SearchPageObject.clickOnArticleWithSubstring(expected_substring);
-        ArticlePageObject.waitForTitleElement();
+        ArticlePageObject.waitForTitleElement(expected_substring);
 
         ArticlePageObject.swipeUp(2000);
         ArticlePageObject.swipeUp(2000);
@@ -46,7 +44,6 @@ public class TestSearchSwipeAndScreenFlip extends CoreTestCase {
     @Test
     public void testSwipeTillElementFound()
     {
-        // DONE: TODO: Refactor during section 5
 
         String search_query = "Appium";
         String expected_substring = "Appium";
@@ -55,51 +52,8 @@ public class TestSearchSwipeAndScreenFlip extends CoreTestCase {
         SearchPageObject.typeSearchLine(search_query);
         SearchPageObject.clickOnArticleWithSubstring(expected_substring);
 
-        ArticlePageObject.waitForTitleElement();
+        ArticlePageObject.waitForTitleElement(expected_substring);
         ArticlePageObject.swipeToFooter();
-    }
-
-    /* Lesson 4, Parts 3-4. Long test */
-    @Test
-    public void testAddToReadingListAndDelete()
-    {
-        String reading_list_title = "Learning programming";
-        String search_query = "Java";
-        String article_title = "Java (programming language)";
-
-        this.NavigationUI = new NavigationUI(driver);
-        this.MyListsPageObject = new MyListsPageObject(driver);
-
-        // Launch app, enter search mode
-        SearchPageObject.initSearchInput();
-
-        // Search "Java"
-        SearchPageObject.typeSearchLine(search_query);
-
-        // Go to article
-        SearchPageObject.clickOnArticleWithSubstring(article_title);
-
-        ArticlePageObject.waitForTitleElement();
-
-        ArticlePageObject.addArticleToReadingList(reading_list_title);
-
-        // Close article
-        ArticlePageObject.closeArticle();
-
-        // Tap 'My lists'
-        NavigationUI.clickMyLists();
-
-        // Tap the list previously created
-        MyListsPageObject.openReadingListByName(reading_list_title);
-
-        // Assert the article is there
-        MyListsPageObject.waitForArticleToAppearByTitle(article_title);
-
-        // Remove by swiping
-        MyListsPageObject.swipeArticleToDelete(article_title);
-
-        // Assert article is removed
-        MyListsPageObject.waitForArticleToDisappearByTitle(article_title);
     }
 
     /* Lesson 4, Part 5. Asserts. */
@@ -113,6 +67,7 @@ public class TestSearchSwipeAndScreenFlip extends CoreTestCase {
 
         // Send query with at least one likely match
         SearchPageObject.typeSearchLine(search_line);
+        SearchPageObject.waitForAnySearchResult();
 
         int number_of_search_elements = SearchPageObject.getNumberOfSearchResults();
 

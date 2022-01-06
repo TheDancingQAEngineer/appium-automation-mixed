@@ -2,29 +2,29 @@ package lib.ui;
 
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.TouchAction;
+import lib.Platform;
 import org.junit.Assert;
 import org.openqa.selenium.*;
 
-public class ArticlePageObject extends MainPageObject{
+abstract public class ArticlePageObject extends MainPageObject{
 
-    private static final String
-        ADD_TO_READING_LIST_XPATH = "xpath://*[@text='Add to reading list']",
-        ARTICLE_TITLE_ID = "id:org.wikipedia:id/view_page_title_text",
-        CLOSE_ARTICLE_BUTTON_XPATH = "xpath://android.widget.ImageButton[@content-desc='Navigate up']",
-        FOOTER_XPATH = "xpath://*[@text='View page in browser']",
-        OK_BUTTON_XPATH = "xpath://*[@text='OK']",
-        ONBOARDING_BUTTON_ID = "id:org.wikipedia:id/onboarding_button",
-        THREE_DOTS_XPATH = "xpath://*[@resource-id='org.wikipedia:id/page_toolbar']" +
-                "//*[@content-desc='More options']",
-        TEXT_INPUT_ID = "id:org.wikipedia:id/text_input",
-        DUMMY = "";
+    protected static String
+            ADD_TO_READING_LIST_LOCATOR,
+            ARTICLE_TITLE_LOCATOR,
+            CLOSE_ARTICLE_BUTTON_LOCATOR,
+            DISMISS_LOGIN_BUTTON_LOCATOR,
+            FOOTER_XPATH,
+            OK_BUTTON_XPATH,
+            ONBOARDING_BUTTON_ID,
+            THREE_DOTS_XPATH,
+            TEXT_INPUT_ID,
+            DUMMY;
 
     /** STRING TEMPLATES BEGIN **/
 
-    private static final String
-            ADD_TO_LIST_BY_NAME_XPATH_TPL = "xpath://*[@resource-id='org.wikipedia:id/list_of_lists']"
-            + "//*[@resource-id='org.wikipedia:id/item_title']"
-            + "[@text='{LIST_NAME}']";
+    protected static String
+            ADD_TO_LIST_BY_NAME_XPATH_TPL,
+            ARTICLE_TITLE_XPATH_TPL;
 
     /** STRING TEMPLATES END **/
 
@@ -38,61 +38,50 @@ public class ArticlePageObject extends MainPageObject{
         return ADD_TO_LIST_BY_NAME_XPATH_TPL.replace("{LIST_NAME}", list_name);
     }
 
+    private String getArticleTitleXpathFromTitle(String title) {
+        return ARTICLE_TITLE_XPATH_TPL.replace("{TITLE}", title);
+    }
+
     /** TEMPLATE METHODS END **/
 
-    public WebElement waitForTitleElement()
+    public WebElement waitForTitleElement(String title_string)
     {
-        return this.waitForElementVisible(ARTICLE_TITLE_ID,
-                "Cannot find article title on page",
+        String locator;
+        if (Platform.getInstance().isIOS()) {
+            locator = this.getArticleTitleXpathFromTitle(title_string);
+        } else {
+            locator = ARTICLE_TITLE_LOCATOR;
+        }
+
+        return this.waitForElementVisible(locator,
+                "Cannot find article title by locator:" + locator,
                 15);
     }
 
     public String getArticleTitle()
     {
-        WebElement title_element = waitForTitleElement();
+        if (Platform.getInstance().isIOS()) {
+            return "";
+        }
+
+        WebElement title_element = waitForTitleElement(ARTICLE_TITLE_LOCATOR);
         return title_element.getAttribute("text");
     }
 
     public void swipeToFooter()
     {
-        this.swipeUpTillElement(FOOTER_XPATH,
-                "Cannot find footer.", 20);
-    }
-
-    private void swipeUpTillElement(String locator_with_type, String error_message, int max_swipes) {
-        int already_swiped = 0;
-        while (driver.findElements(getLocatorByString(locator_with_type)).size() == 0) {
-
-            if (already_swiped >= max_swipes) {
-                waitForElementVisible(locator_with_type,
-                        "Cannot find element by swiping up. \n" + error_message,
-                        0);
-                return;
-            }
-
-            swipeUpQuick();
-            already_swiped++;
+        if (Platform.getInstance().isIOS()) {
+            this.swipeUpTillElementAppears(FOOTER_XPATH,
+                    "Cannot find footer.", 20);
+        } else {
+            this.swipeUpTillElement(FOOTER_XPATH,
+                    "Cannot find footer.", 20);
         }
     }
 
-    private void swipeUpQuick() {
-        swipeUp(200);
-    }
-
-    public void swipeUp(int timeOfSwipe) {
-        TouchAction action = new TouchAction(driver);
-        Dimension size = driver.manage().window().getSize();
-        int x = (int) (size.width / 2);
-        int start_y = (int) (size.height * 0.8);
-        int end_y = (int) (size.height * 0.2);
-
-        this.swipeByCoordinates(x, start_y, x, end_y, timeOfSwipe);
-    }
-
-    public void addArticleToReadingList(String list_name)
+    public void addArticleToReadingListAndroid(String list_name)
     {
-        // DONE: TODO: Adjust for different flow on first and subsequent additions
-        // Tap "Three dots"
+                // Tap "Three dots"
         this.waitForElementVisibleAndClick(
                 THREE_DOTS_XPATH,
                 "Cannot locate three dots.",
@@ -100,7 +89,7 @@ public class ArticlePageObject extends MainPageObject{
 
         // Tap "Add to reading list"
         this.waitForElementClickableAndClick(
-                ADD_TO_READING_LIST_XPATH,
+                ADD_TO_READING_LIST_LOCATOR,
                 "Cannot find 'Add to reading list' menu item.",
                 10);
 
@@ -137,21 +126,34 @@ public class ArticlePageObject extends MainPageObject{
         }
     }
 
+    public void saveArticleForLaterIOS() {
+        this.waitForElementClickableAndClick(
+                ADD_TO_READING_LIST_LOCATOR,
+                "Cannot find 'Save for later' button.",
+                10);
+    }
+
     public void closeArticle() {
         waitForElementVisibleAndClick(
-                CLOSE_ARTICLE_BUTTON_XPATH,
+                CLOSE_ARTICLE_BUTTON_LOCATOR,
                 "Cannot locate 'X' to close article.",
                 5);
     }
 
-    public void assertTitleElementPresent()
+    public void assertTitleElementPresent(String expected_title)
     {
+        String locator;
+        if (Platform.getInstance().isIOS()) {
+            locator = this.getArticleTitleXpathFromTitle(expected_title);
+        } else {
+            locator = ARTICLE_TITLE_LOCATOR;
+        }
+
         try {
-            // TODO: Refactor
-            By by = this.getLocatorByString(ARTICLE_TITLE_ID);
+            By by = this.getLocatorByString(locator);
             WebElement element = driver.findElement(by);
         } catch (NoSuchElementException e) {
-            String default_message = String.format("Article title not found by id: %s.", ARTICLE_TITLE_ID);
+            String default_message = String.format("Article title not found by id: %s.", locator);
             throw new AssertionError(default_message);
         }
     }
@@ -164,5 +166,13 @@ public class ArticlePageObject extends MainPageObject{
                         expected, article_title),
                 expected,
                 article_title);
+    }
+
+    public void dismissLogInToSyncSavedArticles() {
+        this.waitForElementClickableAndClick(
+                DISMISS_LOGIN_BUTTON_LOCATOR,
+                "Cannot locate \"Log in to sync\" pop-up.",
+                10
+        );
     }
 }

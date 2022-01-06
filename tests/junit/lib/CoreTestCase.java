@@ -4,10 +4,9 @@ import io.appium.java_client.AppiumDriver;
 import junit.framework.TestCase;
 import lib.ui.WelcomePageObject;
 
-public class CoreTestCase extends TestCase {
+abstract public class CoreTestCase extends TestCase {
 
     protected AppiumDriver driver;
-
 
     @Override
     protected void setUp() throws Exception

@@ -78,6 +78,7 @@ public class Platform {
         capabilities.setCapability("platformVersion","13.7");
         capabilities.setCapability("automationName","XCUITest");
         capabilities.setCapability("app","***REMOVED***/appium-automation-mixed/appium-automation-mixed/ios-apps/Wikipedia.app");
+        capabilities.setCapability("orientation", "PORTRAIT");
 
         return capabilities;
     }
