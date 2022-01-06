@@ -2,6 +2,7 @@ import lib.CoreTestCase;
 import lib.ui.SearchPageObject;
 import lib.ui.factories.SearchPageObjectFactory;
 import org.junit.*;
+import org.openqa.selenium.TimeoutException;
 
 public class TestEx3 extends CoreTestCase {
 
@@ -39,6 +40,11 @@ public class TestEx3 extends CoreTestCase {
 
         SearchPageObject.initSearchInput();
         SearchPageObject.typeSearchLine(search_query);
-        SearchPageObject.waitForAtLeastNSearchResults(expected_substring, minimum_expected_number_of_results);
+
+        try {
+            SearchPageObject.waitForAtLeastNSearchResults(expected_substring, minimum_expected_number_of_results);
+        } catch (Exception e) {
+            Assert.assertTrue(e.getMessage().contains("Less than 2"));
+        }
     }
 }
