@@ -52,16 +52,8 @@ abstract public class SearchPageObject extends MainPageObject {
 
     public void initSearchInput()
     {
-        this.waitForElementVisibleByXpath(SEARCH_INIT_ELEMENT_XPATH,
-                "Cannot find search field on start screen.",
-                5);
-
-        this.waitForElementVisibleByXpathAndClick(SEARCH_INIT_ELEMENT_XPATH,
+        this.waitForElementClickableAndClick(SEARCH_INIT_ELEMENT_XPATH,
                 "Cannot click in search field at home screen.",
-                5);
-
-        this.waitForElementVisibleByXpath(SEARCH_TEXT_FIELD_XPATH,
-                "Cannot find search input after tap.",
                 5);
     }
 
