@@ -109,20 +109,20 @@ public class TestSearchSwipeAndScreenFlip extends CoreTestCase {
 
         // Send search query
         String search_query = "Java";
-        String expected_substring = "Object-oriented programming language";
+        String expected_substring = "Java (programming language)";
         SearchPageObject.typeSearchLine(search_query);
 
         // Wait for results
         SearchPageObject.clickOnArticleWithSubstring(expected_substring);
 
         // Get title
-        String title_before_rotation = ArticlePageObject.getArticleTitle();
+        String title_before_rotation = ArticlePageObject.getArticleTitle(expected_substring);
 
         // Rotate device
         driver.rotate(ScreenOrientation.LANDSCAPE);
 
         // Assert article title is still there
-        String title_after_rotation = ArticlePageObject.getArticleTitle();
+        String title_after_rotation = ArticlePageObject.getArticleTitle(expected_substring);
 
         Assert.assertEquals(
                 "Titles before and after rotation don't match.",
@@ -134,7 +134,7 @@ public class TestSearchSwipeAndScreenFlip extends CoreTestCase {
         driver.rotate(ScreenOrientation.LANDSCAPE);
 
         // Assert article title is still the same
-        String title_after_second_rotation = ArticlePageObject.getArticleTitle();
+        String title_after_second_rotation = ArticlePageObject.getArticleTitle(expected_substring);
 
         Assert.assertEquals(
                 "Titles before and after two rotations don't match.",
