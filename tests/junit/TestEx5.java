@@ -3,6 +3,9 @@ import lib.ui.ArticlePageObject;
 import lib.ui.MyListsPageObject;
 import lib.ui.NavigationUI;
 import lib.ui.SearchPageObject;
+import lib.ui.factories.ArticlePageObjectFactory;
+import lib.ui.factories.MyListsPageObjectFactory;
+import lib.ui.factories.NavigationUIFactory;
 import lib.ui.factories.SearchPageObjectFactory;
 import org.junit.*;
 
@@ -17,9 +20,9 @@ public class TestEx5 extends CoreTestCase {
     protected void setUp() throws Exception {
         super.setUp();
         SearchPageObject = SearchPageObjectFactory.get(driver);
-        ArticlePageObject = new ArticlePageObject(driver);
-        NavigationUI = new NavigationUI(driver);
-        MyListsPageObject = new MyListsPageObject(driver);
+        ArticlePageObject = ArticlePageObjectFactory.get(driver);
+        NavigationUI = NavigationUIFactory.get(driver);
+        this.MyListsPageObject = MyListsPageObjectFactory.get(driver);
     }
 
     @Test
@@ -31,7 +34,6 @@ public class TestEx5 extends CoreTestCase {
         3. Убеждается, что вторая осталась
         4. Переходит в неё и убеждается, что title совпадает */
 
-        // DONE: TODO: Refactor after section 6.
 
         String
                 search_query_1 = "Java",
@@ -49,9 +51,9 @@ public class TestEx5 extends CoreTestCase {
         // Go to article
         SearchPageObject.clickOnArticleWithSubstring(expected_header_1);
 
-        ArticlePageObject.waitForTitleElement();
+        ArticlePageObject.waitForTitleElement(expected_header_1);
 
-        ArticlePageObject.addArticleToReadingList(reading_list_name);
+        ArticlePageObject.addArticleToReadingListAndroid(reading_list_name);
         ArticlePageObject.closeArticle();
 
         // This kicks us back to home screen, so we
@@ -65,8 +67,8 @@ public class TestEx5 extends CoreTestCase {
         SearchPageObject.clickOnArticleWithSubstring(expected_header_2);
 
         // Tap "Three dots"
-        ArticlePageObject.waitForTitleElement();
-        ArticlePageObject.addArticleToReadingList(reading_list_name);
+        ArticlePageObject.waitForTitleElement(expected_header_2);
+        ArticlePageObject.addArticleToReadingListAndroid(reading_list_name);
         ArticlePageObject.closeArticle();
 
         NavigationUI.clickMyLists();
@@ -81,7 +83,7 @@ public class TestEx5 extends CoreTestCase {
 
         MyListsPageObject.clickOnArticleByTitle(expected_header_2);
 
-        ArticlePageObject.waitForTitleElement();
+        ArticlePageObject.waitForTitleElement(expected_header_2);
         ArticlePageObject.assertTitleMatches(expected_header_2);
     }
 }
