@@ -1,15 +1,12 @@
 import lib.CoreTestCase;
 import lib.Platform;
 import lib.ui.*;
-import lib.ui.factories.ArticlePageObjectFactory;
-import lib.ui.factories.MyListsPageObjectFactory;
-import lib.ui.factories.NavigationUIFactory;
-import lib.ui.factories.SearchPageObjectFactory;
+import lib.ui.factories.*;
 import org.junit.Test;
 
 public class TestAddToReadingListAndDelete extends CoreTestCase {
 
-    protected lib.ui.MainPageObject MainPageObject;
+    protected HomePageObject HomePageObject;
     protected SearchPageObject SearchPageObject;
     protected ArticlePageObject ArticlePageObject;
     protected NavigationUI NavigationUI;
@@ -18,7 +15,7 @@ public class TestAddToReadingListAndDelete extends CoreTestCase {
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        this.MainPageObject = new MainPageObject(driver);
+        this.HomePageObject = HomePageObjectFactory.get(driver);
         this.SearchPageObject = SearchPageObjectFactory.get(driver);
         this.ArticlePageObject = ArticlePageObjectFactory.get(driver);
     }
@@ -44,18 +41,20 @@ public class TestAddToReadingListAndDelete extends CoreTestCase {
 
         ArticlePageObject.waitForTitleElement(article_title);
 
-        if (Platform.getInstance().isAndroid()) {
-            ArticlePageObject.addArticleToReadingListAndroid(reading_list_title);
-        } else {
-            ArticlePageObject.saveArticleForLaterIOS();
-            ArticlePageObject.dismissLogInToSyncSavedArticles();
-        }
+        ArticlePageObject.addArticleToReadingList(reading_list_title);
 
         // Close article
         ArticlePageObject.closeArticle();
+        if (Platform.getInstance().isIOS()) {
+            SearchPageObject.clickCancelSearch();
+        }
 
         // Tap 'My lists'
         NavigationUI.clickMyLists();
+
+        if (Platform.getInstance().isIOS()) {
+            HomePageObject.dismissLogInToSyncSavedArticles();
+        }
 
         // Tap the list previously created
         if (Platform.getInstance().isAndroid()) {

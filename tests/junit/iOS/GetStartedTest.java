@@ -8,12 +8,11 @@ import org.junit.*;
 public class GetStartedTest extends lib.CoreTestCase {
 
     private WelcomePageObject WelcomePageObject;
-    private HomePageObject HomePageObject;
 
+    @Override
     protected void setUp() throws Exception {
-        super.setUp();
+        driver = Platform.getInstance().getDriver();
         this.WelcomePageObject = new WelcomePageObject(driver);
-        this.HomePageObject = new HomePageObject(driver);
     }
 
     @Test
@@ -33,11 +32,5 @@ public class GetStartedTest extends lib.CoreTestCase {
         WelcomePageObject.clickNext();
 
         WelcomePageObject.clickGetStarted();
-
-        HomePageObject.waitForLoginToSync();
-        HomePageObject.clickDismiss();
-
-        HomePageObject.waitForManagePreferences();
-        HomePageObject.clickDismiss();
     }
 }

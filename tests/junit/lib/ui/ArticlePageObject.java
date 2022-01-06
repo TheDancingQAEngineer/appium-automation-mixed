@@ -1,7 +1,6 @@
 package lib.ui;
 
 import io.appium.java_client.AppiumDriver;
-import io.appium.java_client.TouchAction;
 import lib.Platform;
 import org.junit.Assert;
 import org.openqa.selenium.*;
@@ -12,12 +11,12 @@ abstract public class ArticlePageObject extends MainPageObject{
             ADD_TO_READING_LIST_LOCATOR,
             ARTICLE_TITLE_LOCATOR,
             CLOSE_ARTICLE_BUTTON_LOCATOR,
-            DISMISS_LOGIN_BUTTON_LOCATOR,
             FOOTER_XPATH,
             OK_BUTTON_XPATH,
             ONBOARDING_BUTTON_ID,
             THREE_DOTS_XPATH,
             TEXT_INPUT_ID,
+            WEBVIEW_LOCATOR,
             DUMMY;
 
     /** STRING TEMPLATES BEGIN **/
@@ -58,12 +57,30 @@ abstract public class ArticlePageObject extends MainPageObject{
                 15);
     }
 
-    public String getArticleTitle()
-    {
+    public String getArticleTitle(String expected_title) {
         if (Platform.getInstance().isIOS()) {
-            return "";
+            return getArticleTitleIOS(expected_title);
+        } else {
+            return getArticleTitleAndroid();
         }
+    }
 
+    // TODO: Bad logic! Doesn't actually check anything! Rework locators!
+    private String getArticleTitleIOS(String expected_title) {
+        // get an element locator from title
+        String locator = this.getArticleTitleXpathFromTitle(expected_title);
+
+        this.waitForWebViewElement();
+        // Wait for element to appear
+        WebElement title_element = this.waitForElementVisible(
+                locator,
+                "Cannot locate title by locator:" + locator,
+                15);
+
+        return title_element.getAttribute("name");
+    }
+
+    private String getArticleTitleAndroid() {
         WebElement title_element = waitForTitleElement(ARTICLE_TITLE_LOCATOR);
         return title_element.getAttribute("text");
     }
@@ -79,7 +96,16 @@ abstract public class ArticlePageObject extends MainPageObject{
         }
     }
 
-    public void addArticleToReadingListAndroid(String list_name)
+    public void addArticleToReadingList(String list_name)
+    {
+        if (Platform.getInstance().isIOS()) {
+            this.saveArticleForLaterIOS();
+        } else {
+            this.addArticleToReadingListAndroid(list_name);
+        }
+    }
+
+    private void addArticleToReadingListAndroid(String list_name)
     {
                 // Tap "Three dots"
         this.waitForElementVisibleAndClick(
@@ -126,7 +152,7 @@ abstract public class ArticlePageObject extends MainPageObject{
         }
     }
 
-    public void saveArticleForLaterIOS() {
+    private void saveArticleForLaterIOS() {
         this.waitForElementClickableAndClick(
                 ADD_TO_READING_LIST_LOCATOR,
                 "Cannot find 'Save for later' button.",
@@ -158,8 +184,9 @@ abstract public class ArticlePageObject extends MainPageObject{
         }
     }
 
+    // TODO: Bad logic for iOS! Fix!
     public void assertTitleMatches(String expected) {
-        String article_title = this.getArticleTitle();
+        String article_title = this.getArticleTitle(expected);
 
         Assert.assertEquals(
                 String.format("Expected title '%s', got '%s'\n",
@@ -168,11 +195,9 @@ abstract public class ArticlePageObject extends MainPageObject{
                 article_title);
     }
 
-    public void dismissLogInToSyncSavedArticles() {
-        this.waitForElementClickableAndClick(
-                DISMISS_LOGIN_BUTTON_LOCATOR,
-                "Cannot locate \"Log in to sync\" pop-up.",
-                10
-        );
+    private void waitForWebViewElement() {
+        this.waitForElementVisible(WEBVIEW_LOCATOR,
+                "Cannot locate webview element by locator:" + WEBVIEW_LOCATOR,
+                10);
     }
 }
