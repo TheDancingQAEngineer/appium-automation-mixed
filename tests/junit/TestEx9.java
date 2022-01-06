@@ -38,9 +38,9 @@ public class TestEx9 extends CoreTestCase {
 
         WikiArticle article_1 = new WikiArticle("Hungary","Country in Central Europe");
         WikiArticle article_2 = new WikiArticle("Hungary national football team",
-                "Men's national association football team representing Hungary");
+                "Men's national association football team");
         WikiArticle article_3 = new WikiArticle("Hungary in World War II",
-                "Involvement of Hungary in World War II");
+                "of Hungary in World War II");
 
         SearchPageObject.initSearchInput();
         SearchPageObject.typeSearchLine(search_line);
@@ -57,9 +57,9 @@ public class TestEx9 extends CoreTestCase {
 
         WikiArticle article_1 = new WikiArticle("Hungary","Country in Central Europe");
         WikiArticle article_2 = new WikiArticle("Hungary national football team",
-                "Men's national association football team representing Hungary");
+                "Men's national association football team");
         WikiArticle article_3 = new WikiArticle("Hungary in World War II",
-                "Involvement of Hungary in World War II");
+                "of Hungary in World War II");
 
         SearchPageObject.initSearchInput();
         SearchPageObject.typeSearchLine(search_line);
@@ -74,11 +74,11 @@ public class TestEx9 extends CoreTestCase {
     {
         String search_line = "Hungary";
 
-        WikiArticle article_1 = new WikiArticle("Hungary","Involvement of Hungary in World War II");
+        WikiArticle article_1 = new WikiArticle("Hungary","of Hungary in World War II");
         WikiArticle article_2 = new WikiArticle("Hungary national football team",
                 "Country in Central Europe");
         WikiArticle article_3 = new WikiArticle("Hungary in World War II",
-                "Men's national association football team representing Hungary");
+                "Men's national association football team");
 
         SearchPageObject.initSearchInput();
         SearchPageObject.typeSearchLine(search_line);
@@ -93,7 +93,7 @@ public class TestEx9 extends CoreTestCase {
     {
         String search_line = "Hungary";
 
-        WikiArticle article_1 = new WikiArticle("Hungary","Involvement of Hungary in World War II");
+        WikiArticle article_1 = new WikiArticle("Hungary","of Hungary in World War II");
 
         SearchPageObject.initSearchInput();
         SearchPageObject.typeSearchLine(search_line);
