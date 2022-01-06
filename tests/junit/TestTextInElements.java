@@ -1,6 +1,7 @@
 import lib.CoreTestCase;
 import lib.ui.ArticlePageObject;
 import lib.ui.SearchPageObject;
+import lib.ui.factories.ArticlePageObjectFactory;
 import lib.ui.factories.SearchPageObjectFactory;
 import org.junit.*;
 
@@ -11,7 +12,6 @@ public class TestTextInElements extends CoreTestCase {
     protected void setUp() throws Exception
     {
         super.setUp();
-        
         SearchPageObject = SearchPageObjectFactory.get(driver);
     }
 
@@ -82,8 +82,7 @@ public class TestTextInElements extends CoreTestCase {
     @Test
     public void testSearchCancel()
     {
-        // DONE: TODO: Refactor this test by the end of section 4
-        // GIVEN:
+                // GIVEN:
         // - running emulator
         // - running Appium Server
         // - app is on search screen
@@ -102,8 +101,7 @@ public class TestTextInElements extends CoreTestCase {
     /* Part 9: Basic Assertions */
     @Test
     public void testCompareArticleTitle()
-    // DONE: TODO: Refactor during section 5
-    {
+        {
         String search_query = "Java";
         String expected_substring = "Object-oriented programming language";
         String expected_title = "Java (programming language)";
@@ -125,7 +123,7 @@ public class TestTextInElements extends CoreTestCase {
         // THEN: Page title matches our search
         // org.wikipedia:id/view_page_title_text
 
-        ArticlePageObject ArticlePageObject = new ArticlePageObject(driver);
+        ArticlePageObject ArticlePageObject = ArticlePageObjectFactory.get(driver);
         String article_title = ArticlePageObject.getArticleTitle();
 
         Assert.assertEquals(

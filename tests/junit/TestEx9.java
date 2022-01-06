@@ -2,6 +2,7 @@ import lib.CoreTestCase;
 import lib.ui.SearchPageObject;
 import lib.ui.factories.SearchPageObjectFactory;
 import lib.util.WikiArticle;
+import org.junit.Assert;
 import org.junit.Test;
 
 public class TestEx9 extends CoreTestCase {
@@ -97,7 +98,11 @@ public class TestEx9 extends CoreTestCase {
         SearchPageObject.initSearchInput();
         SearchPageObject.typeSearchLine(search_line);
 
-        SearchPageObject.waitForSearchResultByWikiArticleObject(article_1);
+        try {
+            SearchPageObject.waitForSearchResultByWikiArticleObject(article_1);
+        } catch (Exception e) {
+            Assert.assertTrue(e.getMessage().contains("Cannot locate article"));
+        }
     }
 
     @Test
@@ -111,6 +116,10 @@ public class TestEx9 extends CoreTestCase {
         SearchPageObject.typeSearchLine(search_line);
         SearchPageObject.waitForAnySearchResult();
 
+        try {
         SearchPageObject.assertNoSearchResultByTitleAndDescription(article_1.getTitle(), article_1.getDescription());
+        } catch (Exception e) {
+            Assert.assertTrue(e.getMessage().contains("Unexpectedly found element"));
+        }
     }
 }
