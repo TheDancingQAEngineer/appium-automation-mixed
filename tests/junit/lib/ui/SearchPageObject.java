@@ -8,7 +8,7 @@ abstract public class SearchPageObject extends MainPageObject {
     protected static String
         NO_RESULTS_LABEL_XPATH,
         SEARCH_INIT_ELEMENT_XPATH,
-        SEARCH_TEXT_FIELD_XPATH,
+            SEARCH_TEXT_FIELD_LOCATOR,
         SEARCH_CANCEL_BUTTON_ID,
         SEARCH_RESULT_XPATH,
         SEARCH_TEXT_FIELD_ID;
@@ -60,7 +60,7 @@ abstract public class SearchPageObject extends MainPageObject {
     public void typeSearchLine(String search_line)
     {
         this.waitForElementVisibleAndSendKeys(
-                SEARCH_TEXT_FIELD_XPATH,
+                SEARCH_TEXT_FIELD_LOCATOR,
                 search_line,
                 "Cannot type search line to search input",
                 5
@@ -96,7 +96,7 @@ abstract public class SearchPageObject extends MainPageObject {
     }
 
     public void clearSearchInput() {
-        this.waitForElementVisibleAndClear(SEARCH_TEXT_FIELD_XPATH,
+        this.waitForElementVisibleAndClear(SEARCH_TEXT_FIELD_LOCATOR,
                 "Cannot locate search text element to clear.",
                 5);
     }

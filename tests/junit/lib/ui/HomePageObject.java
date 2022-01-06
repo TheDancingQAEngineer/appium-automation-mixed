@@ -1,14 +1,15 @@
 package lib.ui;
 
 import io.appium.java_client.AppiumDriver;
-import lib.ui.MainPageObject;
+import org.openqa.selenium.NoSuchElementException;
 
 public class HomePageObject extends MainPageObject {
 
-    private static final String
-            DISMISS_BUTTON_ID = "id:Dismiss",
-            LOGIN_BUTTON_ID = "id:Log in to sync your saved articles",
-            MANAGE_PREFERENCES_BUTTON_ID = "id:Manage preferences";
+    protected static String
+            DISMISS_BUTTON_ID,
+            DISMISS_LOGIN_TO_SYNC_BUTTON_LOCATOR,
+            LOGIN_BUTTON_ID,
+            MANAGE_PREFERENCES_BUTTON_ID;
 
     public HomePageObject(AppiumDriver driver) {
         super(driver);
@@ -35,5 +36,18 @@ public class HomePageObject extends MainPageObject {
                 "Cannot see \"Manage preferences\" button.",
                 10
         );
+    }
+
+    public void dismissLogInToSyncSavedArticles() {
+        try {
+            this.waitForLoginToSync();
+            this.waitForElementClickableAndClick(
+                    DISMISS_LOGIN_TO_SYNC_BUTTON_LOCATOR,
+                    "Cannot locate \"Log in to sync\" pop-up.",
+                    5
+            );
+        } catch (NoSuchElementException e) {
+            // do nothing and return
+        }
     }
 }
