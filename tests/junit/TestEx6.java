@@ -41,7 +41,7 @@ public class TestEx6 extends CoreTestCase {
         }
     }
 
-    @Test(expected = AssertionError.class)
+    @Test
     public void testArticleHasTitleWithWait()
     // This test is supposed to be more robust than the previous.
     {
