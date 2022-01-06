@@ -4,6 +4,9 @@ import lib.ui.SearchPageObject;
 import lib.ui.factories.ArticlePageObjectFactory;
 import lib.ui.factories.SearchPageObjectFactory;
 import org.junit.*;
+import org.openqa.selenium.WebElement;
+
+import java.util.Set;
 
 public class TestTextInElements extends CoreTestCase {
 
@@ -124,7 +127,7 @@ public class TestTextInElements extends CoreTestCase {
         // org.wikipedia:id/view_page_title_text
 
         ArticlePageObject ArticlePageObject = ArticlePageObjectFactory.get(driver);
-        String article_title = ArticlePageObject.getArticleTitle();
+        String article_title = ArticlePageObject.getArticleTitle(expected_title);
 
         Assert.assertEquals(
                 String.format("Expected title '%s', got '%s'\n",
