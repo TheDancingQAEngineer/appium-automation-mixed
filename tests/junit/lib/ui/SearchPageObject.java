@@ -144,7 +144,7 @@ abstract public class SearchPageObject extends MainPageObject {
         this.waitForElementVisible(
                 NO_RESULTS_LABEL_XPATH,
                 String.format("Cannot locate item by xpath: \n%s", NO_RESULTS_LABEL_XPATH),
-                10);
+                5);
     }
 
     public void assertZeroSearchResults(String search_line) {
@@ -188,5 +188,9 @@ abstract public class SearchPageObject extends MainPageObject {
                     "Failed to load search results.",
                     10);
         }
+    }
+
+    public WikiArticle getWikiArticleBySubstring(String expected_substring) {
+        return new WikiArticle("foo", "bar");
     }
 }

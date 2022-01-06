@@ -1,3 +1,4 @@
+import junit.framework.AssertionFailedError;
 import lib.CoreTestCase;
 import org.junit.*;
 
@@ -13,11 +14,10 @@ public class TestSmoke extends CoreTestCase {
     public void testExpectedFailure()
     {
         try {
-            System.out.println("I am testExpectedFailure(). If I passed, something is off.");
+            System.out.println("I am testExpectedFailure(). I only pass if I throw AssertionFailedError().");
             fail("shouldn't pass.");
-        } catch (Exception e) {
-            // expected
+        } catch (AssertionFailedError e) {
+            Assert.assertTrue(e.getMessage().contains("shouldn't pass"));
         }
-
     }
 }
