@@ -1,157 +1,203 @@
 package lib.ui;
 
 import io.appium.java_client.AppiumDriver;
-import io.appium.java_client.TouchAction;
+import lib.Platform;
 import org.junit.Assert;
 import org.openqa.selenium.*;
 
-public class ArticlePageObject extends MainPageObject{
+abstract public class ArticlePageObject extends MainPageObject{
 
-    private static final String
-        ADD_TO_READING_LIST_XPATH = "//*[@text='Add to reading list']",
-        ADD_TO_LIST_BY_NAME_XPATH_TPL = "//*[@resource-id='org.wikipedia:id/list_of_lists']"
-                + "//*[@resource-id='org.wikipedia:id/item_title']"
-                + "[@text='{LIST_NAME}']",
-        ARTICLE_TITLE_ID = "org.wikipedia:id/view_page_title_text",
-        CLOSE_ARTICLE_BUTTON_XPATH = "//android.widget.ImageButton[@content-desc='Navigate up']",
-        FOOTER_XPATH = "//*[@text='View page in browser']",
-        OK_BUTTON_XPATH = "//*[@text='OK']",
-        ONBOARDING_BUTTON_ID = "org.wikipedia:id/onboarding_button",
-        THREE_DOTS_XPATH = "//*[@resource-id='org.wikipedia:id/page_toolbar']" +
-                "//*[@content-desc='More options']",
-        TEXT_INPUT_ID = "org.wikipedia:id/text_input",
-        DUMMY = "";
+    protected static String
+            ADD_TO_READING_LIST_LOCATOR,
+            ARTICLE_TITLE_LOCATOR,
+            CLOSE_ARTICLE_BUTTON_LOCATOR,
+            FOOTER_XPATH,
+            OK_BUTTON_XPATH,
+            ONBOARDING_BUTTON_ID,
+            THREE_DOTS_XPATH,
+            TEXT_INPUT_ID,
+            WEBVIEW_LOCATOR,
+            DUMMY;
+
+    /** STRING TEMPLATES BEGIN **/
+
+    protected static String
+            ADD_TO_LIST_BY_NAME_XPATH_TPL,
+            ARTICLE_TITLE_XPATH_TPL;
+
+    /** STRING TEMPLATES END **/
 
     public ArticlePageObject(AppiumDriver driver) {
         super(driver);
     }
 
-    public WebElement waitForTitleElement()
+    /** TEMPLATE METHODS BEGIN **/
+
+    private String getReadingListXpathFromName(String list_name) {
+        return ADD_TO_LIST_BY_NAME_XPATH_TPL.replace("{LIST_NAME}", list_name);
+    }
+
+    private String getArticleTitleXpathFromTitle(String title) {
+        return ARTICLE_TITLE_XPATH_TPL.replace("{TITLE}", title);
+    }
+
+    /** TEMPLATE METHODS END **/
+
+    public WebElement waitForTitleElement(String title_string)
     {
-        return this.waitForElementVisible(By.id(ARTICLE_TITLE_ID),
-                "Cannot find article title on page",
+        String locator;
+        if (Platform.getInstance().isIOS()) {
+            locator = this.getArticleTitleXpathFromTitle(title_string);
+        } else {
+            locator = ARTICLE_TITLE_LOCATOR;
+        }
+
+        return this.waitForElementVisible(locator,
+                "Cannot find article title by locator:" + locator,
                 15);
     }
 
-    public String getArticleTitle()
-    {
-        WebElement title_element = waitForTitleElement();
+    public String getArticleTitle(String expected_title) {
+        if (Platform.getInstance().isIOS()) {
+            return getArticleTitleIOS(expected_title);
+        } else {
+            return getArticleTitleAndroid();
+        }
+    }
+
+    // TODO: Bad logic! Doesn't actually check anything! Rework locators!
+    private String getArticleTitleIOS(String expected_title) {
+        // get an element locator from title
+        String locator = this.getArticleTitleXpathFromTitle(expected_title);
+
+        this.waitForWebViewElement();
+        // Wait for element to appear
+        WebElement title_element = this.waitForElementVisible(
+                locator,
+                "Cannot locate title by locator:" + locator,
+                15);
+
+        return title_element.getAttribute("name");
+    }
+
+    private String getArticleTitleAndroid() {
+        WebElement title_element = waitForTitleElement(ARTICLE_TITLE_LOCATOR);
         return title_element.getAttribute("text");
     }
 
     public void swipeToFooter()
     {
-        this.swipeUpTillElement(By.xpath(FOOTER_XPATH),
-                "Cannot find footer.", 20);
-    }
-
-    private void swipeUpTillElement(By by, String error_message, int max_swipes) {
-        int already_swiped = 0;
-        while (driver.findElements(by).size() == 0) {
-
-            if (already_swiped >= max_swipes) {
-                waitForElementVisible(by,
-                        "Cannot find element by swiping up. \n" + error_message,
-                        0);
-                return;
-            }
-
-            swipeUpQuick();
-            already_swiped++;
+        if (Platform.getInstance().isIOS()) {
+            this.swipeUpTillElementAppears(FOOTER_XPATH,
+                    "Cannot find footer.", 20);
+        } else {
+            this.swipeUpTillElement(FOOTER_XPATH,
+                    "Cannot find footer.", 20);
         }
-    }
-
-    private void swipeUpQuick() {
-        swipeUp(200);
-    }
-
-    public void swipeUp(int timeOfSwipe) {
-        TouchAction action = new TouchAction(driver);
-        Dimension size = driver.manage().window().getSize();
-        int x = (int) (size.width / 2);
-        int start_y = (int) (size.height * 0.8);
-        int end_y = (int) (size.height * 0.2);
-
-        action.press(x, start_y).waitAction(timeOfSwipe).moveTo(x, end_y).release().perform();
     }
 
     public void addArticleToReadingList(String list_name)
     {
-        // TODO: Adjust for different flow on first and subsequent additions
-        // Tap "Three dots"
+        if (Platform.getInstance().isIOS()) {
+            this.saveArticleForLaterIOS();
+        } else {
+            this.addArticleToReadingListAndroid(list_name);
+        }
+    }
+
+    private void addArticleToReadingListAndroid(String list_name)
+    {
+                // Tap "Three dots"
         this.waitForElementVisibleAndClick(
-                By.xpath(THREE_DOTS_XPATH),
+                THREE_DOTS_XPATH,
                 "Cannot locate three dots.",
                 10);
 
         // Tap "Add to reading list"
         this.waitForElementClickableAndClick(
-                By.xpath(ADD_TO_READING_LIST_XPATH),
+                ADD_TO_READING_LIST_LOCATOR,
                 "Cannot find 'Add to reading list' menu item.",
                 10);
 
         String reading_list_xpath = getReadingListXpathFromName(list_name);
         try {
             // This works when list 'list_name' already exists
-            this.waitForElementVisibleAndClick(By.xpath(reading_list_xpath),
+            this.waitForElementVisibleAndClick(reading_list_xpath,
                     String.format("Cannot find reading list by name '%s'", list_name),
                     10);
         } catch (TimeoutException e) {
             // This should work on first run
             this.waitForElementVisibleAndClick(
-                    By.id(ONBOARDING_BUTTON_ID),
+                    ONBOARDING_BUTTON_ID,
                     "Cannot find onboarding button.",
                     10);
 
             this.waitForElementVisibleAndClear(
-                    By.id(TEXT_INPUT_ID),
+                    TEXT_INPUT_ID,
                     "Cannot clear input in reading list name.",
                     5);
 
             // Enter list name
             this.waitForElementVisibleAndSendKeys(
-                    By.id(TEXT_INPUT_ID),
+                    TEXT_INPUT_ID,
                     list_name,
                     "Cannot send keys to text input.",
                     10);
 
             // Tap 'OK'
             this.waitForElementVisibleAndClick(
-                    By.xpath(OK_BUTTON_XPATH),
+                    OK_BUTTON_XPATH,
                     "Cannot find OK button.",
                     10);
         }
     }
 
-    private String getReadingListXpathFromName(String list_name) {
-        return ADD_TO_LIST_BY_NAME_XPATH_TPL.replace("{LIST_NAME}", list_name);
+    private void saveArticleForLaterIOS() {
+        this.waitForElementClickableAndClick(
+                ADD_TO_READING_LIST_LOCATOR,
+                "Cannot find 'Save for later' button.",
+                10);
     }
 
     public void closeArticle() {
         waitForElementVisibleAndClick(
-                By.xpath(CLOSE_ARTICLE_BUTTON_XPATH),
+                CLOSE_ARTICLE_BUTTON_LOCATOR,
                 "Cannot locate 'X' to close article.",
                 5);
     }
 
-    public void assertTitleElementPresent()
+    public void assertTitleElementPresent(String expected_title)
     {
+        String locator;
+        if (Platform.getInstance().isIOS()) {
+            locator = this.getArticleTitleXpathFromTitle(expected_title);
+        } else {
+            locator = ARTICLE_TITLE_LOCATOR;
+        }
+
         try {
-            // TODO: Refactor
-            WebElement element = driver.findElement(By.id(ARTICLE_TITLE_ID));
+            By by = this.getLocatorByString(locator);
+            WebElement element = driver.findElement(by);
         } catch (NoSuchElementException e) {
-            String default_message = String.format("Article title not found by id: %s.", ARTICLE_TITLE_ID);
+            String default_message = String.format("Article title not found by id: %s.", locator);
             throw new AssertionError(default_message);
         }
     }
 
+    // TODO: Bad logic for iOS! Fix!
     public void assertTitleMatches(String expected) {
-        String article_title = this.getArticleTitle();
+        String article_title = this.getArticleTitle(expected);
 
         Assert.assertEquals(
                 String.format("Expected title '%s', got '%s'\n",
                         expected, article_title),
                 expected,
                 article_title);
+    }
+
+    private void waitForWebViewElement() {
+        this.waitForElementVisible(WEBVIEW_LOCATOR,
+                "Cannot locate webview element by locator:" + WEBVIEW_LOCATOR,
+                10);
     }
 }
