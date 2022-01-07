@@ -2,35 +2,31 @@ package lib.ui;
 
 import io.appium.java_client.AppiumDriver;
 import lib.util.WikiArticle;
-import org.openqa.selenium.By;
 
-public class SearchPageObject extends MainPageObject{
+abstract public class SearchPageObject extends MainPageObject {
 
-    /** CONSTANTS BEGIN **/
-    private static final String
-        SEARCH_INIT_ELEMENT = "//*[contains(@text, 'Search Wikipedia')]",
-        SEARCH_INPUT = "//*[contains(@text, 'Search…')]",
-        SEARCH_CANCEL_BUTTON = "org.wikipedia:id/search_close_btn",
-        SEARCH_TEXT_FIELD = "org.wikipedia:id/search_src_text";
-    /** CONSTANTS END **/
+    protected static String
+        NO_RESULTS_LABEL_XPATH,
+        SEARCH_INIT_ELEMENT_XPATH,
+            SEARCH_TEXT_FIELD_LOCATOR,
+        SEARCH_CANCEL_BUTTON_ID,
+        SEARCH_RESULT_XPATH,
+        SEARCH_TEXT_FIELD_ID;
 
     /** STRING TEMPLATES BEGIN **/
-    private static final String
-        SEARCH_RESULT_BY_SUBSTRING_TPL = "//*[@resource-id='org.wikipedia:id/page_list_item_container']"
-                + "//*[contains(@text, '{SUBSTRING}')]",
-        SEARCH_ITEM_TITLE_AND_DESCRIPTION_TPL =
-                    "//*[@resource-id='org.wikipedia:id/page_list_item_container']"
-                            + "[.//@text=\"{TITLE}\" and .//@text=\"{DESCRIPTION}\"]";
+
+    protected static String
+            SEARCH_RESULT_BY_SUBSTRING_XPATH_TPL,
+            SEARCH_ITEM_TITLE_AND_DESCRIPTION_TPL;
+
     /** STRING TEMPLATES END **/
 
-    public SearchPageObject(AppiumDriver driver) {
-        super(driver);
-    }
 
     /** TEMPLATE METHODS BEGIN **/
+
     private static String getSearchResultElement(String substring)
     {
-        return SEARCH_RESULT_BY_SUBSTRING_TPL.replace("{SUBSTRING}", substring);
+        return SEARCH_RESULT_BY_SUBSTRING_XPATH_TPL.replace("{SUBSTRING}", substring);
     }
 
     private static String getSearchResultElementByWikiArticleObject(WikiArticle article)
@@ -47,28 +43,24 @@ public class SearchPageObject extends MainPageObject{
                 .replace("{TITLE}", title)
                 .replace("{DESCRIPTION}", description);
     }
+
     /** TEMPLATE METHODS END **/
 
+    public SearchPageObject(AppiumDriver driver) {
+        super(driver);
+    }
 
     public void initSearchInput()
     {
-        this.waitForElementVisibleByXpath(SEARCH_INIT_ELEMENT,
-                "Cannot find search field on start screen.",
-                5);
-
-        this.waitForElementVisibleByXpathAndClick(SEARCH_INIT_ELEMENT,
+        this.waitForElementClickableAndClick(SEARCH_INIT_ELEMENT_XPATH,
                 "Cannot click in search field at home screen.",
-                5);
-
-        this.waitForElementVisibleByXpath(SEARCH_INPUT,
-                "Cannot find search input after tap.",
                 5);
     }
 
     public void typeSearchLine(String search_line)
     {
         this.waitForElementVisibleAndSendKeys(
-                By.xpath(SEARCH_INPUT),
+                SEARCH_TEXT_FIELD_LOCATOR,
                 search_line,
                 "Cannot type search line to search input",
                 5
@@ -84,27 +76,27 @@ public class SearchPageObject extends MainPageObject{
 
     public void waitForCancelButtonToAppear()
     {
-        waitForElementVisible(By.id(SEARCH_CANCEL_BUTTON),
+        waitForElementVisible(SEARCH_CANCEL_BUTTON_ID,
                 "Cannot find cancel button.",
                 5);
     }
 
     public void waitForCancelButtonToDisappear()
     {
-        waitForElementNotVisible(By.id(SEARCH_CANCEL_BUTTON),
+        waitForElementNotVisible(SEARCH_CANCEL_BUTTON_ID,
                 "Search cancel button visible after timeout.",
                 5);
     }
 
     public void clickCancelSearch()
     {
-        this.waitForElementVisibleAndClick(By.id(SEARCH_CANCEL_BUTTON),
+        this.waitForElementVisibleAndClick(SEARCH_CANCEL_BUTTON_ID,
                 "Cannot find and click search cancel button",
                 5);
     }
 
     public void clearSearchInput() {
-        this.waitForElementVisibleAndClear(By.id(SEARCH_TEXT_FIELD),
+        this.waitForElementVisibleAndClear(SEARCH_TEXT_FIELD_LOCATOR,
                 "Cannot locate search text element to clear.",
                 5);
     }
@@ -122,7 +114,7 @@ public class SearchPageObject extends MainPageObject{
             int minimum_expected_number_of_results) {
 
         this.waitForElementsVisible(
-                By.xpath(getSearchResultElement(expected_substring)),
+                getSearchResultElement(expected_substring),
                 minimum_expected_number_of_results - 1,
                 String.format("Less than %d elements found by substring '%s'",
                         minimum_expected_number_of_results, expected_substring),
@@ -131,16 +123,32 @@ public class SearchPageObject extends MainPageObject{
 
     public void waitForSearchResultsToDisappear(String substring) {
         this.waitForElementNotVisible(
-                By.xpath(getSearchResultElement(substring)),
+                getSearchResultElement(substring),
                 "Search result still visible after click on cancel button",
                 5);
+    }
+
+    public int getNumberOfSearchResults() {
+        return this.getNumberOfElements(SEARCH_RESULT_XPATH);
+    }
+
+    public void waitForNoResultsLabel() {
+        this.waitForElementVisible(
+                NO_RESULTS_LABEL_XPATH,
+                String.format("Cannot locate item by xpath: \n%s", NO_RESULTS_LABEL_XPATH),
+                5);
+    }
+
+    public void assertZeroSearchResults(String search_line) {
+        this.assertZeroElementsVisible(SEARCH_RESULT_XPATH,
+                String.format("Found results by query: '%s'", search_line));
     }
 
     public void waitForSearchResultByTitleAndDescription(String title, String description) {
         String article_xpath = this.getSearchResultElementByTitleAndDescription(title, description);
         String error_message = String.format("Cannot locate article with title \"%s\' and description \"%s\".",
                 title, description);
-        this.waitForElementVisibleByXpath(article_xpath,
+        this.waitForElementVisible(article_xpath,
                 error_message,
                 5);
     }
@@ -149,7 +157,7 @@ public class SearchPageObject extends MainPageObject{
         String article_xpath = getSearchResultElementByWikiArticleObject(article);
         String error_message = String.format("Cannot locate article with title \"%s\' and description \"%s\".",
                 article.getTitle(), article.getDescription());
-        this.waitForElementVisibleByXpath(article_xpath,
+        this.waitForElementVisible(article_xpath,
                 error_message,
                 5);
     }
@@ -159,8 +167,22 @@ public class SearchPageObject extends MainPageObject{
         String error_message = String.format("Unexpectedly found element with title \"%s\" and description \"%s\".",
                 title, description);
 
-        this.waitForElementNotVisible(By.xpath(article_xpath),
-                    error_message,
-                    5);
+        this.waitForElementNotVisible(article_xpath,
+                error_message,
+                5);
+    }
+
+    public void waitForAnySearchResult() {
+        try {
+            this.waitForNoResultsLabel();
+        } catch (Exception e) {
+            this.waitForElementClickable(SEARCH_RESULT_XPATH,
+                    "Failed to load search results.",
+                    10);
+        }
+    }
+
+    public WikiArticle getWikiArticleBySubstring(String expected_substring) {
+        return new WikiArticle("foo", "bar");
     }
 }

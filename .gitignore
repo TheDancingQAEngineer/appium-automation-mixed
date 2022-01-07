@@ -3,6 +3,7 @@
 #######################
 
 *.DS_store
+/ios-apps
 
 #######################
 # miscellaneous logs
