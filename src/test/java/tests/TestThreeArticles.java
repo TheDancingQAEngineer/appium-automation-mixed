@@ -7,7 +7,7 @@ import lib.util.WikiArticle;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class TestEx9 extends CoreTestCase {
+public class TestThreeArticles extends CoreTestCase {
 
     private SearchPageObject SearchPageObject;
 
