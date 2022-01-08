@@ -1,7 +1,6 @@
-package iOS;
+package tests;
 
 import lib.Platform;
-import lib.ui.HomePageObject;
 import lib.ui.WelcomePageObject;
 import org.junit.*;
 
