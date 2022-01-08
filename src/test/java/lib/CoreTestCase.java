@@ -12,12 +12,15 @@ abstract public class CoreTestCase extends TestCase {
 
     protected RemoteWebDriver driver;
 
+    protected static final String WIKIPEDIA_MW_HOMEPAGE = "https://en.m.wikipedia.org";
+
     @Override
     protected void setUp() throws Exception
     {
         super.setUp();
         driver = Platform.getInstance().getDriver();
         this.skipIOSWelcomePage();
+        this.openWikiWebPageForMobileWeb();
     }
 
     @Override
@@ -63,6 +66,16 @@ abstract public class CoreTestCase extends TestCase {
             driver.runAppInBackground(duration);
         } else {
             System.out.println("driver.runAppInBackground() not implemented on platform " +
+                    Platform.getInstance().getPlatformVar());
+        }
+    }
+
+    protected void openWikiWebPageForMobileWeb()
+    {
+        if (Platform.getInstance().isMW()) {
+            driver.get(WIKIPEDIA_MW_HOMEPAGE);
+        } else {
+            System.out.println("openWikiWebPageForMobileWeb() does nothing on platform " +
                     Platform.getInstance().getPlatformVar());
         }
     }
