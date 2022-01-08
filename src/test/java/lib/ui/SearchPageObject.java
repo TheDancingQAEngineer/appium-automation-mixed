@@ -1,6 +1,5 @@
 package lib.ui;
 
-import io.appium.java_client.AppiumDriver;
 import lib.util.WikiArticle;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
@@ -10,8 +9,8 @@ abstract public class SearchPageObject extends MainPageObject {
         NO_RESULTS_LABEL_XPATH,
         SEARCH_INIT_ELEMENT_XPATH,
             SEARCH_TEXT_FIELD_LOCATOR,
-        SEARCH_CANCEL_BUTTON_ID,
-        SEARCH_RESULT_XPATH,
+            SEARCH_CANCEL_BUTTON_LOCATOR,
+            SEARCH_RESULT_LOCATOR,
         SEARCH_TEXT_FIELD_ID;
 
     /** STRING TEMPLATES BEGIN **/
@@ -77,23 +76,23 @@ abstract public class SearchPageObject extends MainPageObject {
 
     public void waitForCancelButtonToAppear()
     {
-        waitForElementVisible(SEARCH_CANCEL_BUTTON_ID,
+        waitForElementVisible(SEARCH_CANCEL_BUTTON_LOCATOR,
                 "Cannot find cancel button.",
                 5);
     }
 
     public void waitForCancelButtonToDisappear()
     {
-        waitForElementNotVisible(SEARCH_CANCEL_BUTTON_ID,
+        waitForElementNotVisible(SEARCH_CANCEL_BUTTON_LOCATOR,
                 "Search cancel button visible after timeout.",
                 5);
     }
 
     public void clickCancelSearch()
     {
-        this.waitForElementVisibleAndClick(SEARCH_CANCEL_BUTTON_ID,
-                "Cannot find and click search cancel button",
-                5);
+        this.waitForElementClickableAndClick(SEARCH_CANCEL_BUTTON_LOCATOR,
+                "Cannot find and click search cancel button by locator: " + SEARCH_CANCEL_BUTTON_LOCATOR,
+                10);
     }
 
     public void clearSearchInput() {
@@ -114,11 +113,12 @@ abstract public class SearchPageObject extends MainPageObject {
             String expected_substring,
             int minimum_expected_number_of_results) {
 
+        String locator = getSearchResultElement(expected_substring);
         this.waitForElementsVisible(
-                getSearchResultElement(expected_substring),
+                locator,
                 minimum_expected_number_of_results - 1,
-                String.format("Less than %d elements found by substring '%s'",
-                        minimum_expected_number_of_results, expected_substring),
+                String.format("Less than %d elements found by locator '%s'",
+                        minimum_expected_number_of_results, locator),
                 15);
     }
 
@@ -130,7 +130,7 @@ abstract public class SearchPageObject extends MainPageObject {
     }
 
     public int getNumberOfSearchResults() {
-        return this.getNumberOfElements(SEARCH_RESULT_XPATH);
+        return this.getNumberOfElements(SEARCH_RESULT_LOCATOR);
     }
 
     public void waitForNoResultsLabel() {
@@ -141,7 +141,7 @@ abstract public class SearchPageObject extends MainPageObject {
     }
 
     public void assertZeroSearchResults(String search_line) {
-        this.assertZeroElementsVisible(SEARCH_RESULT_XPATH,
+        this.assertZeroElementsVisible(SEARCH_RESULT_LOCATOR,
                 String.format("Found results by query: '%s'", search_line));
     }
 
@@ -177,7 +177,7 @@ abstract public class SearchPageObject extends MainPageObject {
         try {
             this.waitForNoResultsLabel();
         } catch (Exception e) {
-            this.waitForElementClickable(SEARCH_RESULT_XPATH,
+            this.waitForElementClickable(SEARCH_RESULT_LOCATOR,
                     "Failed to load search results.",
                     10);
         }
