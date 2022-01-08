@@ -12,6 +12,7 @@ public class Platform {
     private static final String APPIUM_URL = "http://127.0.0.1:4723/wd/hub";
     private static final String PLATFORM_ENV_VAR_NAME = "UI_TESTS_PLATFORM";
     private static final String PLATFORM_ANDROID = "android";
+    private static final String PLATFORM_MOBILE_VIEW = "mobile_view";
     private static final String PLATFORM_IOS = "ios";
 
     private static Platform instance;
@@ -50,6 +51,11 @@ public class Platform {
     public boolean isIOS()
     {
         return isPlatform(PLATFORM_IOS);
+    }
+
+    public boolean isMW()
+    {
+        return isPlatform(PLATFORM_MOBILE_VIEW);
     }
 
     private DesiredCapabilities getAndroidDesiredCapabilities()
