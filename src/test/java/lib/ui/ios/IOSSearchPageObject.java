@@ -1,6 +1,5 @@
 package lib.ui.ios;
 
-import io.appium.java_client.AppiumDriver;
 import lib.ui.SearchPageObject;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
@@ -10,8 +9,8 @@ public class IOSSearchPageObject extends SearchPageObject {
         NO_RESULTS_LABEL_XPATH = "xpath://XCUIElementTypeStaticText[@name='No results found']";
         SEARCH_INIT_ELEMENT_XPATH = "xpath://XCUIElementTypeSearchField[@label='Search Wikipedia']";
         SEARCH_TEXT_FIELD_LOCATOR = "xpath://XCUIElementTypeSearchField";
-        SEARCH_CANCEL_BUTTON_ID = "xpath://XCUIElementTypeButton[@name=\"Cancel\"]";
-        SEARCH_RESULT_XPATH = "xpath://XCUIElementTypeCollectionView" +
+        SEARCH_CANCEL_BUTTON_LOCATOR = "xpath://XCUIElementTypeButton[@name=\"Cancel\"]";
+        SEARCH_RESULT_LOCATOR = "xpath://XCUIElementTypeCollectionView" +
             "//XCUIElementTypeCell";
     }
 
