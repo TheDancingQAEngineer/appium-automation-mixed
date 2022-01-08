@@ -4,6 +4,7 @@ import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.ios.IOSDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.remote.RemoteWebDriver;
 
 import java.net.URL;
 
@@ -12,7 +13,6 @@ public class Platform {
     private static final String APPIUM_URL = "http://127.0.0.1:4723/wd/hub";
     private static final String PLATFORM_ENV_VAR_NAME = "UI_TESTS_PLATFORM";
     private static final String PLATFORM_ANDROID = "android";
-    private static final String PLATFORM_MOBILE_VIEW = "mobile_view";
     private static final String PLATFORM_IOS = "ios";
 
     private static Platform instance;
@@ -27,7 +27,7 @@ public class Platform {
         return instance;
     }
 
-    public AppiumDriver getDriver() throws Exception
+    public RemoteWebDriver getDriver() throws Exception
     {
         URL url = new URL(APPIUM_URL);
         String error_message = String.format(
@@ -51,11 +51,6 @@ public class Platform {
     public boolean isIOS()
     {
         return isPlatform(PLATFORM_IOS);
-    }
-
-    public boolean isMW()
-    {
-        return isPlatform(PLATFORM_MOBILE_VIEW);
     }
 
     private DesiredCapabilities getAndroidDesiredCapabilities()
@@ -89,7 +84,7 @@ public class Platform {
         return capabilities;
     }
 
-    private String getPlatformVar()
+    public String getPlatformVar()
     {
         return System.getenv(PLATFORM_ENV_VAR_NAME);
     }

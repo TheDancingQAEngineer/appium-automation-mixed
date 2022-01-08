@@ -4,6 +4,7 @@ import io.appium.java_client.AppiumDriver;
 import lib.Platform;
 import org.junit.Assert;
 import org.openqa.selenium.*;
+import org.openqa.selenium.remote.RemoteWebDriver;
 
 abstract public class ArticlePageObject extends MainPageObject{
 
@@ -27,7 +28,7 @@ abstract public class ArticlePageObject extends MainPageObject{
 
     /** STRING TEMPLATES END **/
 
-    public ArticlePageObject(AppiumDriver driver) {
+    public ArticlePageObject(RemoteWebDriver driver) {
         super(driver);
     }
 
