@@ -3,6 +3,7 @@ package lib.ui.ios;
 import io.appium.java_client.AppiumDriver;
 import lib.ui.HomePageObject;
 import lib.ui.MainPageObject;
+import org.openqa.selenium.remote.RemoteWebDriver;
 
 public class IOSHomePageObject extends HomePageObject {
 
@@ -13,7 +14,7 @@ public class IOSHomePageObject extends HomePageObject {
         MANAGE_PREFERENCES_BUTTON_ID = "id:Manage preferences";
     }
 
-    public IOSHomePageObject(AppiumDriver driver) {
+    public IOSHomePageObject(RemoteWebDriver driver) {
         super(driver);
     }
 }
