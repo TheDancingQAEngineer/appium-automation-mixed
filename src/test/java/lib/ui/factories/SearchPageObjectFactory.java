@@ -1,10 +1,10 @@
 package lib.ui.factories;
 
-import io.appium.java_client.AppiumDriver;
 import lib.Platform;
 import lib.ui.SearchPageObject;
 import lib.ui.android.AndroidSearchPageObject;
 import lib.ui.ios.IOSSearchPageObject;
+import lib.ui.mobileweb.MWSearchPageObject;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
 public class SearchPageObjectFactory {
@@ -13,8 +13,10 @@ public class SearchPageObjectFactory {
     {
         if(Platform.getInstance().isIOS()) {
             return new IOSSearchPageObject(driver);
-        } else {
+        } else if (Platform.getInstance().isAndroid()) {
             return new AndroidSearchPageObject(driver);
+        } else {
+            return new MWSearchPageObject(driver);
         }
     }
 }
