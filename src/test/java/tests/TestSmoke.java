@@ -1,3 +1,5 @@
+package tests;
+
 import junit.framework.AssertionFailedError;
 import lib.CoreTestCase;
 import org.junit.*;
