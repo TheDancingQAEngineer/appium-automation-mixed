@@ -4,10 +4,12 @@ import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.TouchAction;
 import io.appium.java_client.touch.WaitOptions;
 import io.appium.java_client.touch.offset.PointOption;
+import lib.Platform;
 import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -17,9 +19,9 @@ import java.util.regex.Pattern;
 
 public class MainPageObject {
 
-    protected AppiumDriver driver;
+    protected RemoteWebDriver driver;
 
-    public MainPageObject(AppiumDriver driver)
+    public MainPageObject(RemoteWebDriver driver)
     {
         this.driver = driver;
     }
@@ -162,20 +164,26 @@ public class MainPageObject {
             int x_start, int y_start,
             int x_end, int y_end, int timeOfSwipe)
     {
-        TouchAction action = new TouchAction(driver);
+        if (driver instanceof AppiumDriver) {
 
-        PointOption startingPoint = PointOption.point(x_start, y_start);
-        PointOption endPoint = PointOption.point(x_end, y_end);
+            TouchAction action = new TouchAction((AppiumDriver) driver);
 
-        Duration swipeDuration = Duration.ofMillis(timeOfSwipe);
-        WaitOptions swipeWait = WaitOptions.waitOptions(swipeDuration);
+            PointOption startingPoint = PointOption.point(x_start, y_start);
+            PointOption endPoint = PointOption.point(x_end, y_end);
 
-        action
-                .press(startingPoint)
-                .waitAction(swipeWait)
-                .moveTo(endPoint)
-                .release()
-                .perform();
+            Duration swipeDuration = Duration.ofMillis(timeOfSwipe);
+            WaitOptions swipeWait = WaitOptions.waitOptions(swipeDuration);
+
+            action
+                    .press(startingPoint)
+                    .waitAction(swipeWait)
+                    .moveTo(endPoint)
+                    .release()
+                    .perform();
+        } else {
+            System.out.println("TouchAction() not implemented on platform " +
+                    Platform.getInstance().getPlatformVar());
+        }
     }
 
     protected By getLocatorByString(String locator_with_type) throws IllegalArgumentException
@@ -189,6 +197,8 @@ public class MainPageObject {
             return By.xpath(locator);
         } else if (by_type.equals("id")) {
             return By.id(locator);
+        } else if (by_type.equals("css")) {
+            return By.cssSelector(locator);
         } else {
             throw new IllegalArgumentException(
                     String.format(error_message_format, locator_with_type));
@@ -278,12 +288,17 @@ public class MainPageObject {
     }
 
     public void swipeUp(int timeOfSwipe) {
-        TouchAction action = new TouchAction(driver);
-        Dimension size = driver.manage().window().getSize();
-        int x = (int) (size.width / 2);
-        int start_y = (int) (size.height * 0.8);
-        int end_y = (int) (size.height * 0.2);
+        if (driver instanceof AppiumDriver) {
+            TouchAction action = new TouchAction((AppiumDriver) driver);
+            Dimension size = driver.manage().window().getSize();
+            int x = (int) (size.width / 2);
+            int start_y = (int) (size.height * 0.8);
+            int end_y = (int) (size.height * 0.2);
 
-        this.swipeByCoordinates(x, start_y, x, end_y, timeOfSwipe);
+            this.swipeByCoordinates(x, start_y, x, end_y, timeOfSwipe);
+        } else {
+        System.out.println("TouchAction() not implemented on platform " +
+                Platform.getInstance().getPlatformVar());
+        }
     }
 }
