@@ -2,6 +2,7 @@ package lib.ui;
 
 import io.appium.java_client.AppiumDriver;
 import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.remote.RemoteWebDriver;
 
 public class HomePageObject extends MainPageObject {
 
@@ -11,7 +12,7 @@ public class HomePageObject extends MainPageObject {
             LOGIN_BUTTON_ID,
             MANAGE_PREFERENCES_BUTTON_ID;
 
-    public HomePageObject(AppiumDriver driver) {
+    public HomePageObject(RemoteWebDriver driver) {
         super(driver);
     }
 
