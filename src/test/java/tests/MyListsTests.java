@@ -20,7 +20,7 @@ public class MyListsTests extends CoreTestCase {
         PASSWORD = "***REMOVED***";
 
     @Override
-    protected void setUp() throws Exception {
+    public void setUp() throws Exception {
         super.setUp();
         this.HomePageObject = HomePageObjectFactory.get(driver);
         this.SearchPageObject = SearchPageObjectFactory.get(driver);
