@@ -4,6 +4,7 @@ import lib.CoreTestCase;
 import lib.Platform;
 import lib.ui.*;
 import lib.ui.factories.*;
+import lib.ui.mobileweb.MWAuthPageObject;
 import org.junit.*;
 
 public class TestAddTwoArticlesToReadingListAndRemoveOne extends CoreTestCase {
@@ -13,6 +14,10 @@ public class TestAddTwoArticlesToReadingListAndRemoveOne extends CoreTestCase {
     private ArticlePageObject ArticlePageObject;
     private NavigationUI NavigationUI;
     private MyListsPageObject MyListsPageObject;
+
+    private static final String
+            USERNAME = "TheDancingQAEngineer",
+            PASSWORD = "*UHBnm,ki";
 
     @Override
     protected void setUp() throws Exception {
@@ -53,16 +58,29 @@ public class TestAddTwoArticlesToReadingListAndRemoveOne extends CoreTestCase {
         ArticlePageObject.waitForTitleElement(expected_header_1);
 
         ArticlePageObject.addArticleToReadingList(reading_list_name);
+
+        if (Platform.getInstance().isMW()) {
+            // Log in
+            AuthPageObject Auth = new MWAuthPageObject(driver);
+            Auth.clickAuthButton();
+            Auth.enterCredentials(USERNAME, PASSWORD);
+            Auth.submitLoginForm();
+
+            ArticlePageObject.waitForTitleElement(expected_header_1);
+            ArticlePageObject.assertTitleMatches(expected_header_1);
+        }
+
         ArticlePageObject.closeArticle();
 
-        if (Platform.getInstance().isAndroid()) {
-            // closing article kicks us back to home screen, so we simply
-            // initiate new search
-            SearchPageObject.initSearchInput();
-        } else {
-            // on iOS, we get to search results instead, so we need to
+        if (Platform.getInstance().isIOS()) {
+            // on iOS, closing article kicks us to search results instead, so we need to
             // clear search input
             SearchPageObject.clearSearchInput();
+        } else {
+            // On Android, closing article kicks us back to home screen,
+            // and on MW we don't even need to close article, so we simply
+            // initiate new search
+            SearchPageObject.initSearchInput();
         }
 
         // Send search query
@@ -79,6 +97,7 @@ public class TestAddTwoArticlesToReadingListAndRemoveOne extends CoreTestCase {
             SearchPageObject.clickCancelSearch();
         }
 
+        NavigationUI.openNavigation();
         NavigationUI.clickMyLists();
 
         if (Platform.getInstance().isIOS()) {
