@@ -1,6 +1,5 @@
 package lib.ui.android;
 
-import io.appium.java_client.AppiumDriver;
 import lib.ui.ArticlePageObject;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
@@ -11,7 +10,7 @@ public class AndroidArticlePageObject extends ArticlePageObject {
         ADD_TO_READING_LIST_LOCATOR = "xpath://*[@text='Add to reading list']";
         ARTICLE_TITLE_LOCATOR = "id:org.wikipedia:id/view_page_title_text";
         CLOSE_ARTICLE_BUTTON_LOCATOR = "xpath://android.widget.ImageButton[@content-desc='Navigate up']";
-        FOOTER_XPATH = "xpath://*[@text='View page in browser']";
+        FOOTER_LOCATOR = "xpath://*[@text='View page in browser']";
         OK_BUTTON_XPATH = "xpath://*[@text='OK']";
         ONBOARDING_BUTTON_ID = "id:org.wikipedia:id/onboarding_button";
         THREE_DOTS_XPATH = "xpath://*[@resource-id='org.wikipedia:id/page_toolbar']" +
