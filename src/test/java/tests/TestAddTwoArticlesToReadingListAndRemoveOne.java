@@ -112,10 +112,6 @@ public class TestAddTwoArticlesToReadingListAndRemoveOne extends CoreTestCase {
         MyListsPageObject.waitForArticleToAppearByTitle(expected_header_1);
         MyListsPageObject.waitForArticleToAppearByTitle(expected_header_2);
         MyListsPageObject.swipeArticleToDelete(expected_header_1);
-        if (Platform.getInstance().isIOS())
-        {
-            MyListsPageObject.clickSwipeDeleteButton();
-        }
 
         MyListsPageObject.waitForArticleToDisappearByTitle(expected_header_1);
 
