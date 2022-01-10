@@ -7,17 +7,13 @@ import tests.*;
 @RunWith(Suite.class)
 
 @Suite.SuiteClasses({
-        TestSmoke.class,
-        TestEx3.class,
-        TestEx6.class,
+        SmokeTests.class,
+        WelcomeTests.class,
+        SearchTests.class,
         TestThreeArticles.class,
-        TestAddToReadingListAndDelete.class,
-        TestAddTwoArticlesToReadingListAndRemoveOne.class,
-        TestTextInElements.class,
-        TestSearch.class,
-        TestSwipe.class,
-        TestScreenFlip.class,
-        GetStartedTest.class
+        ArticleTests.class,
+        MyListsTests.class,
+        TestAddTwoArticlesToReadingListAndRemoveOne.class
 })
 
 public class TestSuite {

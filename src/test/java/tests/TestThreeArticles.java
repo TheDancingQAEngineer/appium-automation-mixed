@@ -40,7 +40,7 @@ public class TestThreeArticles extends CoreTestCase {
 
         WikiArticle article_1 = new WikiArticle("Hungary","Country in Central Europe");
         WikiArticle article_2 = new WikiArticle("Hungary national football team",
-                "Men's national association football team");
+                "national association football team");
         WikiArticle article_3 = new WikiArticle("Hungary in World War II",
                 "of Hungary in World War II");
 
@@ -59,7 +59,7 @@ public class TestThreeArticles extends CoreTestCase {
 
         WikiArticle article_1 = new WikiArticle("Hungary","Country in Central Europe");
         WikiArticle article_2 = new WikiArticle("Hungary national football team",
-                "Men's national association football team");
+                "national association football team");
         WikiArticle article_3 = new WikiArticle("Hungary in World War II",
                 "of Hungary in World War II");
 
@@ -80,7 +80,7 @@ public class TestThreeArticles extends CoreTestCase {
         WikiArticle article_2 = new WikiArticle("Hungary national football team",
                 "Country in Central Europe");
         WikiArticle article_3 = new WikiArticle("Hungary in World War II",
-                "Men's national association football team");
+                "national association football team");
 
         SearchPageObject.initSearchInput();
         SearchPageObject.typeSearchLine(search_line);

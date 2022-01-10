@@ -1,20 +1,21 @@
 package lib.ui;
 
-import io.appium.java_client.AppiumDriver;
+import lib.Platform;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
 abstract public class MyListsPageObject extends MainPageObject{
 
     protected static String
-            READING_LIST_CONTENTS_ID;
+            READING_LIST_CONTENTS_ID,
+            SWIPE_DELETE_BUTTON_LOCATOR;
 
     /** STRING TEMPLATES BEGIN **/
 
     protected static String
             READING_LIST_BY_NAME_XPATH_TPL,
             ARTICLE_BY_TITLE_XPATH_TPL,
-            SWIPE_DELETE_BUTTON_LOCATOR;
+            UNWATCH_BUTTON_BY_TITLE_LOCATOR_TPL;
 
     /** STRING TEMPLATES END **/
 
@@ -29,6 +30,12 @@ abstract public class MyListsPageObject extends MainPageObject{
     private static String getSavedArticleXpathByTitle(String title)
     {
         return ARTICLE_BY_TITLE_XPATH_TPL
+                .replace("{TITLE}", title);
+    }
+
+    private static String getUnwatchButtonByTitle(String title)
+    {
+        return UNWATCH_BUTTON_BY_TITLE_LOCATOR_TPL
                 .replace("{TITLE}", title);
     }
 
@@ -52,6 +59,30 @@ abstract public class MyListsPageObject extends MainPageObject{
 
     public void swipeArticleToDelete(String article_title)
     {
+        if (Platform.getInstance().isMW()) {
+            this.unwatchArticleMW(article_title);
+        } else {
+            this.swipeArticleToDeleteNative(article_title);
+            if (Platform.getInstance().isIOS()) {
+                this.clickSwipeDeleteButton();
+            }
+        }
+    }
+
+    private void unwatchArticleMW(String article_title) {
+        String unwatch_locator = this.getUnwatchButtonByTitle(article_title);
+        this.waitForElementClickableAndClick(unwatch_locator,
+                "Cannot locate 'Unwatch' button for article '" + article_title +
+                "' by locator " + unwatch_locator, 5);
+        this.waitForElementNotVisible(unwatch_locator,
+                "Page Refresh may be incomplete. Element still visible by locator "
+                        + unwatch_locator, 5);
+        driver.navigate().refresh();
+
+    }
+
+    private void swipeArticleToDeleteNative(String article_title)
+    {
         this.waitForArticleToAppearByTitle(article_title);
 
         String article_title_xpath = getSavedArticleXpathByTitle(article_title);
@@ -73,7 +104,7 @@ abstract public class MyListsPageObject extends MainPageObject{
                 10);
     }
 
-        public void clickOnArticleByTitle(String title) {
+    public void clickOnArticleByTitle(String title) {
         String article_xpath = getSavedArticleXpathByTitle(title);
         WebElement article_element = this.waitForElementVisible(
                 article_xpath,

@@ -8,6 +8,7 @@ import lib.Platform;
 import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -73,6 +74,18 @@ public class MainPageObject {
         wait.withMessage(error_message + '\n');
         return wait.until(
                 ExpectedConditions.elementToBeClickable(by)
+        );
+    }
+
+    protected boolean isElementStale(String locator_with_type,
+                                                 String error_message,
+                                                 long timeoutInSeconds)
+    {
+        By by = getLocatorByString(locator_with_type);
+        WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
+        wait.withMessage(error_message + '\n');
+        return wait.until(
+                ExpectedConditions.stalenessOf(driver.findElement(by))
         );
     }
 
@@ -230,6 +243,11 @@ public class MainPageObject {
                 15)
                 .getLocation()
                 .getY();
+        if (Platform.getInstance().isMW()) {
+            JavascriptExecutor JSExec = (JavascriptExecutor) driver;
+            Object js_result = JSExec.executeScript("return window.pageYOffset");
+            element_y_pos -= Integer.parseInt(js_result.toString());
+        }
         int screen_height = driver
                 .manage()
                 .window()
@@ -297,8 +315,61 @@ public class MainPageObject {
 
             this.swipeByCoordinates(x, start_y, x, end_y, timeOfSwipe);
         } else {
-        System.out.println("TouchAction() not implemented on platform " +
-                Platform.getInstance().getPlatformVar());
+            this.scrollWebPageUp(timeOfSwipe);
+        }
+    }
+
+    public void scrollWebPageUp(int time_of_scroll_in_millis)
+    {
+        if (Platform.getInstance().isMW()) {
+            JavascriptExecutor JSExec = (JavascriptExecutor) driver;
+            JSExec.executeScript("window.scrollBy(0, 250)");
+            try {
+                Thread.sleep(time_of_scroll_in_millis);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+        } else {
+            System.out.println("scrollWebPageUp not implemented on platform " +
+                    Platform.getInstance().getPlatformVar());
+        }
+    }
+
+    public void scrollWebPageTillElementVisible(String locator, String error_message, int max_swipes)
+    {
+        int already_swiped = 0;
+
+        WebElement element = this.waitForElementVisible(locator, error_message, 5);
+
+        while(!this.isElementWithinScreenBounds(locator)) {
+            this.scrollWebPageUp(200);
+            already_swiped++;
+            if (already_swiped >= max_swipes) {
+                Assert.assertTrue(error_message, element.isDisplayed());
+            }
+        }
+    }
+
+    public boolean isElementPresent(String locator) {
+        return this.getNumberOfElements(locator) > 0;
+    }
+
+    public void tryClickElementWithFewAttempts(String locator, String error_message, int max_attempts)
+    {
+        int current_attempt = 0;
+        boolean need_more_attempts = true;
+
+        while (need_more_attempts) {
+            try {
+                this.waitForElementClickableAndClick(locator, error_message, 1);
+                need_more_attempts = false;
+            } catch (Exception e) {
+                if (current_attempt > max_attempts) {
+                    this.waitForElementClickableAndClick(locator, error_message, 1);
+                }
+            }
+            current_attempt++;
         }
     }
 }

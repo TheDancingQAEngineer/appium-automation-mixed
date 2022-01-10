@@ -1,16 +1,15 @@
-package lib.ui.ios;
+package lib.ui.mobileweb;
 
 import lib.ui.ArticlePageObject;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
-public class IOSArticlePageObject extends ArticlePageObject {
+public class MWArticlePageObject extends ArticlePageObject {
 
     static {
-        ADD_TO_READING_LIST_LOCATOR = "id:Save for later";
-        ARTICLE_TITLE_LOCATOR = "xpath://XCUIElementTypeOther[@name=\"Appium\"]";
-        CLOSE_ARTICLE_BUTTON_LOCATOR = "id:Back";
-        FOOTER_LOCATOR = "xpath://XCUIElementTypeStaticText[@name=\"View article in browser\"]";
-        WEBVIEW_LOCATOR = "xpath://XCUIElementTypeWebView";
+        ADD_TO_READING_LIST_LOCATOR = "css:#page-actions #ca-watch[class*='page-actions-watch'][role=button]"; // OK
+        REMOVE_FROM_READING_LIST_LOCATOR = "css:#page-actions #ca-watch[class*='page-actions-watch'][role=button][class*='watched']"; // OK
+        ARTICLE_TITLE_LOCATOR = "css:#content h1"; // OK
+        FOOTER_LOCATOR = "css:footer.mw-footer"; // OK
         DUMMY = "";
     }
 
@@ -26,7 +25,7 @@ public class IOSArticlePageObject extends ArticlePageObject {
     /** STRING TEMPLATES END **/
 
     /** CONSTRUCTOR BEGINS **/
-    public IOSArticlePageObject(RemoteWebDriver driver) {
+    public MWArticlePageObject(RemoteWebDriver driver) {
         super(driver);
     }
     /** CONSTRUCTOR ENDS **/

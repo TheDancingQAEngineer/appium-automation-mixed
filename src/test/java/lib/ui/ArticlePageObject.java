@@ -1,6 +1,5 @@
 package lib.ui;
 
-import io.appium.java_client.AppiumDriver;
 import lib.Platform;
 import org.junit.Assert;
 import org.openqa.selenium.*;
@@ -10,9 +9,10 @@ abstract public class ArticlePageObject extends MainPageObject{
 
     protected static String
             ADD_TO_READING_LIST_LOCATOR,
+            REMOVE_FROM_READING_LIST_LOCATOR,
             ARTICLE_TITLE_LOCATOR,
             CLOSE_ARTICLE_BUTTON_LOCATOR,
-            FOOTER_XPATH,
+            FOOTER_LOCATOR,
             OK_BUTTON_XPATH,
             ONBOARDING_BUTTON_ID,
             THREE_DOTS_XPATH,
@@ -61,8 +61,10 @@ abstract public class ArticlePageObject extends MainPageObject{
     public String getArticleTitle(String expected_title) {
         if (Platform.getInstance().isIOS()) {
             return getArticleTitleIOS(expected_title);
-        } else {
+        } else if (Platform.getInstance().isAndroid()) {
             return getArticleTitleAndroid();
+        } else {
+            return getArticleTitleMW();
         }
     }
 
@@ -86,14 +88,22 @@ abstract public class ArticlePageObject extends MainPageObject{
         return title_element.getAttribute("text");
     }
 
+    private String getArticleTitleMW() {
+        WebElement title_element = waitForTitleElement(ARTICLE_TITLE_LOCATOR);
+        return title_element.getText();
+    }
+
     public void swipeToFooter()
     {
         if (Platform.getInstance().isIOS()) {
-            this.swipeUpTillElementAppears(FOOTER_XPATH,
-                    "Cannot find footer.", 20);
+            this.swipeUpTillElementAppears(FOOTER_LOCATOR,
+                    "Cannot find footer by locator " + FOOTER_LOCATOR, 40);
+        } else if (Platform.getInstance().isAndroid()) {
+            this.swipeUpTillElement(FOOTER_LOCATOR,
+                    "Cannot find footer by locator " + FOOTER_LOCATOR, 40);
         } else {
-            this.swipeUpTillElement(FOOTER_XPATH,
-                    "Cannot find footer.", 20);
+            this.scrollWebPageTillElementVisible(FOOTER_LOCATOR,
+                    "Cannot find footer by locator " + FOOTER_LOCATOR, 40);
         }
     }
 
@@ -101,9 +111,19 @@ abstract public class ArticlePageObject extends MainPageObject{
     {
         if (Platform.getInstance().isIOS()) {
             this.saveArticleForLaterIOS();
-        } else {
+        } else if (Platform.getInstance().isAndroid()){
             this.addArticleToReadingListAndroid(list_name);
+        } else {
+            this.addArticleToWatchListMW();
         }
+    }
+
+    private void addArticleToWatchListMW() {
+        this.removeArticleFromSavedIfAdded();
+        this.tryClickElementWithFewAttempts(
+            ADD_TO_READING_LIST_LOCATOR,
+            "Cannot find 'Save for later' button.",
+            10);
     }
 
     private void addArticleToReadingListAndroid(String list_name)
@@ -161,10 +181,14 @@ abstract public class ArticlePageObject extends MainPageObject{
     }
 
     public void closeArticle() {
-        waitForElementVisibleAndClick(
-                CLOSE_ARTICLE_BUTTON_LOCATOR,
-                "Cannot locate 'X' to close article.",
-                5);
+        if (Platform.getInstance().isMW()) {
+            System.out.println("No need to close article on platform: " + Platform.getInstance().getPlatformVar());
+        } else {
+            waitForElementVisibleAndClick(
+                    CLOSE_ARTICLE_BUTTON_LOCATOR,
+                    "Cannot locate 'X' to close article.",
+                    5);
+        }
     }
 
     public void assertTitleElementPresent(String expected_title)
@@ -200,5 +224,20 @@ abstract public class ArticlePageObject extends MainPageObject{
         this.waitForElementVisible(WEBVIEW_LOCATOR,
                 "Cannot locate webview element by locator:" + WEBVIEW_LOCATOR,
                 10);
+    }
+
+    public void removeArticleFromSavedIfAdded()
+    {
+        if (this.isElementPresent(REMOVE_FROM_READING_LIST_LOCATOR)) {
+            tryClickElementWithFewAttempts(REMOVE_FROM_READING_LIST_LOCATOR,
+                    "Cannot click 'Unwatch' button by locator " + REMOVE_FROM_READING_LIST_LOCATOR,
+                    5);
+            waitForElementNotVisible(REMOVE_FROM_READING_LIST_LOCATOR,
+                    "After unwatching, 'Unwatch' button is visible after timeout by locator " + ADD_TO_READING_LIST_LOCATOR,
+                    5);
+            waitForElementVisible(ADD_TO_READING_LIST_LOCATOR,
+                    "After unwatching, 'Watch' button is not visible by locator " + ADD_TO_READING_LIST_LOCATOR,
+                    5);
+        }
     }
 }

@@ -110,6 +110,7 @@ public class Platform {
 
         ChromeOptions chrome_options = new ChromeOptions();
         chrome_options.addArguments("window-size=360,640");
+        chrome_options.setExperimentalOption("mobileEmulation", mobile_emulation);
         System.setProperty("webdriver.chrome.driver", PATH_TO_CHROMEDRIVER);
 
         return chrome_options;
