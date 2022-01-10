@@ -20,7 +20,7 @@ public class TestAddTwoArticlesToReadingListAndRemoveOne extends CoreTestCase {
             PASSWORD = "***REMOVED***";
 
     @Override
-    protected void setUp() throws Exception {
+    public void setUp() throws Exception {
         super.setUp();
         HomePageObject = HomePageObjectFactory.get(driver);
         SearchPageObject = SearchPageObjectFactory.get(driver);

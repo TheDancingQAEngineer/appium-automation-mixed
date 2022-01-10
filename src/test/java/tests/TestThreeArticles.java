@@ -12,7 +12,7 @@ public class TestThreeArticles extends CoreTestCase {
     private SearchPageObject SearchPageObject;
 
     @Override
-    protected void setUp() throws Exception {
+    public void setUp() throws Exception {
         super.setUp();
         SearchPageObject = SearchPageObjectFactory.get(driver);
     }
