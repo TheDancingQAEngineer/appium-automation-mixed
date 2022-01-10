@@ -85,10 +85,6 @@ public class MyListsTests extends CoreTestCase {
 
         // Remove by swiping
         MyListsPageObject.swipeArticleToDelete(article_title);
-        if (Platform.getInstance().isIOS())
-        {
-            MyListsPageObject.clickSwipeDeleteButton();
-        }
 
         // Assert article is removed
         MyListsPageObject.waitForArticleToDisappearByTitle(article_title);
