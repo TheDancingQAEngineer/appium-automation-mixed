@@ -4,15 +4,20 @@ import lib.CoreTestCase;
 import lib.Platform;
 import lib.ui.*;
 import lib.ui.factories.*;
+import lib.ui.mobileweb.MWAuthPageObject;
 import org.junit.Test;
 
-public class TestAddToReadingListAndDelete extends CoreTestCase {
+public class MyListsTests extends CoreTestCase {
 
     protected HomePageObject HomePageObject;
     protected SearchPageObject SearchPageObject;
     protected ArticlePageObject ArticlePageObject;
     protected NavigationUI NavigationUI;
     protected MyListsPageObject MyListsPageObject;
+
+    private static final String
+        USERNAME = "TheDancingQAEngineer",
+        PASSWORD = "*UHBnm,ki";
 
     @Override
     protected void setUp() throws Exception {
@@ -45,6 +50,17 @@ public class TestAddToReadingListAndDelete extends CoreTestCase {
 
         ArticlePageObject.addArticleToReadingList(reading_list_title);
 
+        if (Platform.getInstance().isMW()) {
+            // Log in
+            AuthPageObject Auth = new MWAuthPageObject(driver);
+            Auth.clickAuthButton();
+            Auth.enterCredentials(USERNAME, PASSWORD);
+            Auth.submitLoginForm();
+
+            ArticlePageObject.waitForTitleElement(article_title);
+            ArticlePageObject.assertTitleMatches(article_title);
+        }
+
         // Close article
         ArticlePageObject.closeArticle();
         if (Platform.getInstance().isIOS()) {
@@ -52,6 +68,7 @@ public class TestAddToReadingListAndDelete extends CoreTestCase {
         }
 
         // Tap 'My lists'
+        NavigationUI.openNavigation();
         NavigationUI.clickMyLists();
 
         if (Platform.getInstance().isIOS()) {
