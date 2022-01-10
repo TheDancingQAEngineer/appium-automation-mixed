@@ -1,35 +1,46 @@
 package lib;
 
 import io.appium.java_client.AppiumDriver;
-import junit.framework.TestCase;
+import io.qameta.allure.Step;
 import lib.ui.WelcomePageObject;
+import org.apache.commons.io.FileUtils;
+import org.junit.After;
+import org.junit.Before;
+import org.openqa.selenium.OutputType;
 import org.openqa.selenium.ScreenOrientation;
+import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.time.Duration;
+import java.util.Properties;
 
-abstract public class CoreTestCase extends TestCase {
+abstract public class CoreTestCase {
 
+    private static final String ALLURE_ENVIRONMENT_DOC_LINK = "https://docs.qameta.io/allure/#_environment";
     protected RemoteWebDriver driver;
 
     protected static final String WIKIPEDIA_MW_HOMEPAGE = "https://en.m.wikipedia.org";
 
-    @Override
-    protected void setUp() throws Exception
+    @Before
+    @Step("Instantiate driver and create session")
+    public void setUp() throws Exception
     {
-        super.setUp();
         driver = Platform.getInstance().getDriver();
+        this.createAllurePropertyFile();
+        this.rotateScreenPortrait();
         this.skipIOSWelcomePage();
         this.openWikiWebPageForMobileWeb();
     }
 
-    @Override
-    protected void tearDown() throws Exception {
+    @After
+    @Step("Terminate session and quit driver")
+    public void tearDown() {
         driver.quit();
-
-        super.tearDown();
     }
 
+    @Step("Skip Welcome page on iOS (does nothing on Android and MobileWeb)")
     private void skipIOSWelcomePage()
     {
         if(Platform.getInstance().isIOS()) {
@@ -38,6 +49,7 @@ abstract public class CoreTestCase extends TestCase {
         }
     }
 
+    @Step("Rotate device to portrait (does nothing for MobileWeb)")
     protected void rotateScreenPortrait()
     {
         if (driver instanceof AppiumDriver) {
@@ -60,6 +72,7 @@ abstract public class CoreTestCase extends TestCase {
         }
     }
 
+    @Step("Send app to background (does nothing for MobileWeb)")
     protected void sendAppToBackground(Duration duration) {
         if (driver instanceof AppiumDriver) {
             AppiumDriver driver = (AppiumDriver) this.driver;
@@ -70,6 +83,7 @@ abstract public class CoreTestCase extends TestCase {
         }
     }
 
+    @Step("Open MobileWeb Wikipedia page (does nothing on Android and iOS)")
     protected void openWikiWebPageForMobileWeb()
     {
         if (Platform.getInstance().isMW()) {
@@ -77,6 +91,22 @@ abstract public class CoreTestCase extends TestCase {
         } else {
             System.out.println("openWikiWebPageForMobileWeb() does nothing on platform " +
                     Platform.getInstance().getPlatformVar());
+        }
+    }
+
+    @Step("Create Allure 'properties' file")
+    private void createAllurePropertyFile()
+    {
+        String path = System.getProperty("allure.results.directory");
+        try {
+            Properties props = new Properties();
+            FileOutputStream fos = new FileOutputStream(path + "/environment.properties");
+            props.setProperty("Environment", Platform.getInstance().getPlatformVar());
+            props.store(fos, "See " + ALLURE_ENVIRONMENT_DOC_LINK);
+            fos.close();
+        } catch (Exception e) {
+            System.err.println("IO problem when writing Allure properties file.");
+            e.printStackTrace();
         }
     }
 }
