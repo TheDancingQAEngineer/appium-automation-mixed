@@ -49,6 +49,7 @@ abstract public class ArticlePageObject extends MainPageObject{
         String locator;
         if (Platform.getInstance().isIOS()) {
             locator = this.getArticleTitleXpathFromTitle(title_string);
+            this.waitForWebViewElement();
         } else {
             locator = ARTICLE_TITLE_LOCATOR;
         }
@@ -59,38 +60,16 @@ abstract public class ArticlePageObject extends MainPageObject{
     }
 
     public String getArticleTitle(String expected_title) {
+        WebElement title_element = this.waitForTitleElement(expected_title);
+        screenshot(this.takeScreenshot("article_title"));
+
         if (Platform.getInstance().isIOS()) {
-            return getArticleTitleIOS(expected_title);
+            return title_element.getAttribute("name");
         } else if (Platform.getInstance().isAndroid()) {
-            return getArticleTitleAndroid();
+            return title_element.getAttribute("text");
         } else {
-            return getArticleTitleMW();
+            return title_element.getText();
         }
-    }
-
-    // TODO: Bad logic! Doesn't actually check anything! Rework locators!
-    private String getArticleTitleIOS(String expected_title) {
-        // get an element locator from title
-        String locator = this.getArticleTitleXpathFromTitle(expected_title);
-
-        this.waitForWebViewElement();
-        // Wait for element to appear
-        WebElement title_element = this.waitForElementVisible(
-                locator,
-                "Cannot locate title by locator:" + locator,
-                15);
-
-        return title_element.getAttribute("name");
-    }
-
-    private String getArticleTitleAndroid() {
-        WebElement title_element = waitForTitleElement(ARTICLE_TITLE_LOCATOR);
-        return title_element.getAttribute("text");
-    }
-
-    private String getArticleTitleMW() {
-        WebElement title_element = waitForTitleElement(ARTICLE_TITLE_LOCATOR);
-        return title_element.getText();
     }
 
     public void swipeToFooter()

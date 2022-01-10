@@ -1,5 +1,8 @@
 package tests;
 
+import io.qameta.allure.Description;
+import io.qameta.allure.Step;
+import io.qameta.allure.junit4.DisplayName;
 import lib.CoreTestCase;
 import lib.ui.ArticlePageObject;
 import lib.ui.SearchPageObject;
@@ -12,7 +15,7 @@ public class ArticleTests extends CoreTestCase {
     private SearchPageObject SearchPageObject;
     private ArticlePageObject ArticlePageObject;
 
-    protected void setUp() throws Exception
+    public void setUp() throws Exception
     {
         super.setUp();
         SearchPageObject = SearchPageObjectFactory.get(driver);
@@ -21,6 +24,11 @@ public class ArticleTests extends CoreTestCase {
 
     /* Part 9: Basic Assertions */
     @Test
+    @DisplayName("Compare article title with expected.")
+    @Description("GIVEN: Search by query 'Java'\n" +
+            "WHEN: Article with substring 'Object-oriented programming langauge' is clicked\n" +
+            "THEN: Article title is 'Java (programming language)'")
+    @Step("Sterting test testCompareArticleTitle")
     public void testCompareArticleTitle()
         {
         String search_query = "Java";
@@ -47,6 +55,8 @@ public class ArticleTests extends CoreTestCase {
         ArticlePageObject ArticlePageObject = ArticlePageObjectFactory.get(driver);
         String article_title = ArticlePageObject.getArticleTitle(expected_title);
 
+        // ArticlePageObject.takeScreenshot("article_page");
+
         Assert.assertEquals(
                 String.format("Expected title '%s', got '%s'\n",
                         expected_title, article_title),
@@ -56,6 +66,8 @@ public class ArticleTests extends CoreTestCase {
     }
 
     @Test
+    @DisplayName("Swipe article 5 times.")
+    @Description("A simple search article and swipe up test. No special checks.")
     public void testSwipeArticle()
     {
 

@@ -1,5 +1,6 @@
 package lib.ui;
 
+import io.qameta.allure.Step;
 import lib.util.WikiArticle;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
@@ -57,6 +58,7 @@ abstract public class SearchPageObject extends MainPageObject {
                 5);
     }
 
+    @Step("Type '{search_line}' into search input field")
     public void typeSearchLine(String search_line)
     {
         this.waitForElementVisibleAndSendKeys(

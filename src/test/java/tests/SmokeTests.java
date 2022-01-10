@@ -17,8 +17,8 @@ public class SmokeTests extends CoreTestCase {
     {
         try {
             System.out.println("I am testExpectedFailure(). I only pass if I throw AssertionFailedError().");
-            fail("shouldn't pass.");
-        } catch (AssertionFailedError e) {
+            Assert.fail("shouldn't pass.");
+        } catch (AssertionError e) {
             Assert.assertTrue(e.getMessage().contains("shouldn't pass"));
         }
     }

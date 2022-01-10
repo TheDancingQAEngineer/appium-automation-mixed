@@ -10,7 +10,7 @@ public class SearchTests extends CoreTestCase {
     protected SearchPageObject SearchPageObject;
 
     @Override
-    protected void setUp() throws Exception {
+    public void setUp() throws Exception {
         super.setUp();
         this.SearchPageObject = SearchPageObjectFactory.get(driver);
     }

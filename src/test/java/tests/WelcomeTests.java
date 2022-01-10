@@ -9,7 +9,7 @@ public class WelcomeTests extends lib.CoreTestCase {
     private WelcomePageObject WelcomePageObject;
 
     @Override
-    protected void setUp() throws Exception {
+    public void setUp() throws Exception {
         driver = Platform.getInstance().getDriver();
         this.WelcomePageObject = new WelcomePageObject(driver);
     }
