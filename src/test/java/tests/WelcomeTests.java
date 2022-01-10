@@ -4,7 +4,7 @@ import lib.Platform;
 import lib.ui.WelcomePageObject;
 import org.junit.*;
 
-public class GetStartedTest extends lib.CoreTestCase {
+public class WelcomeTests extends lib.CoreTestCase {
 
     private WelcomePageObject WelcomePageObject;
 
@@ -17,7 +17,7 @@ public class GetStartedTest extends lib.CoreTestCase {
     @Test
     public void testPassThroughWelcome()
     {
-        if (Platform.getInstance().isAndroid()) {
+        if (Platform.getInstance().isAndroid() || Platform.getInstance().isMW()) {
             return;
         }
 
