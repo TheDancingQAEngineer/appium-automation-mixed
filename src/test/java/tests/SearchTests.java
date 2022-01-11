@@ -1,5 +1,7 @@
 package tests;
 
+import io.qameta.allure.Feature;
+import io.qameta.allure.Features;
 import lib.ui.SearchPageObject;
 import lib.CoreTestCase;
 import lib.ui.factories.SearchPageObjectFactory;
@@ -50,6 +52,7 @@ public class SearchTests extends CoreTestCase {
     }
 
     @Test
+    @Features(value={@Feature("Search")})
     public void testSearchResultsAppearAndDisappear()   // This test passes.
     {
         int minimum_expected_number_of_results = 2;
