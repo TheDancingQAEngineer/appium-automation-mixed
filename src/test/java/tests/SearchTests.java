@@ -1,9 +1,6 @@
 package tests;
 
-import io.qameta.allure.Description;
-import io.qameta.allure.Feature;
-import io.qameta.allure.Features;
-import io.qameta.allure.Severity;
+import io.qameta.allure.*;
 import io.qameta.allure.junit4.DisplayName;
 import lib.ui.SearchPageObject;
 import lib.CoreTestCase;
@@ -21,10 +18,10 @@ public class SearchTests extends CoreTestCase {
     }
 
     @Test
-    @DisplayName(0)
-    @Description(0)
-    @Severity()
-    @Features()
+    @DisplayName("Find search field and click")
+    @Description("Test that home screen has a clickable 'Search' element")
+    @Severity(SeverityLevel.CRITICAL)
+    @Features(value = {@Feature("Search")})
     public void testFindSearchFieldAndClick()
     {
         // GIVEN:
@@ -40,10 +37,10 @@ public class SearchTests extends CoreTestCase {
     }
 
     @Test
-    @DisplayName(0)
-    @Description(0)
-    @Severity()
-    @Features()
+    @DisplayName("Test sending text to search input")
+    @Description("Check that framework does send text to search field")
+    @Severity(SeverityLevel.CRITICAL)
+    @Features(value = {@Feature("Search")})
     public void testSendTextToSearchField()
     {
         String search_query = "Yo La Tengo Discography";
@@ -63,9 +60,9 @@ public class SearchTests extends CoreTestCase {
     }
 
     @Test
-    @DisplayName(0)
-    @Description(0)
-    @Severity()
+    @DisplayName("Test that search results appear and disappear")
+    @Description("Verify that search results react to user input")
+    @Severity(SeverityLevel.NORMAL)
     @Features(value={@Feature("Search")})
     public void testSearchResultsAppearAndDisappear()   // This test passes.
     {
@@ -84,10 +81,10 @@ public class SearchTests extends CoreTestCase {
     }
 
     @Test
-    @DisplayName(0)
-    @Description(0)
-    @Severity()
-    @Features()
+    @DisplayName("Test that overly specific queries return at most 1 result")
+    @Description("This is a demo test for checking that our framework counts results correctly")
+    @Severity(SeverityLevel.MINOR)
+    @Features(value = {@Feature("Search")})
     public void testOverlySpecificQueryThatFails()   // This test fails by design.
     {
         int minimum_expected_number_of_results = 2;
@@ -105,26 +102,16 @@ public class SearchTests extends CoreTestCase {
     }
 
     @Test
-    @DisplayName(0)
-    @Description(0)
-    @Severity()
-    @Features()
-    /* Part 5. Compound xPath */
-    public void testSearchForJavaTheProgrammingLanguage() {
-        SearchPageObject.initSearchInput();
-        SearchPageObject.typeSearchLine("Java");
-        SearchPageObject.waitForSearchResult("Object-oriented programming language");
-    }
-
-    @Test
-    @DisplayName(0)
-    @Description(0)
-    @Severity()
-    @Features()
+    @DisplayName("Test search by query")
+    @Description("GIVEN: initiated search\n" +
+            "// WHEN: we type 'Java' into search field\n" +
+            "// THEN: at least one search result contains text 'rogramming language'")
+    @Severity(SeverityLevel.NORMAL)
+    @Features(value = {@Feature("Search")})
     public void testSearchForJavaRefactored() {
         String
                 search_query = "Java",
-                expected_substring = "Object-oriented programming language";
+                expected_substring = "rogramming language";
 
         // GIVEN:
         // - running emulator
@@ -143,10 +130,10 @@ public class SearchTests extends CoreTestCase {
 
     /* Lesson 4, Part 5. Asserts. */
     @Test
-    @DisplayName(0)
-    @Description(0)
-    @Severity()
-    @Features()
+    @DisplayName("Test presence of search results by a reasonable query")
+    @Description("Check that searching by reasonable query returns at least one result")
+    @Severity(SeverityLevel.BLOCKER)
+    @Features(value = {@Feature("Search")})
     public void testAmountOfNotEmptySearch()
     {
         String search_line = "Yo La Tengo discography";
@@ -166,10 +153,10 @@ public class SearchTests extends CoreTestCase {
 
     /* Lesson 4, Part 6. Empty Search */
     @Test
-    @DisplayName(0)
-    @Description(0)
-    @Severity()
-    @Features()
+    @DisplayName("Test that garbage input doesn't return results")
+    @Description("Send a nonsense input and check that no search results were found.")
+    @Severity(SeverityLevel.NORMAL)
+    @Features(value = {@Feature("Search")})
     public void testAmountOfEmptySearch()
     {
         String search_line = "VCXZasdfrewq";
@@ -190,10 +177,10 @@ public class SearchTests extends CoreTestCase {
 
     /* Part 8. Background. */
     @Test
-    @DisplayName(0)
-    @Description(0)
-    @Severity()
-    @Features()
+    @DisplayName("Check search results after sending app to background")
+    @Description("0")
+    @Severity(SeverityLevel.NORMAL)
+    @Features(value = {@Feature("Search")})
     public void testCheckSearchArticleInBackground()
     {
         // Launch app
@@ -219,10 +206,10 @@ public class SearchTests extends CoreTestCase {
 
     /* Part 10: Search cancel. */
     @Test
-    @DisplayName(0)
-    @Description(0)
-    @Severity()
-    @Features()
+    @DisplayName("Test search cancel")
+    @Description("Test that cancelling search brings user out of search screen")
+    @Severity(SeverityLevel.NORMAL)
+    @Features(value = {@Feature("Search")})
     public void testSearchCancelAdvanced()
     {
         String search_query = "Java";
@@ -234,30 +221,6 @@ public class SearchTests extends CoreTestCase {
         // WHEN: we have cleared text from search input
         //      AND we click X to cancel search...
         SearchPageObject.clearSearchInput();
-        SearchPageObject.waitForCancelButtonToAppear();
-        SearchPageObject.clickCancelSearch();
-
-        // THEN: the X is no longer visible (though it says nothing of functionality)
-        SearchPageObject.waitForCancelButtonToDisappear();
-    }
-
-    /* Part 7: Search cancel. */
-    @Test
-    @DisplayName(0)
-    @Description(0)
-    @Severity()
-    @Features()
-    public void testSearchCancel()
-    {
-        // GIVEN:
-        // - running emulator
-        // - running Appium Server
-        // - app is on search screen
-
-
-        SearchPageObject.initSearchInput();
-
-        // WHEN: we click X to cancel search...
         SearchPageObject.waitForCancelButtonToAppear();
         SearchPageObject.clickCancelSearch();
 

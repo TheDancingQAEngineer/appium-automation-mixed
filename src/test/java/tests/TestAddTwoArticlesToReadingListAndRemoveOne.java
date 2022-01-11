@@ -33,13 +33,13 @@ public class TestAddTwoArticlesToReadingListAndRemoveOne extends CoreTestCase {
     }
 
     @Test
-    @DisplayName("Add to articles to reading list, then delete one")
+    @DisplayName("Add two articles to reading list, then delete one")
     @Description("Search for two articles by different keywords, " +
         "add them to a reading list/'Saved' list, then remove one," +
         "check that the other remains, and check that the one that remains" +
         "is indeed the one that we kept.")
     @Severity(SeverityLevel.CRITICAL)
-    @Features(value={@Feature("Search"), @Feature("Article"),
+    @Features(value={@Feature("Search"), @Feature("Articles"),
     @Feature("Reading List")})
     public void testAddTwoArticlesToReadingListAndRemoveOne()
     {

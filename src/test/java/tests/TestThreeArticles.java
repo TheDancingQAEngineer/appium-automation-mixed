@@ -36,7 +36,7 @@ public class TestThreeArticles extends CoreTestCase {
      **/
 
     @Test
-    @DisplayName("Find three articles by matching title AND description (from strings)")
+    @DisplayName("Find three articles by matching title AND description (from WikiArticle object)")
     @Description("This test tests the test framework more than the app itself")
     @Severity(SeverityLevel.MINOR)  // This test tests the test framework more than the app itself
     @Features(value={@Feature("Search")})
@@ -59,7 +59,7 @@ public class TestThreeArticles extends CoreTestCase {
     }
 
     @Test
-    @DisplayName("Find three articles by matching title AND description (from WikiArticle object)")
+    @DisplayName("Find three articles by matching title AND description (from strings)")
     @Description("This test tests the test framework more than the app itself")
     @Severity(SeverityLevel.MINOR)  // This test tests the test framework more than the app itself
     @Features(value={@Feature("Search")})
@@ -123,8 +123,12 @@ public class TestThreeArticles extends CoreTestCase {
             Assert.fail(String.format("Article with title '%s' and description containing '%s')" +
                     "shouldn't have been found.", article_1.getTitle(),
                     article_1.getDescription()));
-        } catch (Exception e) {
-            Assert.assertTrue(e.getMessage().contains("Cannot locate article"));
+        } catch (Exception e1) {
+            try {
+                Assert.assertTrue(e1.getMessage().contains("Cannot locate article"));
+            } catch (Exception e2) {
+                e2.printStackTrace();
+            }
         }
     }
 
