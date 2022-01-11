@@ -1,9 +1,6 @@
 package tests;
 
-import io.qameta.allure.Description;
-import io.qameta.allure.Features;
-import io.qameta.allure.Severity;
-import io.qameta.allure.Step;
+import io.qameta.allure.*;
 import io.qameta.allure.junit4.DisplayName;
 import lib.CoreTestCase;
 import lib.ui.ArticlePageObject;
@@ -12,6 +9,7 @@ import lib.ui.factories.ArticlePageObjectFactory;
 import lib.ui.factories.SearchPageObjectFactory;
 import org.junit.*;
 
+@Epic("Tests for Articles")
 public class ArticleTests extends CoreTestCase {
 
     private SearchPageObject SearchPageObject;
@@ -30,7 +28,8 @@ public class ArticleTests extends CoreTestCase {
     @Description("GIVEN: Search by query 'Java'\n" +
             "WHEN: Article with substring 'Object-oriented programming langauge' is clicked\n" +
             "THEN: Article title is 'Java (programming language)'")
-    @Step("Sterting test testCompareArticleTitle")
+    @Severity(SeverityLevel.BLOCKER)
+    @Features(value={@Feature("Search"), @Feature("Articles")})
     public void testCompareArticleTitle()
         {
         String search_query = "Java";
@@ -69,9 +68,9 @@ public class ArticleTests extends CoreTestCase {
 
     @Test
     @DisplayName("Swipe article 5 times.")
-    @Description("A simple search article and swipe up test. No special checks.")
-    @Severity()
-    @Features()
+    @Description("A simple test to check swipe functionality")
+    @Severity(SeverityLevel.NORMAL)
+    @Features(value={@Feature("Search"), @Feature("Articles")})
     public void testSwipeArticle()
     {
 
@@ -93,13 +92,12 @@ public class ArticleTests extends CoreTestCase {
 
     /* Lesson 4, Parts 1-2. Swipes */
     @Test
-    @DisplayName(0)
-    @Description(0)
-    @Severity()
-    @Features()
+    @DisplayName("Swipe to footer")
+    @Description("Check that article has footer element that is reachable by repeated swiping")
+    @Severity(SeverityLevel.NORMAL)
+    @Features(value={@Feature("Search"), @Feature("Articles")})
     public void testSwipeTillElementFound()
     {
-
         String search_query = "Appium";
         String expected_substring = "Appium";
 
@@ -112,10 +110,11 @@ public class ArticleTests extends CoreTestCase {
     }
 
     @Test
-    @DisplayName(0)
-    @Description(0)
-    @Severity()
-    @Features()
+    @Flaky
+    @DisplayName("Test article has title")
+    @Description("This is a badly written test")
+    @Severity(SeverityLevel.TRIVIAL)
+    @Features(value={@Feature("Search"), @Feature("Articles")})
     public void testArticleHasTitleImmediately()
     // This test is supposed to be flaky.
     {
@@ -131,10 +130,12 @@ public class ArticleTests extends CoreTestCase {
     }
 
     @Test
-    @DisplayName(0)
-    @Description(0)
-    @Severity()
-    @Features()
+    @DisplayName("Test article has title with wait")
+    @Description("GIVEN: a search result by valid query\n" +
+            "WHEN: we click on search result\n" +
+            "THEN: article title element is on the screen")
+    @Severity(SeverityLevel.CRITICAL)
+    @Features(value={@Feature("Search"), @Feature("Articles")})
     public void testArticleHasTitleWithWait()
     // This test is supposed to be more robust than the previous.
     {
@@ -149,10 +150,11 @@ public class ArticleTests extends CoreTestCase {
 
     /* Part 7. Rotation */
     @Test
-    @DisplayName(0)
-    @Description(0)
-    @Severity()
-    @Features()
+    @DisplayName("Test that article title doesn't change when device is rotated")
+    @Description("Flip device from portrait to landscape and back." +
+            "Check that article title remains the same.")
+    @Severity(SeverityLevel.NORMAL)
+    @Features(value={@Feature("Articles")})
     public void testChangeScreenOrientationOnSearchResults()
     {
         // Tap search

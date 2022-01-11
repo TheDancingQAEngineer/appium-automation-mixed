@@ -9,6 +9,7 @@ import lib.ui.factories.*;
 import lib.ui.mobileweb.MWAuthPageObject;
 import org.junit.Test;
 
+@Epic("Tests for the Reading List")
 public class MyListsTests extends CoreTestCase {
 
     protected HomePageObject HomePageObject;
@@ -34,7 +35,7 @@ public class MyListsTests extends CoreTestCase {
     @Description("Add article to a reading list/'Saved' list," +
         "then remove and check that it is indeed gone.")
     @Severity(SeverityLevel.CRITICAL)
-    @Features(value={@Feature("Search"), @Feature("Article"),
+    @Features(value={@Feature("Search"), @Feature("Articles"),
             @Feature("Reading List")})
     public void testAddToReadingListAndDelete()
     {
