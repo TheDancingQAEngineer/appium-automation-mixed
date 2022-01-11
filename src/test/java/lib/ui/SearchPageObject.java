@@ -25,11 +25,13 @@ abstract public class SearchPageObject extends MainPageObject {
 
     /** TEMPLATE METHODS BEGIN **/
 
+    @Step(0)
     private static String getSearchResultElement(String substring)
     {
         return SEARCH_RESULT_BY_SUBSTRING_XPATH_TPL.replace("{SUBSTRING}", substring);
     }
 
+    @Step(0)
     private static String getSearchResultElementByWikiArticleObject(WikiArticle article)
     {
         return SEARCH_ITEM_TITLE_AND_DESCRIPTION_TPL
@@ -37,6 +39,7 @@ abstract public class SearchPageObject extends MainPageObject {
                 .replace("{DESCRIPTION}", article.getDescription());
     }
 
+    @Step(0)
     private static String getSearchResultElementByTitleAndDescription(
             String title, String description)
     {
@@ -47,6 +50,7 @@ abstract public class SearchPageObject extends MainPageObject {
 
     /** TEMPLATE METHODS END **/
 
+    @Step(0)
     public SearchPageObject(RemoteWebDriver driver) {
         super(driver);
     }
@@ -69,6 +73,7 @@ abstract public class SearchPageObject extends MainPageObject {
         );
     }
 
+    @Step(0)
     public void waitForSearchResult(String substring)
     {
         String search_result_xpath = getSearchResultElement(substring);
@@ -76,6 +81,7 @@ abstract public class SearchPageObject extends MainPageObject {
                 String.format("Cannot find search result by substring '%s'", substring));
     }
 
+    @Step(0)
     public void waitForCancelButtonToAppear()
     {
         waitForElementVisible(SEARCH_CANCEL_BUTTON_LOCATOR,
@@ -83,6 +89,7 @@ abstract public class SearchPageObject extends MainPageObject {
                 5);
     }
 
+    @Step(0)
     public void waitForCancelButtonToDisappear()
     {
         waitForElementNotVisible(SEARCH_CANCEL_BUTTON_LOCATOR,
@@ -90,6 +97,7 @@ abstract public class SearchPageObject extends MainPageObject {
                 5);
     }
 
+    @Step(0)
     public void clickCancelSearch()
     {
         this.waitForElementClickableAndClick(SEARCH_CANCEL_BUTTON_LOCATOR,
@@ -97,12 +105,14 @@ abstract public class SearchPageObject extends MainPageObject {
                 10);
     }
 
+    @Step(0)
     public void clearSearchInput() {
         this.waitForElementVisibleAndClear(SEARCH_TEXT_FIELD_LOCATOR,
                 "Cannot locate search text element to clear.",
                 5);
     }
 
+    @Step(0)
     public void clickOnArticleWithSubstring(String substring)
     {
         String search_result_xpath = getSearchResultElement(substring);
@@ -111,6 +121,7 @@ abstract public class SearchPageObject extends MainPageObject {
                 10);
     }
 
+    @Step(0)
     public void waitForAtLeastNSearchResults(
             String expected_substring,
             int minimum_expected_number_of_results) {
@@ -124,6 +135,7 @@ abstract public class SearchPageObject extends MainPageObject {
                 15);
     }
 
+    @Step(0)
     public void waitForSearchResultsToDisappear(String substring) {
         this.waitForElementNotVisible(
                 getSearchResultElement(substring),
@@ -131,10 +143,12 @@ abstract public class SearchPageObject extends MainPageObject {
                 5);
     }
 
+    @Step(0)
     public int getNumberOfSearchResults() {
         return this.getNumberOfElements(SEARCH_RESULT_LOCATOR);
     }
 
+    @Step(0)
     public void waitForNoResultsLabel() {
         this.waitForElementVisible(
                 NO_RESULTS_LABEL_XPATH,
@@ -142,11 +156,13 @@ abstract public class SearchPageObject extends MainPageObject {
                 5);
     }
 
+    @Step(0)
     public void assertZeroSearchResults(String search_line) {
         this.assertZeroElementsVisible(SEARCH_RESULT_LOCATOR,
                 String.format("Found results by query: '%s'", search_line));
     }
 
+    @Step(0)
     public void waitForSearchResultByTitleAndDescription(String title, String description) {
         String article_xpath = this.getSearchResultElementByTitleAndDescription(title, description);
         String error_message = String.format("Cannot locate article with title \"%s\' and description \"%s\".",
@@ -156,6 +172,7 @@ abstract public class SearchPageObject extends MainPageObject {
                 5);
     }
 
+    @Step(0)
     public void waitForSearchResultByWikiArticleObject(WikiArticle article) {
         String article_xpath = getSearchResultElementByWikiArticleObject(article);
         String error_message = String.format("Cannot locate article with title \"%s\' and description \"%s\".",
@@ -165,6 +182,7 @@ abstract public class SearchPageObject extends MainPageObject {
                 5);
     }
 
+    @Step(0)
     public void assertNoSearchResultByTitleAndDescription(String title, String description) {
         String article_xpath = getSearchResultElementByTitleAndDescription(title, description);
         String error_message = String.format("Unexpectedly found element with title \"%s\" and description \"%s\".",
@@ -175,6 +193,7 @@ abstract public class SearchPageObject extends MainPageObject {
                 5);
     }
 
+    @Step(0)
     public void waitForAnySearchResult() {
         try {
             this.waitForNoResultsLabel();

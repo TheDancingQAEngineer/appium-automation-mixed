@@ -1,7 +1,10 @@
 package tests;
 
+import io.qameta.allure.Description;
 import io.qameta.allure.Feature;
 import io.qameta.allure.Features;
+import io.qameta.allure.Severity;
+import io.qameta.allure.junit4.DisplayName;
 import lib.ui.SearchPageObject;
 import lib.CoreTestCase;
 import lib.ui.factories.SearchPageObjectFactory;
@@ -18,6 +21,10 @@ public class SearchTests extends CoreTestCase {
     }
 
     @Test
+    @DisplayName(0)
+    @Description(0)
+    @Severity()
+    @Features()
     public void testFindSearchFieldAndClick()
     {
         // GIVEN:
@@ -33,6 +40,10 @@ public class SearchTests extends CoreTestCase {
     }
 
     @Test
+    @DisplayName(0)
+    @Description(0)
+    @Severity()
+    @Features()
     public void testSendTextToSearchField()
     {
         String search_query = "Yo La Tengo Discography";
@@ -52,6 +63,9 @@ public class SearchTests extends CoreTestCase {
     }
 
     @Test
+    @DisplayName(0)
+    @Description(0)
+    @Severity()
     @Features(value={@Feature("Search")})
     public void testSearchResultsAppearAndDisappear()   // This test passes.
     {
@@ -70,6 +84,10 @@ public class SearchTests extends CoreTestCase {
     }
 
     @Test
+    @DisplayName(0)
+    @Description(0)
+    @Severity()
+    @Features()
     public void testOverlySpecificQueryThatFails()   // This test fails by design.
     {
         int minimum_expected_number_of_results = 2;
@@ -87,6 +105,10 @@ public class SearchTests extends CoreTestCase {
     }
 
     @Test
+    @DisplayName(0)
+    @Description(0)
+    @Severity()
+    @Features()
     /* Part 5. Compound xPath */
     public void testSearchForJavaTheProgrammingLanguage() {
         SearchPageObject.initSearchInput();
@@ -95,6 +117,10 @@ public class SearchTests extends CoreTestCase {
     }
 
     @Test
+    @DisplayName(0)
+    @Description(0)
+    @Severity()
+    @Features()
     public void testSearchForJavaRefactored() {
         String
                 search_query = "Java",
@@ -117,6 +143,10 @@ public class SearchTests extends CoreTestCase {
 
     /* Lesson 4, Part 5. Asserts. */
     @Test
+    @DisplayName(0)
+    @Description(0)
+    @Severity()
+    @Features()
     public void testAmountOfNotEmptySearch()
     {
         String search_line = "Yo La Tengo discography";
@@ -136,6 +166,10 @@ public class SearchTests extends CoreTestCase {
 
     /* Lesson 4, Part 6. Empty Search */
     @Test
+    @DisplayName(0)
+    @Description(0)
+    @Severity()
+    @Features()
     public void testAmountOfEmptySearch()
     {
         String search_line = "VCXZasdfrewq";
@@ -156,6 +190,10 @@ public class SearchTests extends CoreTestCase {
 
     /* Part 8. Background. */
     @Test
+    @DisplayName(0)
+    @Description(0)
+    @Severity()
+    @Features()
     public void testCheckSearchArticleInBackground()
     {
         // Launch app
@@ -181,6 +219,10 @@ public class SearchTests extends CoreTestCase {
 
     /* Part 10: Search cancel. */
     @Test
+    @DisplayName(0)
+    @Description(0)
+    @Severity()
+    @Features()
     public void testSearchCancelAdvanced()
     {
         String search_query = "Java";
@@ -201,6 +243,10 @@ public class SearchTests extends CoreTestCase {
 
     /* Part 7: Search cancel. */
     @Test
+    @DisplayName(0)
+    @Description(0)
+    @Severity()
+    @Features()
     public void testSearchCancel()
     {
         // GIVEN:
