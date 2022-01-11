@@ -1,6 +1,7 @@
 package tests;
 
 import io.qameta.allure.*;
+import io.qameta.allure.junit4.DisplayName;
 import lib.CoreTestCase;
 import lib.Platform;
 import lib.ui.*;
@@ -32,9 +33,14 @@ public class TestAddTwoArticlesToReadingListAndRemoveOne extends CoreTestCase {
     }
 
     @Test
+    @DisplayName("Add to articles to reading list, then delete one")
+    @Description("Search for two articles by different keywords, " +
+        "add them to a reading list/'Saved' list, then remove one," +
+        "check that the other remains, and check that the one that remains" +
+        "is indeed the one that we kept.")
+    @Severity(SeverityLevel.CRITICAL)
     @Features(value={@Feature("Search"), @Feature("Article"),
     @Feature("Reading List")})
-    @Severity(SeverityLevel.CRITICAL)
     public void testAddTwoArticlesToReadingListAndRemoveOne()
     {
         /* Написать тест, который:

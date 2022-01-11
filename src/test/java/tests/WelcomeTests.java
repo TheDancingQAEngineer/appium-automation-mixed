@@ -1,5 +1,7 @@
 package tests;
 
+import io.qameta.allure.*;
+import io.qameta.allure.junit4.DisplayName;
 import lib.Platform;
 import lib.ui.WelcomePageObject;
 import org.junit.*;
@@ -15,6 +17,10 @@ public class WelcomeTests extends lib.CoreTestCase {
     }
 
     @Test
+    @DisplayName("Walk through iOS app starter screen")
+    @Description("Get from starter screen to app main view")
+    @Severity(SeverityLevel.MINOR)
+    @Features(value={@Feature("First Launch Screen")})
     public void testPassThroughWelcome()
     {
         if (Platform.getInstance().isAndroid() || Platform.getInstance().isMW()) {

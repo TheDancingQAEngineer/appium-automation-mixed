@@ -1,6 +1,7 @@
 package lib.ui;
 
 import io.appium.java_client.AppiumDriver;
+import io.qameta.allure.Step;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
@@ -16,6 +17,7 @@ public class HomePageObject extends MainPageObject {
         super(driver);
     }
 
+    @Step("Click 'Dismiss' button")
     public void clickDismiss() {
         this.waitForElementClickableAndClick(
                 DISMISS_BUTTON_ID,
@@ -23,6 +25,7 @@ public class HomePageObject extends MainPageObject {
                 10);
     }
 
+    @Step("Locate 'Log in to sync your saved articles' overlay")
     public void waitForLoginToSync() {
         this.waitForElementVisible(
                 LOGIN_BUTTON_ID,
@@ -31,6 +34,7 @@ public class HomePageObject extends MainPageObject {
         );
     }
 
+    @Step("Wait for 'Manage preferences' button")
     public void waitForManagePreferences() {
         this.waitForElementVisible(
                 MANAGE_PREFERENCES_BUTTON_ID,
@@ -39,12 +43,13 @@ public class HomePageObject extends MainPageObject {
         );
     }
 
+    @Step("Click 'dismiss' button on 'Log in to sync your saved articles' overlay")
     public void dismissLogInToSyncSavedArticles() {
         try {
             this.waitForLoginToSync();
             this.waitForElementClickableAndClick(
                     DISMISS_LOGIN_TO_SYNC_BUTTON_LOCATOR,
-                    "Cannot locate \"Log in to sync\" pop-up.",
+                    "Cannot locate 'X' button in \"Log in to sync\" pop-up.",
                     5
             );
         } catch (NoSuchElementException e) {
