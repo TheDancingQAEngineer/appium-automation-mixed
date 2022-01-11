@@ -1,5 +1,6 @@
 package lib.ui;
 
+import io.qameta.allure.Step;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
 abstract public class AuthPageObject extends MainPageObject{
@@ -14,6 +15,7 @@ abstract public class AuthPageObject extends MainPageObject{
         super(driver);
     }
 
+    @Step("Find and click login button")
     public void clickAuthButton() {
         this.waitForElementVisible(LOGIN_BUTTON_LOCATOR,
                 "Cannot locate Login button by locator " + LOGIN_BUTTON_LOCATOR,
@@ -23,6 +25,7 @@ abstract public class AuthPageObject extends MainPageObject{
                 5);
     }
 
+    @Step("Send login and password to respective fields")
     public void enterCredentials(String login, String password)
     {
         this.waitForElementVisibleAndSendKeys(USERNAME_INPUT_LOCATOR, login,
@@ -31,6 +34,7 @@ abstract public class AuthPageObject extends MainPageObject{
                 "Cannot send keys to password field by locator " + PASSWORD_INPUT_LOCATOR, 5);
     }
 
+    @Step("Click submit button")
     public void submitLoginForm() {
         this.waitForElementClickableAndClick(SUBMIT_BUTTON_LOCATOR,
                 "Cannot click Submit button by locator " + SUBMIT_BUTTON_LOCATOR,

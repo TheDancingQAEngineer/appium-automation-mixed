@@ -1,5 +1,7 @@
 package tests;
 
+import io.qameta.allure.*;
+import io.qameta.allure.junit4.DisplayName;
 import lib.CoreTestCase;
 import lib.ui.SearchPageObject;
 import lib.ui.factories.SearchPageObjectFactory;
@@ -34,6 +36,10 @@ public class TestThreeArticles extends CoreTestCase {
      **/
 
     @Test
+    @DisplayName("Find three articles by matching title AND description (from strings)")
+    @Description("This test tests the test framework more than the app itself")
+    @Severity(SeverityLevel.MINOR)  // This test tests the test framework more than the app itself
+    @Features(value={@Feature("Search")})
     public void testArticleTitleAndDescription1()       // with custom class
     {
         String search_line = "Hungary";
@@ -53,6 +59,10 @@ public class TestThreeArticles extends CoreTestCase {
     }
 
     @Test
+    @DisplayName("Find three articles by matching title AND description (from WikiArticle object)")
+    @Description("This test tests the test framework more than the app itself")
+    @Severity(SeverityLevel.MINOR)  // This test tests the test framework more than the app itself
+    @Features(value={@Feature("Search")})
     public void testArticleTitleAndDescription2()       // with strings
     {
         String search_line = "Hungary";
@@ -72,6 +82,10 @@ public class TestThreeArticles extends CoreTestCase {
     }
 
     @Test
+    @DisplayName("Try to find search results with mashed-up names and descriptions.")
+    @Description("This test tests the test framework more than the app itself")
+    @Severity(SeverityLevel.MINOR)  // This test tests the test framework more than the app itself
+    @Features(value={@Feature("Search")})
     public void testBadArticleTitlesAndDescriptions1()       // checks that no mixed-up articles are found
     {
         String search_line = "Hungary";
@@ -91,6 +105,10 @@ public class TestThreeArticles extends CoreTestCase {
     }
 
     @Test
+    @DisplayName("Test mash-up of titles and descriptions.")
+    @Description("This test tests the test framework more than the app itself")
+    @Severity(SeverityLevel.MINOR)  // This test tests the test framework more than the app itself
+    @Features(value={@Feature("Search")})
     public void testBadArticleTitlesAndDescriptions2()       // fails by design
     {
         String search_line = "Hungary";
@@ -102,12 +120,19 @@ public class TestThreeArticles extends CoreTestCase {
 
         try {
             SearchPageObject.waitForSearchResultByWikiArticleObject(article_1);
+            Assert.fail(String.format("Article with title '%s' and description containing '%s')" +
+                    "shouldn't have been found.", article_1.getTitle(),
+                    article_1.getDescription()));
         } catch (Exception e) {
             Assert.assertTrue(e.getMessage().contains("Cannot locate article"));
         }
     }
 
     @Test
+    @DisplayName("Test that when a valid article is not 'not found'")
+    @Description("This test tests the test framework more than the app itself")
+    @Severity(SeverityLevel.MINOR)  // This test tests the test framework more than the app itself
+    @Features(value={@Feature("Search")})
     public void testGoodArticleIsLabelledAsBad()       // fails by design
     {
         String search_line = "Hungary";
