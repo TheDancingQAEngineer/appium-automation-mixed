@@ -35,19 +35,19 @@ abstract public class ArticlePageObject extends MainPageObject{
 
     /** TEMPLATE METHODS BEGIN **/
 
-    @Step(0)
+    // Too specific for a @Step, no?
     private String getReadingListXpathFromName(String list_name) {
         return ADD_TO_LIST_BY_NAME_XPATH_TPL.replace("{LIST_NAME}", list_name);
     }
 
-    @Step(0)
+    // Too specific for a @Step, no?
     private String getArticleTitleXpathFromTitle(String title) {
         return ARTICLE_TITLE_XPATH_TPL.replace("{TITLE}", title);
     }
 
     /** TEMPLATE METHODS END **/
 
-    @Step(0)
+    @Step("Wait till article title is visible")
     public WebElement waitForTitleElement(String title_string)
     {
         String locator;
@@ -63,7 +63,7 @@ abstract public class ArticlePageObject extends MainPageObject{
                 15);
     }
 
-    @Step(0)
+    @Step("Get article title")
     public String getArticleTitle(String expected_title) {
         WebElement title_element = this.waitForTitleElement(expected_title);
         screenshot(this.takeScreenshot("article_title"));
@@ -77,7 +77,7 @@ abstract public class ArticlePageObject extends MainPageObject{
         }
     }
 
-    @Step(0)
+    @Step("Swipe article till footer")
     public void swipeToFooter()
     {
         if (Platform.getInstance().isIOS()) {
@@ -92,7 +92,7 @@ abstract public class ArticlePageObject extends MainPageObject{
         }
     }
 
-    @Step(0)
+    @Step("Add current article to list '{list_name}', or 'Save for later', or 'Watch'")
     public void addArticleToReadingList(String list_name)
     {
         if (Platform.getInstance().isIOS()) {
@@ -177,7 +177,7 @@ abstract public class ArticlePageObject extends MainPageObject{
         }
     }
 
-    @Step(0)
+    @Step("Check that title element is on the page")
     public void assertTitleElementPresent(String expected_title)
     {
         String locator;
@@ -197,7 +197,7 @@ abstract public class ArticlePageObject extends MainPageObject{
     }
 
     // TODO: Bad logic for iOS! Fix!
-    @Step(0)
+    @Step("Check that article is '{expected}'")
     public void assertTitleMatches(String expected) {
         String article_title = this.getArticleTitle(expected);
 
@@ -214,7 +214,7 @@ abstract public class ArticlePageObject extends MainPageObject{
                 10);
     }
 
-    @Step(0)
+    @Step("[mobileweb] If article already saved to 'watched', unwatch before proceeding")
     public void removeArticleFromSavedIfAdded()
     {
         if (this.isElementPresent(REMOVE_FROM_READING_LIST_LOCATOR)) {
