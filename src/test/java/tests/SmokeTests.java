@@ -1,14 +1,12 @@
 package tests;
 
-import io.qameta.allure.Description;
-import io.qameta.allure.Features;
-import io.qameta.allure.Severity;
-import io.qameta.allure.SeverityLevel;
+import io.qameta.allure.*;
 import io.qameta.allure.junit4.DisplayName;
 import junit.framework.AssertionFailedError;
 import lib.CoreTestCase;
 import org.junit.*;
 
+@Epic("Smoke tests for test tool stack")
 public class SmokeTests extends CoreTestCase {
 
     @Test
