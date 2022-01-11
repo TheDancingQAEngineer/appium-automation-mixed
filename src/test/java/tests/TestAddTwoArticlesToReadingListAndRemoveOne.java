@@ -1,5 +1,6 @@
 package tests;
 
+import io.qameta.allure.*;
 import lib.CoreTestCase;
 import lib.Platform;
 import lib.ui.*;
@@ -7,6 +8,7 @@ import lib.ui.factories.*;
 import lib.ui.mobileweb.MWAuthPageObject;
 import org.junit.*;
 
+@Epic("Tests for the Reading List")
 public class TestAddTwoArticlesToReadingListAndRemoveOne extends CoreTestCase {
 
     private HomePageObject HomePageObject;
@@ -30,6 +32,9 @@ public class TestAddTwoArticlesToReadingListAndRemoveOne extends CoreTestCase {
     }
 
     @Test
+    @Features(value={@Feature("Search"), @Feature("Article"),
+    @Feature("Reading List")})
+    @Severity(SeverityLevel.CRITICAL)
     public void testAddTwoArticlesToReadingListAndRemoveOne()
     {
         /* Написать тест, который:
