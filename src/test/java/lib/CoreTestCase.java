@@ -3,15 +3,11 @@ package lib;
 import io.appium.java_client.AppiumDriver;
 import io.qameta.allure.Step;
 import lib.ui.WelcomePageObject;
-import org.apache.commons.io.FileUtils;
 import org.junit.After;
 import org.junit.Before;
-import org.openqa.selenium.OutputType;
 import org.openqa.selenium.ScreenOrientation;
-import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
-import java.io.File;
 import java.io.FileOutputStream;
 import java.time.Duration;
 import java.util.Properties;
@@ -24,7 +20,7 @@ abstract public class CoreTestCase {
     protected static final String WIKIPEDIA_MW_HOMEPAGE = "https://en.m.wikipedia.org";
 
     @Before
-    @Step("Instantiate driver and create session")
+    @Step("Launch test and get to starting page")
     public void setUp() throws Exception
     {
         driver = Platform.getInstance().getDriver();
@@ -61,6 +57,7 @@ abstract public class CoreTestCase {
         }
     }
 
+    @Step("Rotate device to landscape (does nothing for MobileWeb)")
     protected void rotateScreenLandscape()
     {
         if (driver instanceof AppiumDriver) {

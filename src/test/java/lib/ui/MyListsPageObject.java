@@ -1,5 +1,6 @@
 package lib.ui;
 
+import io.qameta.allure.Step;
 import lib.Platform;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.RemoteWebDriver;
@@ -21,18 +22,21 @@ abstract public class MyListsPageObject extends MainPageObject{
 
     /** TEMPLATE METHODS BEGIN **/
 
+    @Step(0)
     private static String getListXpathByName(String list_name)
     {
         return READING_LIST_BY_NAME_XPATH_TPL
                 .replace("{LIST_NAME}", list_name);
     }
 
+    @Step(0)
     private static String getSavedArticleXpathByTitle(String title)
     {
         return ARTICLE_BY_TITLE_XPATH_TPL
                 .replace("{TITLE}", title);
     }
 
+    @Step(0)
     private static String getUnwatchButtonByTitle(String title)
     {
         return UNWATCH_BUTTON_BY_TITLE_LOCATOR_TPL
@@ -45,6 +49,7 @@ abstract public class MyListsPageObject extends MainPageObject{
         super(driver);
     }
 
+    @Step("On Android, open named reading list '{list_name}'")
     public void openReadingListByName(String list_name)
     {
         String list_name_xpath = getListXpathByName(list_name);
@@ -57,6 +62,7 @@ abstract public class MyListsPageObject extends MainPageObject{
                 5);
     }
 
+    @Step("Swipe away/unwatch article '{title}'")
     public void swipeArticleToDelete(String article_title)
     {
         if (Platform.getInstance().isMW()) {
@@ -69,6 +75,7 @@ abstract public class MyListsPageObject extends MainPageObject{
         }
     }
 
+    @Step("On mobile web, click 'Unwatch' button of article '{article_title}'")
     private void unwatchArticleMW(String article_title) {
         String unwatch_locator = this.getUnwatchButtonByTitle(article_title);
         this.waitForElementClickableAndClick(unwatch_locator,
@@ -81,6 +88,7 @@ abstract public class MyListsPageObject extends MainPageObject{
 
     }
 
+    @Step("On mobile emulator, swipe article '{article_title}' to the left")
     private void swipeArticleToDeleteNative(String article_title)
     {
         this.waitForArticleToAppearByTitle(article_title);
@@ -90,6 +98,7 @@ abstract public class MyListsPageObject extends MainPageObject{
                 "Swipe to left failed.");
     }
 
+    @Step("Wait till article '{article_title}' is visible")
     public void waitForArticleToAppearByTitle(String article_title) {
         String article_xpath = getSavedArticleXpathByTitle(article_title);
         this.waitForElementVisible(article_xpath,
@@ -97,6 +106,7 @@ abstract public class MyListsPageObject extends MainPageObject{
                 10);
     }
 
+    @Step("Wait till article '{article_title}' is no longer visible")
     public void waitForArticleToDisappearByTitle(String article_title) {
         String article_xpath = getSavedArticleXpathByTitle(article_title);
         this.waitForElementNotVisible(article_xpath,
@@ -104,6 +114,7 @@ abstract public class MyListsPageObject extends MainPageObject{
                 10);
     }
 
+    @Step("Click on article with title '{title}'")
     public void clickOnArticleByTitle(String title) {
         String article_xpath = getSavedArticleXpathByTitle(title);
         WebElement article_element = this.waitForElementVisible(
@@ -113,6 +124,7 @@ abstract public class MyListsPageObject extends MainPageObject{
         article_element.click();
     }
 
+    @Step("On iOS, click 'Delete' button after swipe")
     public void clickSwipeDeleteButton() {
         this.waitForElementClickableAndClick(SWIPE_DELETE_BUTTON_LOCATOR,
                 "Cannot locate 'Swipe action delete' button",
