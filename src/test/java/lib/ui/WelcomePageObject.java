@@ -1,6 +1,7 @@
 package lib.ui;
 
 import io.appium.java_client.AppiumDriver;
+import io.qameta.allure.Step;
 import lib.ui.MainPageObject;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
@@ -18,6 +19,7 @@ public class WelcomePageObject extends MainPageObject {
         super(driver);
     }
 
+    @Step("Locate 'Learn more about wikipedia' link")
     public void waitForLearnMoreLink()
     {
         this.waitForElementVisible(
@@ -26,6 +28,7 @@ public class WelcomePageObject extends MainPageObject {
                 10);
     }
 
+    @Step("Click 'Next' button")
     public void clickNext()
     {
         this.waitForElementClickableAndClick(
@@ -34,6 +37,7 @@ public class WelcomePageObject extends MainPageObject {
                 10);
     }
 
+    @Step("Locate 'New ways to explore' text")
     public void waitForNewWaysToExplore() {
         this.waitForElementVisible(
                 NEW_WAYS_TO_EXPLORE_TEXT,
@@ -42,6 +46,7 @@ public class WelcomePageObject extends MainPageObject {
         );
     }
 
+    @Step("Locate 'Add or edit preferred languages' text")
     public void waitForAddOrEditLanguages() {
         this.waitForElementVisible(
                 PREFERRED_LANGUAGES_TEXT,
@@ -50,6 +55,7 @@ public class WelcomePageObject extends MainPageObject {
         );
     }
 
+    @Step("Click 'Get started' button")
     public void clickGetStarted() {
         this.waitForElementClickableAndClick(
                 GET_STARTED_BUTTON_ID,
@@ -57,6 +63,7 @@ public class WelcomePageObject extends MainPageObject {
                 10);
     }
 
+    @Step("Click 'Skip' button")
     public void clickSkip() {
         this.waitForElementClickableAndClick(
                 SKIP_BUTTON_ID,

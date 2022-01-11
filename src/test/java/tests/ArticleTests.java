@@ -1,6 +1,8 @@
 package tests;
 
 import io.qameta.allure.Description;
+import io.qameta.allure.Features;
+import io.qameta.allure.Severity;
 import io.qameta.allure.Step;
 import io.qameta.allure.junit4.DisplayName;
 import lib.CoreTestCase;
@@ -68,6 +70,8 @@ public class ArticleTests extends CoreTestCase {
     @Test
     @DisplayName("Swipe article 5 times.")
     @Description("A simple search article and swipe up test. No special checks.")
+    @Severity()
+    @Features()
     public void testSwipeArticle()
     {
 
@@ -89,6 +93,10 @@ public class ArticleTests extends CoreTestCase {
 
     /* Lesson 4, Parts 1-2. Swipes */
     @Test
+    @DisplayName(0)
+    @Description(0)
+    @Severity()
+    @Features()
     public void testSwipeTillElementFound()
     {
 
@@ -104,6 +112,10 @@ public class ArticleTests extends CoreTestCase {
     }
 
     @Test
+    @DisplayName(0)
+    @Description(0)
+    @Severity()
+    @Features()
     public void testArticleHasTitleImmediately()
     // This test is supposed to be flaky.
     {
@@ -119,6 +131,10 @@ public class ArticleTests extends CoreTestCase {
     }
 
     @Test
+    @DisplayName(0)
+    @Description(0)
+    @Severity()
+    @Features()
     public void testArticleHasTitleWithWait()
     // This test is supposed to be more robust than the previous.
     {
@@ -133,6 +149,10 @@ public class ArticleTests extends CoreTestCase {
 
     /* Part 7. Rotation */
     @Test
+    @DisplayName(0)
+    @Description(0)
+    @Severity()
+    @Features()
     public void testChangeScreenOrientationOnSearchResults()
     {
         // Tap search
@@ -175,6 +195,7 @@ public class ArticleTests extends CoreTestCase {
         );
     }
 
+    @Step("Search for article '{expected_header}' by query '{search_query}')")
     private void goFromStartScreenThroughSearchToArticle(String search_query, String expected_header)
     {
         SearchPageObject.initSearchInput();

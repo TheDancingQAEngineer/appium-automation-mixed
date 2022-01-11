@@ -1,5 +1,6 @@
 package lib.ui;
 
+import io.qameta.allure.Step;
 import lib.Platform;
 import org.junit.Assert;
 import org.openqa.selenium.*;
@@ -34,16 +35,19 @@ abstract public class ArticlePageObject extends MainPageObject{
 
     /** TEMPLATE METHODS BEGIN **/
 
+    @Step(0)
     private String getReadingListXpathFromName(String list_name) {
         return ADD_TO_LIST_BY_NAME_XPATH_TPL.replace("{LIST_NAME}", list_name);
     }
 
+    @Step(0)
     private String getArticleTitleXpathFromTitle(String title) {
         return ARTICLE_TITLE_XPATH_TPL.replace("{TITLE}", title);
     }
 
     /** TEMPLATE METHODS END **/
 
+    @Step(0)
     public WebElement waitForTitleElement(String title_string)
     {
         String locator;
@@ -59,6 +63,7 @@ abstract public class ArticlePageObject extends MainPageObject{
                 15);
     }
 
+    @Step(0)
     public String getArticleTitle(String expected_title) {
         WebElement title_element = this.waitForTitleElement(expected_title);
         screenshot(this.takeScreenshot("article_title"));
@@ -72,6 +77,7 @@ abstract public class ArticlePageObject extends MainPageObject{
         }
     }
 
+    @Step(0)
     public void swipeToFooter()
     {
         if (Platform.getInstance().isIOS()) {
@@ -86,6 +92,7 @@ abstract public class ArticlePageObject extends MainPageObject{
         }
     }
 
+    @Step(0)
     public void addArticleToReadingList(String list_name)
     {
         if (Platform.getInstance().isIOS()) {
@@ -170,6 +177,7 @@ abstract public class ArticlePageObject extends MainPageObject{
         }
     }
 
+    @Step(0)
     public void assertTitleElementPresent(String expected_title)
     {
         String locator;
@@ -189,6 +197,7 @@ abstract public class ArticlePageObject extends MainPageObject{
     }
 
     // TODO: Bad logic for iOS! Fix!
+    @Step(0)
     public void assertTitleMatches(String expected) {
         String article_title = this.getArticleTitle(expected);
 
@@ -205,6 +214,7 @@ abstract public class ArticlePageObject extends MainPageObject{
                 10);
     }
 
+    @Step(0)
     public void removeArticleFromSavedIfAdded()
     {
         if (this.isElementPresent(REMOVE_FROM_READING_LIST_LOCATOR)) {

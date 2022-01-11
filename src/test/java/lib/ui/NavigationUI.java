@@ -1,5 +1,6 @@
 package lib.ui;
 
+import io.qameta.allure.Step;
 import lib.Platform;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
@@ -13,6 +14,7 @@ abstract public class NavigationUI extends MainPageObject{
         super(driver);
     }
 
+    @Step("Click 'My Lists' (or 'Saved Articles' on iOS and MobileWeb)")
     public void clickMyLists()
     {
         if (Platform.getInstance().isMW()) {
@@ -27,6 +29,7 @@ abstract public class NavigationUI extends MainPageObject{
         }
     }
 
+    @Step("Click navigation panel icon (does nothing on Android and iOS)")
     public void openNavigation()
     {
         if (Platform.getInstance().isMW()) {
