@@ -22,21 +22,21 @@ abstract public class MyListsPageObject extends MainPageObject{
 
     /** TEMPLATE METHODS BEGIN **/
 
-    @Step(0)
+    // Too specific for a @Step, no?
     private static String getListXpathByName(String list_name)
     {
         return READING_LIST_BY_NAME_XPATH_TPL
                 .replace("{LIST_NAME}", list_name);
     }
 
-    @Step(0)
+    // Too specific for a @Step, no?
     private static String getSavedArticleXpathByTitle(String title)
     {
         return ARTICLE_BY_TITLE_XPATH_TPL
                 .replace("{TITLE}", title);
     }
 
-    @Step(0)
+    // Too specific for a @Step, no?
     private static String getUnwatchButtonByTitle(String title)
     {
         return UNWATCH_BUTTON_BY_TITLE_LOCATOR_TPL
@@ -62,7 +62,7 @@ abstract public class MyListsPageObject extends MainPageObject{
                 5);
     }
 
-    @Step("Swipe away/unwatch article '{title}'")
+    @Step("Swipe away/unwatch article '{article_title}'")
     public void swipeArticleToDelete(String article_title)
     {
         if (Platform.getInstance().isMW()) {
