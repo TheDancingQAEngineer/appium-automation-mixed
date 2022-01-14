@@ -5,7 +5,7 @@ import io.qameta.allure.Step;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
-public class HomePageObject extends MainPageObject {
+abstract public class HomePageObject extends MainPageObject {
 
     protected static String
             DISMISS_BUTTON_ID,

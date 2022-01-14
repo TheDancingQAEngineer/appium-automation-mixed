@@ -21,7 +21,7 @@ import java.time.Duration;
 import java.util.List;
 import java.util.regex.Pattern;
 
-public class MainPageObject {
+abstract public class MainPageObject {
 
     protected RemoteWebDriver driver;
 
