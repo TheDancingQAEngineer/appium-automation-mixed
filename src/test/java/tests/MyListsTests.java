@@ -7,6 +7,7 @@ import lib.Platform;
 import lib.ui.*;
 import lib.ui.factories.*;
 import lib.ui.mobileweb.MWAuthPageObject;
+import org.junit.Assert;
 import org.junit.Test;
 
 @Epic("Tests for the Reading List")
@@ -17,10 +18,6 @@ public class MyListsTests extends CoreTestCase {
     protected ArticlePageObject ArticlePageObject;
     protected NavigationUI NavigationUI;
     protected MyListsPageObject MyListsPageObject;
-
-    private static final String
-        USERNAME = "TheDancingQAEngineer",
-        PASSWORD = "***REMOVED***";
 
     @Override
     public void setUp() throws Exception {
@@ -62,9 +59,7 @@ public class MyListsTests extends CoreTestCase {
         if (Platform.getInstance().isMW()) {
             // Log in
             AuthPageObject Auth = new MWAuthPageObject(driver);
-            Auth.clickAuthButton();
-            Auth.enterCredentials(USERNAME, PASSWORD);
-            Auth.submitLoginForm();
+            Auth.authorize();
 
             ArticlePageObject.waitForTitleElement(article_title);
             ArticlePageObject.assertTitleMatches(article_title);
