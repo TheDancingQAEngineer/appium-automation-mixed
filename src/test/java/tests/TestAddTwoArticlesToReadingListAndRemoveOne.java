@@ -20,7 +20,7 @@ public class TestAddTwoArticlesToReadingListAndRemoveOne extends CoreTestCase {
 
     private static final String
             USERNAME = "TheDancingQAEngineer",
-            PASSWORD = "*UHBnm,ki";
+            PASSWORD = "***REMOVED***";
 
     @Override
     public void setUp() throws Exception {
