@@ -74,7 +74,7 @@ public class TestAddTwoArticlesToReadingListAndRemoveOne extends CoreTestCase {
             // Log in
             AuthPageObject Auth = new MWAuthPageObject(driver);
             Auth.clickAuthButton();
-            Auth.enterCredentials(USERNAME, PASSWORD);
+            Auth.enterCredentials();
             Auth.submitLoginForm();
 
             ArticlePageObject.waitForTitleElement(expected_header_1);
