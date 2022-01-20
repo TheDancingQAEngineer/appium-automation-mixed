@@ -18,10 +18,6 @@ public class TestAddTwoArticlesToReadingListAndRemoveOne extends CoreTestCase {
     private NavigationUI NavigationUI;
     private MyListsPageObject MyListsPageObject;
 
-    private static final String
-            USERNAME = "TheDancingQAEngineer",
-            PASSWORD = "***REMOVED***";
-
     @Override
     public void setUp() throws Exception {
         super.setUp();
