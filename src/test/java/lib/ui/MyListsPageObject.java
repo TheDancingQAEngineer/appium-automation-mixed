@@ -77,7 +77,7 @@ abstract public class MyListsPageObject extends MainPageObject{
 
     @Step("On mobile web, click 'Unwatch' button of article '{article_title}'")
     private void unwatchArticleMW(String article_title) {
-        String unwatch_locator = this.getUnwatchButtonByTitle(article_title);
+        String unwatch_locator = getUnwatchButtonByTitle(article_title);
         this.waitForElementClickableAndClick(unwatch_locator,
                 "Cannot locate 'Unwatch' button for article '" + article_title +
                 "' by locator " + unwatch_locator, 5);
