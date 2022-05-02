@@ -7,7 +7,7 @@ import lib.Platform;
 import lib.ui.*;
 import lib.ui.factories.*;
 import lib.ui.mobileweb.MWAuthPageObject;
-import org.junit.Assert;
+// import org.junit.Assert;
 import org.junit.Test;
 
 @Epic("Tests for the Reading List")
