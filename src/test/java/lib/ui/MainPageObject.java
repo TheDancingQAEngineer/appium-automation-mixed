@@ -223,7 +223,7 @@ abstract public class MainPageObject {
 
     protected int getNumberOfElements(String locator_with_type) {
         By by = getLocatorByString(locator_with_type);
-        List elements = driver.findElements(by);
+        List<WebElement> elements = driver.findElements(by);
         return elements.size();
     }
 
@@ -310,7 +310,6 @@ abstract public class MainPageObject {
 
     public void swipeUp(int timeOfSwipe) {
         if (driver instanceof AppiumDriver) {
-            TouchAction action = new TouchAction((AppiumDriver) driver);
             Dimension size = driver.manage().window().getSize();
             int x = (int) (size.width / 2);
             int start_y = (int) (size.height * 0.8);

@@ -1,8 +1,6 @@
 package lib.ui.ios;
 
-import io.appium.java_client.AppiumDriver;
 import lib.ui.HomePageObject;
-import lib.ui.MainPageObject;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
 public class IOSHomePageObject extends HomePageObject {

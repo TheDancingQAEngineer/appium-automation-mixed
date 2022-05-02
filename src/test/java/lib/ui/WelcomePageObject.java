@@ -1,8 +1,8 @@
 package lib.ui;
 
-import io.appium.java_client.AppiumDriver;
+// import io.appium.java_client.AppiumDriver;
 import io.qameta.allure.Step;
-import lib.ui.MainPageObject;
+// import lib.ui.MainPageObject;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
 public class WelcomePageObject extends MainPageObject {
