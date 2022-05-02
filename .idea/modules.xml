@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/appium-automation-maven.iml" filepath="$PROJECT_DIR$/appium-automation-maven.iml" />
       <module fileurl="file://$PROJECT_DIR$/appium-automation-mixed.iml" filepath="$PROJECT_DIR$/appium-automation-mixed.iml" />
     </modules>
   </component>
