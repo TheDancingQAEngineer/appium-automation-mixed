@@ -2,7 +2,7 @@ package tests;
 
 import io.qameta.allure.*;
 import io.qameta.allure.junit4.DisplayName;
-import junit.framework.AssertionFailedError;
+// import junit.framework.AssertionFailedError;
 import lib.CoreTestCase;
 import org.junit.*;
 
