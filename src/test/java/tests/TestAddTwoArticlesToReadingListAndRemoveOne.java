@@ -45,6 +45,11 @@ public class TestAddTwoArticlesToReadingListAndRemoveOne extends CoreTestCase {
         3. Убеждается, что вторая осталась
         4. Переходит в неё и убеждается, что title совпадает */
 
+        // Skipping on MW because we need authorization.
+        // this.skipTestIfMW();
+
+        // Skipping on MW because we need authorization.
+        this.skipTestIfMW();
 
         String
                 search_query_1 = "Java",
