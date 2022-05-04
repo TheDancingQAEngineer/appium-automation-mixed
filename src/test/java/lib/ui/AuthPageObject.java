@@ -2,6 +2,7 @@ package lib.ui;
 
 import io.qameta.allure.Step;
 import org.junit.Assert;
+import org.junit.Assume;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
@@ -41,7 +42,8 @@ abstract public class AuthPageObject extends MainPageObject{
                 "Cannot send keys to password field by locator " + PASSWORD_INPUT_LOCATOR, 5);
     }
 
-    @Step("Send login and password to respective fields")
+    @Step("Send login and password to respective fields." +
+    "Will be skipped if none are provided.")
     public void enterCredentials()
     {
         String login = getLoginFromEnv();
