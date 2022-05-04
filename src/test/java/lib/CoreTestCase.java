@@ -4,6 +4,7 @@ import io.appium.java_client.AppiumDriver;
 import io.qameta.allure.Step;
 import lib.ui.WelcomePageObject;
 import org.junit.After;
+import org.junit.Assume;
 import org.junit.Before;
 import org.openqa.selenium.ScreenOrientation;
 import org.openqa.selenium.remote.RemoteWebDriver;
@@ -105,5 +106,11 @@ abstract public class CoreTestCase {
             System.err.println("IO problem when writing Allure properties file.");
             e.printStackTrace();
         }
+    }
+
+    @Step("Skip test if on MobileWeb")
+    protected void skipTestIfMW()
+    {
+        Assume.assumeFalse(Platform.getInstance().isMW());
     }
 }
