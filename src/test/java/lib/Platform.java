@@ -15,12 +15,12 @@ import java.util.Map;
 public class Platform {
 
     private static final String APPIUM_URL = "http://127.0.0.1:4723/wd/hub";
-    private static final String PATH_TO_CHROMEDRIVER = "***REMOVED***/chromedriver97/chromedriver";
+    private static final String CHROMEDRIVER_ENV_VAR_NAME = "PATH_TO_CHROMEDRIVER";
     private static final String MW_USERAGENT = "Mozilla/5.0 (Linux; Android 4.2.1; en-us; Nexus 5 Build/JOP40D) AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.166 Mobile Safari/535.19";
     private static final String PLATFORM_ENV_VAR_NAME = "UI_TESTS_PLATFORM";
     private static final String PLATFORM_ANDROID = "android";
     private static final String PLATFORM_IOS = "ios";
-    private static final String PLATFORM_MOBILE_WEB = "mobileweb";
+    private static final String PLATFORM_MOBILE_WEB_CHROME = "mw-chrome";
 
     private static Platform instance;
     private Platform() {}
@@ -65,7 +65,7 @@ public class Platform {
 
     public boolean isMW()
     {
-        return isPlatform(PLATFORM_MOBILE_WEB);
+        return isPlatform(PLATFORM_MOBILE_WEB_CHROME);
     }
 
     private DesiredCapabilities getAndroidDesiredCapabilities()
@@ -113,7 +113,7 @@ public class Platform {
         ChromeOptions chrome_options = new ChromeOptions();
         chrome_options.addArguments("window-size=360,640");
         chrome_options.setExperimentalOption("mobileEmulation", mobile_emulation);
-        System.setProperty("webdriver.chrome.driver", PATH_TO_CHROMEDRIVER);
+        System.setProperty("webdriver.chrome.driver", this.getChromedriverPathFromEnv());
 
         return chrome_options;
     }
@@ -127,5 +127,10 @@ public class Platform {
     {
         String env_platform = getPlatformVar();
         return my_platform.equals(env_platform);
+    }
+
+    private String getChromedriverPathFromEnv()
+    {
+        return System.getenv(CHROMEDRIVER_ENV_VAR_NAME);
     }
 }

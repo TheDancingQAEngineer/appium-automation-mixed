@@ -7,7 +7,7 @@ import lib.Platform;
 import lib.ui.*;
 import lib.ui.factories.*;
 import lib.ui.mobileweb.MWAuthPageObject;
-// import org.junit.Assert;
+
 import org.junit.Test;
 
 @Epic("Tests for the Reading List")
@@ -27,6 +27,7 @@ public class MyListsTests extends CoreTestCase {
         this.ArticlePageObject = ArticlePageObjectFactory.get(driver);
     }
 
+    // @Ignore("Requires authorization in mobileweb")
     @Test
     @DisplayName("Add one article to a reading list, then remove.")
     @Description("Add article to a reading list/'Saved' list," +
@@ -36,6 +37,9 @@ public class MyListsTests extends CoreTestCase {
             @Feature("Reading List")})
     public void testAddToReadingListAndDelete()
     {
+        // Skipping on MW because we need authorization.
+        this.skipTestIfMW();
+
         String reading_list_title = "Learning programming";
         String search_query = "Java";
         String article_title = "Java (programming language)";
