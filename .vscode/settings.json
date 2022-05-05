@@ -3,7 +3,7 @@
     "java.test.config": {
         "name": "allTests",
         "env":{ 
-            "UI_TESTS_PLATFORM": "mw-chrome",
+            "UI_TESTS_PLATFORM": "mw-firefox",
             "PATH_TO_CHROMEDRIVER": "c:\\Storage\\yAvsharov\\Software\\Devtools\\webdrivers\\chrome\\101\\chromedriver.exe",
             "PATH_TO_GECKODRIVER": "c:\\Storage\\yAvsharov\\Software\\Devtools\\webdrivers\\firefox64\\0.30\\geckodriver.exe"
         }
