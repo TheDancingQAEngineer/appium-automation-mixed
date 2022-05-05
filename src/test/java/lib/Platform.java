@@ -3,8 +3,11 @@ package lib;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.ios.IOSDriver;
 import io.qameta.allure.Step;
+
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
@@ -16,11 +19,13 @@ public class Platform {
 
     private static final String APPIUM_URL = "http://127.0.0.1:4723/wd/hub";
     private static final String CHROMEDRIVER_ENV_VAR_NAME = "PATH_TO_CHROMEDRIVER";
+    private static final String GECKODRIVER_ENV_VAR_NAME = "PATH_TO_GECKODRIVER";
     private static final String MW_USERAGENT = "Mozilla/5.0 (Linux; Android 4.2.1; en-us; Nexus 5 Build/JOP40D) AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.166 Mobile Safari/535.19";
     private static final String PLATFORM_ENV_VAR_NAME = "UI_TESTS_PLATFORM";
     private static final String PLATFORM_ANDROID = "android";
     private static final String PLATFORM_IOS = "ios";
     private static final String PLATFORM_MOBILE_WEB_CHROME = "mw-chrome";
+    private static final String PLATFORM_MOBILE_WEB_FIREFOX = "mw-firefox";
 
     private static Platform instance;
     private Platform() {}
@@ -46,8 +51,10 @@ public class Platform {
             return new AndroidDriver(url, this.getAndroidDesiredCapabilities());
         } else if (this.isIOS()) {
             return new IOSDriver(url, this.getIOSDesiredCapabilities());
-        } else if (this.isMW()) {
+        } else if (this.isMWChrome()) {
             return new ChromeDriver(this.getMWChromeOptions());
+        } else if (this.isMWFirefox()) {
+            return new FirefoxDriver(this.getMWFirefoxOptions());
         } else {
             throw new Exception(error_message);
         }
@@ -65,7 +72,17 @@ public class Platform {
 
     public boolean isMW()
     {
+        return (isMWChrome() || isMWFirefox());
+    }
+
+    public boolean isMWChrome()
+    {
         return isPlatform(PLATFORM_MOBILE_WEB_CHROME);
+    }
+
+    public boolean isMWFirefox()
+    {
+        return isPlatform(PLATFORM_MOBILE_WEB_FIREFOX);
     }
 
     private DesiredCapabilities getAndroidDesiredCapabilities()
@@ -118,6 +135,13 @@ public class Platform {
         return chrome_options;
     }
 
+    private FirefoxOptions getMWFirefoxOptions() {
+        FirefoxOptions firefox_options = new FirefoxOptions();
+
+        System.setProperty("webdriver.gecko.driver", this.getGeckodriverPathFromEnv());        
+        return firefox_options;
+    }
+
     public String getPlatformVar()
     {
         return System.getenv(PLATFORM_ENV_VAR_NAME);
@@ -132,5 +156,9 @@ public class Platform {
     private String getChromedriverPathFromEnv()
     {
         return System.getenv(CHROMEDRIVER_ENV_VAR_NAME);
+    }
+    
+    private String getGeckodriverPathFromEnv() {
+        return System.getenv(GECKODRIVER_ENV_VAR_NAME);
     }
 }
