@@ -1,9 +1,9 @@
-package lib.ui.mobileweb;
+package lib.ui.mobileweb.chrome;
 
 import lib.ui.SearchPageObject;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
-public class MWSearchPageObject extends SearchPageObject {
+public class MWChromeSearchPageObject extends SearchPageObject {
 
     static {
         NO_RESULTS_LABEL_XPATH = "css:div.caption>p.without-results"; // OK
@@ -28,7 +28,7 @@ public class MWSearchPageObject extends SearchPageObject {
     /** STRING TEMPLATES END **/
 
     /** CONSTRUCTOR BEGINS **/
-        public MWSearchPageObject(RemoteWebDriver driver) {
+        public MWChromeSearchPageObject(RemoteWebDriver driver) {
         super(driver);
     }
     /** CONSTRUCTOR ENDS **/
