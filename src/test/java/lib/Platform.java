@@ -13,6 +13,7 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 
 import java.net.URL;
 import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.Map;
 
 public class Platform {
@@ -136,8 +137,13 @@ public class Platform {
     }
 
     private FirefoxOptions getMWFirefoxOptions() {
-        FirefoxOptions firefox_options = new FirefoxOptions();
 
+        ArrayList<String> deviceMetrics = new ArrayList<String>();
+        deviceMetrics.add("-width 360");
+        deviceMetrics.add("-height 640");
+
+        FirefoxOptions firefox_options = new FirefoxOptions();
+        firefox_options.addArguments(deviceMetrics);
         System.setProperty("webdriver.gecko.driver", this.getGeckodriverPathFromEnv());        
         return firefox_options;
     }
