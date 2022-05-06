@@ -13,7 +13,9 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 
 import java.net.URL;
 import java.util.HashMap;
+import java.util.List;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Map;
 
 public class Platform {
@@ -138,12 +140,18 @@ public class Platform {
 
     private FirefoxOptions getMWFirefoxOptions() {
 
+        List<String> width = Arrays.asList("-width", "360");
+        List<String> height = Arrays.asList("-height", "640");
+
         ArrayList<String> deviceMetrics = new ArrayList<String>();
-        deviceMetrics.add("-width 360");
-        deviceMetrics.add("-height 640");
+        deviceMetrics.addAll(width);
+        deviceMetrics.addAll(height);
+
+        String preferenceToEnableChromeDevtools = "devtools.chrome.enabled";
 
         FirefoxOptions firefox_options = new FirefoxOptions();
         firefox_options.addArguments(deviceMetrics);
+        firefox_options.addPreference(preferenceToEnableChromeDevtools, true);
         System.setProperty("webdriver.gecko.driver", this.getGeckodriverPathFromEnv());        
         return firefox_options;
     }
