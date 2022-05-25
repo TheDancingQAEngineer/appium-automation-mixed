@@ -6,7 +6,7 @@ import org.junit.Assert;
 import org.openqa.selenium.*;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
-abstract public class ArticlePageObject extends MainPageObject{
+abstract public class ArticlePageObject extends MainPageObject {
 
     protected static String
             ADD_TO_READING_LIST_LOCATOR,

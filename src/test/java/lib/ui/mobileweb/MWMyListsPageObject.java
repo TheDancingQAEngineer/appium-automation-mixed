@@ -5,6 +5,7 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 
 public class MWMyListsPageObject extends MyListsPageObject {
 
+    // TODO: Remove or move to env/config
     private static final String MW_WIKI_TEN_MINUTE_MAIL = "hereha9135@unigeol.com";
 
     static {
