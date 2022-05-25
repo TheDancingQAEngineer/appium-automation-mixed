@@ -13,7 +13,7 @@ public class ArticlePageObjectFactory {
     {
         if (Platform.getInstance().isIOS()) {
             return new IOSArticlePageObject(driver);
-        } else if (Platform.getInstance().isAndroid()){
+        } else if (Platform.getInstance().isAndroid()) {
             return new AndroidArticlePageObject(driver);
         } else {
             return new MWArticlePageObject(driver);
