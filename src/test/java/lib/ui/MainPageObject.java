@@ -97,6 +97,7 @@ abstract public class MainPageObject {
         return waitForElementVisible(xpath, error_message, timeoutInSeconds);
     }
 
+    // TODO: Refactor timeouts to constants or enums
     protected WebElement waitForElementVisibleByXpath(String xpath, String error_message)
     {
         return waitForElementVisibleByXpath(xpath, error_message, 5);
