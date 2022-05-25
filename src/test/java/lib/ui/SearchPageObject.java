@@ -9,9 +9,9 @@ abstract public class SearchPageObject extends MainPageObject {
     protected static String
         NO_RESULTS_LABEL_XPATH,
         SEARCH_INIT_ELEMENT_XPATH,
-            SEARCH_TEXT_FIELD_LOCATOR,
-            SEARCH_CANCEL_BUTTON_LOCATOR,
-            SEARCH_RESULT_LOCATOR,
+        SEARCH_TEXT_FIELD_LOCATOR,
+        SEARCH_CANCEL_BUTTON_LOCATOR,
+        SEARCH_RESULT_LOCATOR,
         SEARCH_TEXT_FIELD_ID;
 
     /** STRING TEMPLATES BEGIN **/

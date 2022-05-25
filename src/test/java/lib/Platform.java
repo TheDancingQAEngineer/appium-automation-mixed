@@ -20,11 +20,14 @@ import java.util.Map;
 
 public class Platform {
 
+    // TODO: move to env or config
     private static final String APPIUM_URL = "http://127.0.0.1:4723/wd/hub";
     private static final String CHROMEDRIVER_ENV_VAR_NAME = "PATH_TO_CHROMEDRIVER";
     private static final String GECKODRIVER_ENV_VAR_NAME = "PATH_TO_GECKODRIVER";
+    // TODO: move to env or config
     private static final String MW_USERAGENT = "Mozilla/5.0 (Linux; Android 4.2.1; en-us; Nexus 5 Build/JOP40D) AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.166 Mobile Safari/535.19";
     private static final String PLATFORM_ENV_VAR_NAME = "UI_TESTS_PLATFORM";
+    // TODO: how about converting to enum?
     private static final String PLATFORM_ANDROID = "android";
     private static final String PLATFORM_IOS = "ios";
     private static final String PLATFORM_MOBILE_WEB_CHROME = "mw-chrome";
@@ -92,6 +95,7 @@ public class Platform {
     {
         DesiredCapabilities capabilities = new DesiredCapabilities();
 
+        // TODO: Convert ALL capabilities to external config
         capabilities.setCapability("platformName","Android");
         capabilities.setCapability("deviceName","andro80");
         capabilities.setCapability("platformVersion","8.0");
@@ -101,14 +105,15 @@ public class Platform {
         capabilities.setCapability("app","/Users/user2/codebase/github/appium-automation-mixed/appium-automation-mixed/apks/org.wikipedia.apk");
         capabilities.setCapability("appWaitDuration", 40000);
         capabilities.setCapability("orientation", "PORTRAIT");
-
+        
         return capabilities;
     }
-
+    
     private DesiredCapabilities getIOSDesiredCapabilities()
     {
         DesiredCapabilities capabilities = new DesiredCapabilities();
-
+        
+        // TODO: Convert ALL capabilities to external config
         capabilities.setCapability("platformName","iOS");
         capabilities.setCapability("deviceName","iPhone 8");
         capabilities.setCapability("platformVersion","13.7");

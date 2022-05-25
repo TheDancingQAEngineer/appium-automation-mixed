@@ -15,9 +15,11 @@ import java.util.Properties;
 
 abstract public class CoreTestCase {
 
+    // TODO: move to env or config
     private static final String ALLURE_ENVIRONMENT_DOC_LINK = "https://docs.qameta.io/allure/#_environment";
     protected RemoteWebDriver driver;
-
+    
+    // TODO: move to env or config
     protected static final String WIKIPEDIA_MW_HOMEPAGE = "https://en.m.wikipedia.org";
 
     @Before
