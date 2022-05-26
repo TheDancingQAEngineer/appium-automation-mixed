@@ -24,6 +24,8 @@ public class Platform {
     private static final String APPIUM_URL = "http://127.0.0.1:4723/wd/hub";
     private static final String CHROMEDRIVER_ENV_VAR_NAME = "PATH_TO_CHROMEDRIVER";
     private static final String GECKODRIVER_ENV_VAR_NAME = "PATH_TO_GECKODRIVER";
+    private static final String PATH_TO_APK_ENV_VAR_NAME = "PATH_TO_APK";
+    private static final String PATH_TO_IOS_APP_ENV_VAR_NAME = "PATH_TO_IOS_APP";
     // TODO: move to env or config
     private static final String MW_USERAGENT = "Mozilla/5.0 (Linux; Android 4.2.1; en-us; Nexus 5 Build/JOP40D) AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.166 Mobile Safari/535.19";
     private static final String PLATFORM_ENV_VAR_NAME = "UI_TESTS_PLATFORM";
@@ -102,7 +104,7 @@ public class Platform {
         capabilities.setCapability("automationName","UiAutomator2");
         capabilities.setCapability("appPackage","org.wikipedia");
         capabilities.setCapability("appActivity",".main.MainActivity");
-        capabilities.setCapability("app","***REMOVED***/appium-automation-mixed/appium-automation-mixed/apks/org.wikipedia.apk");
+        capabilities.setCapability("app",this.getPathToAndroidApk());
         capabilities.setCapability("appWaitDuration", 40000);
         capabilities.setCapability("orientation", "PORTRAIT");
         
@@ -118,7 +120,7 @@ public class Platform {
         capabilities.setCapability("deviceName","iPhone 8");
         capabilities.setCapability("platformVersion","13.7");
         capabilities.setCapability("automationName","XCUITest");
-        capabilities.setCapability("app","***REMOVED***/appium-automation-mixed/appium-automation-mixed/ios-apps/Wikipedia.app");
+        capabilities.setCapability("app",this.getPathToIOSApp());
         capabilities.setCapability("orientation", "PORTRAIT");
 
         return capabilities;
@@ -179,5 +181,15 @@ public class Platform {
     
     private String getGeckodriverPathFromEnv() {
         return System.getenv(GECKODRIVER_ENV_VAR_NAME);
+    }
+
+    private String getPathToAndroidApk()
+    {
+        return System.getenv(PATH_TO_APK_ENV_VAR_NAME);
+    }
+
+    private String getPathToIOSApp()
+    {
+        return System.getenv(PATH_TO_IOS_APP_ENV_VAR_NAME);
     }
 }
