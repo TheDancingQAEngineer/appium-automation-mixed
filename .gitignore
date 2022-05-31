@@ -15,12 +15,19 @@
 logs/
 screenshots/
 
-########################
-# Java
+#######################
+# IDE stuff
 #######################
 
-.gradle/
 .idea/
+.vscode/
+*.iml
+
+########################
+# Java
+########################
+
+.gradle/
 target/
 pom.xml.tag
 pom.xml.releaseBackup
