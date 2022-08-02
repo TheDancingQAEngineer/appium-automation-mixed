@@ -5,8 +5,16 @@
 *.DS_store
 
 #######################
+# Android app packages
+#######################
+apks/
+*.apk
+
+#######################
 # iOS app package
 #######################
+ios-apps/
+*.app
 
 #######################
 # miscellaneous logs
