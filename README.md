@@ -1,13 +1,14 @@
 # appium-automation-mixed
  
-Рабочий первый тест на pytest и junit.
+This is a work in progress. Use at your own risk.
 
-Библиотеки junit - из урока
+### Wikipedia mobile app versions tested:
+- Android apk: 2.6.198-r-2017-06-09
+- iOS app: 6.4.1(0)
 
-python-версия проверена с библиотеками:
-- Appium-Python-Client v2.0.0
-- selenium v3.14.1 и v4.0.0
-
-Не гарантирована работа сочетания Appium-Python-Client v1.3.0 (предыдущая стабильная)
-и selenium v4.0.0.
-
+### Environment variables and configuration
+- UI_TESTS_PLATFORM
+- PATH_TO_CHROMEDRIVER
+- PATH_TO_GECKODRIVER
+- WIKI_USERNAME
+- WIKI_PASSWORD

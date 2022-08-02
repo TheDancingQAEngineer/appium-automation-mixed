@@ -5,26 +5,35 @@
 *.DS_store
 
 #######################
+# Android app packages
+#######################
+apks/
+*.apk
+
+#######################
 # iOS app package
 #######################
-
 ios-apps/
-
-#######################
-# Android app package
-#######################
-
-apks/
+*.app
 
 #######################
 # miscellaneous logs
 #######################
 
 logs/
+screenshots/
+
+#######################
+# IDE stuff
+#######################
+
+.idea/
+.vscode/
+*.iml
 
 ########################
 # Java
-#######################
+########################
 
 .gradle/
 target/
@@ -83,7 +92,6 @@ dist/
 downloads/
 eggs/
 .eggs/
-lib/
 lib64/
 parts/
 sdist/
