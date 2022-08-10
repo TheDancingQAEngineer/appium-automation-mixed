@@ -30,4 +30,10 @@ public class HerokuFormTests extends CoreTestCase {
             String.format("Expected page title to be \"%s\", but got \"%s\"", expected, actual),
             expected, actual);
     }
+
+    @Test
+    public void testSubmittingEmptyForm() {
+        FormPageObject.scrollToSubmitButton();
+        FormPageObject.clickSubmitButton();
+    }
 }

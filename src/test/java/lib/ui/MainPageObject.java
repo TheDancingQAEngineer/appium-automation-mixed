@@ -250,7 +250,12 @@ abstract public class MainPageObject {
         if (Platform.getInstance().isMW()) {
             JavascriptExecutor JSExec = (JavascriptExecutor) driver;
             Object js_result = JSExec.executeScript("return window.pageYOffset");
-            element_y_pos -= Integer.parseInt(js_result.toString());
+            try {
+                element_y_pos -= Integer.parseInt(js_result.toString());
+            } catch (NumberFormatException e) {
+                element_y_pos -= Math
+                    .round(Float.parseFloat(js_result.toString()));
+            }
         }
         int screen_height = driver
                 .manage()
