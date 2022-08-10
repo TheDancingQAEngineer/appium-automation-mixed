@@ -2,11 +2,12 @@ package tests;
 
 import io.qameta.allure.*;
 import io.qameta.allure.junit4.DisplayName;
-import lib.CoreTestCase;
+import lib.WikiCoreTestCase;
+
 import org.junit.*;
 
 @Epic("Smoke tests for test tool stack")
-public class SmokeTests extends CoreTestCase {
+public class SmokeTests extends WikiCoreTestCase {
 
     @Test
     @DisplayName("Smoke test of test tool stack")

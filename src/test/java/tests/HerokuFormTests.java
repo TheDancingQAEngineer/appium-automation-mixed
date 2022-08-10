@@ -4,7 +4,6 @@ import org.junit.Test;
 
 import org.junit.Assert;
 import lib.CoreTestCase;
-import lib.Platform;
 import lib.ui.FormPageObject;
 import lib.ui.factories.FormPageObjectFactory;
 
@@ -17,8 +16,8 @@ public class HerokuFormTests extends CoreTestCase {
 
     @Override
     public void setUp() throws Exception {
-        driver = Platform.getInstance().getDriver();
-        driver.get(TEST_PAGE_URL);
+        this.sutMwHomepage = TEST_PAGE_URL;
+        super.setUp();
         this.FormPageObject = FormPageObjectFactory.get(driver);
     }
 

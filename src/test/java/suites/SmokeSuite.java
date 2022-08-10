@@ -8,7 +8,7 @@ import tests.*;
 
 @Suite.SuiteClasses({
         SmokeTests.class,
-        SearchTests.class
+        HerokuFormTests.class
 })
 
 public class SmokeSuite {

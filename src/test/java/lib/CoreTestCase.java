@@ -20,7 +20,7 @@ abstract public class CoreTestCase {
     protected RemoteWebDriver driver;
     
     // TODO: move to env or config
-    protected static final String WIKIPEDIA_MW_HOMEPAGE = "https://en.m.wikipedia.org";
+    protected String sutMwHomepage;
 
     @Before
     @Step("Launch test and get to starting page")
@@ -30,7 +30,7 @@ abstract public class CoreTestCase {
         this.createAllurePropertyFile();
         this.rotateScreenPortrait();
         this.skipIOSWelcomePage();
-        this.openWikiWebPageForMobileWeb();
+        this.openWebPageForMobileWeb();
     }
 
     @After
@@ -84,12 +84,12 @@ abstract public class CoreTestCase {
     }
 
     @Step("Open MobileWeb Wikipedia page (does nothing on Android and iOS)")
-    protected void openWikiWebPageForMobileWeb()
+    protected void openWebPageForMobileWeb()
     {
         if (Platform.getInstance().isMW()) {
-            driver.get(WIKIPEDIA_MW_HOMEPAGE);
+            driver.get(sutMwHomepage);
         } else {
-            System.out.println("openWikiWebPageForMobileWeb() does nothing on platform " +
+            System.out.println("openWebPageForMobileWeb() does nothing on platform " +
                     Platform.getInstance().getPlatformVar());
         }
     }
