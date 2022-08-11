@@ -23,17 +23,14 @@ public class HerokuFormTests extends CoreTestCase {
 
     @Test
     public void testFormPageAccess() {
-
-        String expected = "HTML Form Elements";
-        String actual = driver.getTitle();
-        Assert.assertEquals(
-            String.format("Expected page title to be \"%s\", but got \"%s\"", expected, actual),
-            expected, actual);
+        Assert.assertEquals("HTML Form Elements", driver.getTitle());
     }
 
     @Test
     public void testSubmittingEmptyForm() {
         FormPageObject.scrollToSubmitButton();
         FormPageObject.clickSubmitButton();
+        Assert.assertEquals("Processed Form Details", driver.getTitle());
+        Assert.assertEquals("https://testpages.herokuapp.com/styled/the_form_processor.php", driver.getCurrentUrl());
     }
 }
